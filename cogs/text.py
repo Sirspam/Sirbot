@@ -17,11 +17,6 @@ class text(commands.Cog):
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.send(embed=embed)
         await logger.log_info(self, f'Link embed sent\n----------')
-
-    @commands.command()
-    async def lol(self, ctx):
-        print("lol")
-        await logger.log_info(self, "lmao penis")
         
 
 def setup(bot):
