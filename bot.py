@@ -26,7 +26,7 @@ firebase_admin.initialize_app(cred)
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix="!s ",intents=intents,case_insensitive=True,allowed_mentions=discord.AllowedMentions(replied_user=False))
+bot = commands.Bot(command_prefix="!s ",intents=intents,case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(replied_user=False))
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
@@ -47,7 +47,8 @@ initial_cogs = [
     "cogs.user",
     "cogs.scoresaber",
     "cogs.neko",
-    "cogs.text"
+    "cogs.text",
+    "cogs.help"
 ]
 
 for cog in initial_cogs:
