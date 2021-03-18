@@ -14,9 +14,9 @@ class helpClient(commands.Cog):
         embed = discord.Embed(
             title="Help",
             description="``<text> is a mandatory argument while [text] is an optional argument``",
-            color=0xff0000
+            color=0x00A9E0
         )
-        embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/790189114711605260/c6e486bab141b997eeceb42ac5c9a3c2.png?size=256")
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(
             name="Sub help commands",
             value="**!s help user** | command and subcommands for !s user \n**!s help update** | valid fields for !s user update\n**!s help scoresaber** | command and subcommands for !s help scoresaber\n**!s help neko** | command and subcommands for neko <a:HyperNeko:754632378038747177>",
