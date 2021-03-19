@@ -13,17 +13,17 @@ class helpClient(commands.Cog):
         logger.log_info(self, "Recieved help")
         embed = discord.Embed(
             title="Help",
-            description="``<text> is a mandatory argument while [text] is an optional argument``",
+            description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument",
             color=0x00A9E0
         )
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(
             name="Sub help commands",
-            value="**!s help user** | command and subcommands for !s user \n**!s help update** | valid fields for !s user update\n**!s help scoresaber** | command and subcommands for !s help scoresaber\n**!s help neko** | command and subcommands for neko <a:HyperNeko:754632378038747177>",
+            value="``help user`` | command and subcommands for the user command\n``help update`` | valid fields for the user update subcommand\n``help scoresaber`` | command and subcommands for the scoresaber command\n``help neko`` | command and subcommands for the neko command",
             inline=False
         )
         embed.add_field(
-            name="!s links",
+            name="links",
             value="Posts important links for Sirbot",
             inline=False
         )
@@ -34,25 +34,25 @@ class helpClient(commands.Cog):
     async def user(self, ctx):
         embed = discord.Embed(
             title="Help User",
-            description="These are the valid arguments for !s user",
-            color=0xff0000)
+            description="These are the valid arguments for the user command",
+            color=0x00A9E0)
         embed.add_field(
-            name="!s user [mention]",
+            name="user [mention]",
             value="get the info of a user",
             inline=False
         )
         embed.add_field(
-            name="!s user add <ScoreSaber link>",
+            name="user add <ScoreSaber link>",
             value="add yourself to the userbase.",
             inline=False
         )
         embed.add_field(
-            name="!s user update <field>",
-            value="Update your info, use ``!s help update`` for the fields and more info!",
+            name="user update <field>",
+            value=f"Update your info, use ``{ctx.prefix}help update`` for the fields and more info!",
             inline=False
         )
         embed.add_field(
-            name="!s user remove",
+            name="user remove",
             value="Removes you from the database",
             inline=False
         )
@@ -63,7 +63,7 @@ class helpClient(commands.Cog):
         embed = discord.Embed(
             title="Help User Update",
             description="These are the valid fields for !s user update <field> <kwarg>\nAny of these can be removed with ``user remove <field>``",
-            color=0xff0000
+            color=0x00A9E0
         )
         embed.add_field(
             name="username <kwarg>",
@@ -110,7 +110,7 @@ class helpClient(commands.Cog):
         embed = discord.Embed(
             title="Help ScoreSaber",
             description="These are the valid arguments for >ScoreSaber\n~~certainly not a bad ripoff of bs bot~~",
-            color=0xff0000
+            color=0x00A9E0
         )
         embed.add_field(
             name="scoresaber [mention]",
@@ -149,7 +149,7 @@ class helpClient(commands.Cog):
         embed = discord.Embed(
             title="Help Neko",
             description="These are the valid arguments for >neko",
-            colour=0xff0000
+            colour=0x00A9E0
         )
         #embed.set_thumbnail(url="https://i.imgur.com/7Whb3qK.png")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/754643335511015505/810691863610523668/unknown.png")
