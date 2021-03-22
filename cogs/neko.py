@@ -12,7 +12,7 @@ async def image(self, link):
     async with aiohttp.ClientSession() as session:
         async with session.get(link) as resp:
             json_data = json.loads(await resp.text())
-            await logger.log_info(self, json_data["url"])
+            await logger.log_info(self, "<"+json_data["url"]+">")
             async with session.get(json_data["url"]) as resp:
                 return io.BytesIO(await resp.read())
 
