@@ -8,7 +8,7 @@ class text(commands.Cog):
         self.bot = bot
 
 
-    @commands.command(case_insensitive=True, aliases=["link"], help="Links relevant for the bot")
+    @commands.command(case_insensitive=True, aliases=["link"])
     async def links(self, ctx):
         await logger.log_info(self, f'Recieved link in {ctx.guild.name}')
         embed = discord.Embed(
@@ -17,7 +17,6 @@ class text(commands.Cog):
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.send(embed=embed)
         await logger.log_info(self, f'Link embed sent\n----------')
-        
 
 def setup(bot):
     bot.add_cog(text(bot))

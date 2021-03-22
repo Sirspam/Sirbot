@@ -18,16 +18,9 @@ class user(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["u"])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def user(self, ctx, argument=None):
+    async def user(self, ctx, argument: discord.Member = None):
         if argument is not None:
-            if argument.isdigit():
-                ctx.author = self.bot.get_user(int(argument))
-                if ctx.author is None:
-                    return await ctx.send("I can't find anyone with that ID")
-            else:
-                ID = argument[3:]
-                ID = ID[:-1]
-                ctx.author = self.bot.get_user(int(ID))
+            ctx.author = argument
         await logger.log_info(self, f'Recieved user {ctx.author.name}')
         ref = dab.collection("users").document(str(ctx.author.id)).get()
         if ref.exists is False:
@@ -147,16 +140,8 @@ class user(commands.Cog):
     
     @commands.Cog.listener("on_member_remove")
     async def on_member_remove(self, member):
-        await logger.log_info(self, f"{member.name} ({member.id}) has left the server")
-        try:
-            col_ref = dab.collection('users').document('collectionlist').get().get('array')
-            col_ref.remove(str(member.id))
-            dab.collection('users').document('collectionlist').update({'array': col_ref})
-            dab.collection("users").document(str(member.id)).delete()
-            await self.bot.get_channel(754625185306378271).send(f"{member.name} ({member.id}) has left the server and been successfully removed from the database")
-            await logger.log_info(self, f"Response: {member.id} has been successfully removed to the database\n----------")
-        except Exception as e:
-            await logger.log_info(self, e)
+        return 
+        # Need to make this work accross multiple servers
 
     # User Remove
     @user.group(invoke_without_command=True, case_insensitive=True)
