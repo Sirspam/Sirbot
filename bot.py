@@ -24,9 +24,15 @@ cred = credentials.Certificate({
 })
 firebase_admin.initialize_app(cred)
 
+async def get_prefix(bot, ctx):
+    if ctx.guild.id == 822032743553695745:
+        return ">"
+    else:
+        return "!s "
+
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix="!s ",intents=intents,case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(replied_user=False))
+bot = commands.Bot(command_prefix=get_prefix, intents=intents, case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(replied_user=False))
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
