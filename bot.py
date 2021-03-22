@@ -25,9 +25,11 @@ cred = credentials.Certificate({
 firebase_admin.initialize_app(cred)
 
 async def get_prefix(bot, ctx):
-    if ctx.guild.id == 822032743553695745:
+    if ctx.guild.id == 822032743553695745: # Sirserver (home server)
         return ">"
-    else:
+    elif ctx.guild.id == 813981502323818527: # Magicalbackgroundnoise's server
+        return "!cum "
+    else: # Default
         return "!s "
 
 intents = discord.Intents.default()
