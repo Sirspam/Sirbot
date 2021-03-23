@@ -76,8 +76,7 @@ class user(commands.Cog):
         # try:
         #   this on for size, Mister
         try:
-            colourRaw = ref.get("colour")
-            colour = await commands.ColourConverter().convert(ctx, colourRaw)
+            colour = await commands.ColourConverter().convert(ctx, ref.get("colour"))
             embed = discord.Embed(title=username, colour=colour)
         except BaseException:
             embed = discord.Embed(
@@ -97,7 +96,7 @@ class user(commands.Cog):
         await ctx.reply(embed=embed)
         logging.info('Response: user embed\n----------')
 
-    # User Add
+
     @user.command(case_insensitive=True)
     async def add(self, ctx, argument=None):
         logging.info(f'Recieved user add {ctx.author.name}')
@@ -143,131 +142,43 @@ class user(commands.Cog):
         return 
         # Need to make this work accross multiple servers
 
-    # User Remove
+
     @user.group(invoke_without_command=True, case_insensitive=True)
-    async def remove(self, ctx):
+    async def remove(self, ctx, argument=None):
         logging.info(f"User remove ran by {ctx.author.name}")
-        try:
-            col_ref = dab.collection('users').document('collectionlist').get().get('array')
-            col_ref.remove(str(ctx.author.id))
-            dab.collection('users').document('collectionlist').update({'array': col_ref})
-            dab.collection("users").document(str(ctx.author.id)).delete()
-            await ctx.send(f"{ctx.author.name} has been successfully removed from the database")
-            logging.info(f"Response: {ctx.author.id} has been successfully removed to the database\n----------")
-        except Exception as e:
-            logging.info(e+"\n----------")
+        if argument is None:
+            try:
+                col_ref = dab.collection('users').document('collectionlist').get().get('array')
+                col_ref.remove(str(ctx.author.id))
+                dab.collection('users').document('collectionlist').update({'array': col_ref})
+                dab.collection("users").document(str(ctx.author.id)).delete()
+                await ctx.send(f"{ctx.author.name} has been successfully removed from the database")
+                logging.info(f"Response: {ctx.author.id} has been successfully removed to the database\n----------")
+            except Exception as e:
+                logging.error(e+"\n----------")
+        elif argument is not None:
+            if argument.lower() in ["username", "steam", "twitch", "youtube", "twitter", "reddit", "birthday", "pfp", "hmd", "status", "colour", "color"]:
+                if argument.lower() == "username":
+                    logging.info("Escalated to user remove username")
+                    dab.collection("users").document(str(ctx.author.id)).update({
+                        "username": ctx.author.name
+                    })
+                    await ctx.send("I've removed your username")
+                    logging.info(f"{ctx.author.name} has removed their username")
+                else:
+                    if argument.lower() == "color":
+                        argument == "colour"
+                    logging.info(f"Escalated to user remove {argument.lower()}")
+                    doc_ref = dab.collection("users").document(str(ctx.author.id))
+                    doc_ref.update({
+                        argument.lower(): firestore.DELETE_FIELD
+                    })
+                    await ctx.send(f"I've removed your {argument.lower()}")
+                    logging.info(f"{ctx.author.name} has removed their {argument.lower()}")
+            else:
+                raise commands.BadArgument
 
-    @remove.command(case_insensitive=True, aliases=["username"])
-    async def remove_username(self, ctx):
-        logging.info(f"Recieved: user remove username {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "username": ctx.author.name
-        })
-        await ctx.send("I've removed your username")
-        logging.info(f"{ctx.author.name} has removed their username")
-
-    @remove.command(case_insensitive=True, aliases=["steam"])
-    async def remove_steam(self, ctx):
-        logging.info(f"Recieved: user remove Steam {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "steam": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your Steam")
-        logging.info(f"{ctx.author.name} has removed their Steam")
-
-    @remove.command(case_insensitive=True, aliases=["twitch"])
-    async def remove_twitch(self, ctx):
-        logging.info(f"Recieved: user remove Twitch {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "twitch": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your Twitch")
-        logging.info(f"{ctx.author.name} has removed their Twitch")
-
-    @remove.command(case_insensitive=True, aliases=["youtube"])
-    async def remove_youtube(self, ctx):
-        logging.info(f"Recieved: user remove Youtube {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "youtube": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your Youtube")
-        logging.info(f"{ctx.author.name} has removed their Youtube")
-
-    @remove.command(case_insensitive=True, aliases=["twitter"])
-    async def remove_twitter(self, ctx):
-        logging.info(f"Recieved: user remove Twitter {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "twitter": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your Twitter")
-        logging.info(f"{ctx.author.name} has removed their Twitter")
-
-    @remove.command(case_insensitive=True, aliases=["reddit"])
-    async def remove_reddit(self, ctx):
-        logging.info(f"Recieved: user remove Reddit {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "reddit": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your Reddit")
-        logging.info(f"{ctx.author.name} has removed their Reddit")
-
-    @remove.command(case_insensitive=True, aliases=["birthday"])
-    async def remove_birthday(self, ctx):
-        logging.info(f"Recieved: user remove birthday {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "birthday": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your Birthday")
-        logging.info(f"{ctx.author.name} has removed their Birthday")
-
-    @remove.command(case_insensitive=True, aliases=["hmd"])
-    async def remove_hmd(self, ctx):
-        logging.info(f"Recieved: user remove HMD {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "hmd": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your HMD")
-        logging.info(f"{ctx.author.name} has removed their HMD")
-
-    @remove.command(case_insensitive=True, aliases=["pfp"])
-    async def remove_pfp(self, ctx):
-        logging.info(f"Recieved: user remove pfp {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "pfp": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your pfp")
-        logging.info(f"{ctx.author.name} has removed their pfp")
-
-    @remove.command(case_insensitive=True, aliases=["status"])
-    async def remove_status(self, ctx):
-        logging.info(f"Recieved: user remove status {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "status": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your status")
-        logging.info(f"{ctx.author.name} has removed their status")
-
-    @remove.command(case_insensitive=True, aliases=["colour", "color"])
-    async def remove_colour(self, ctx):
-        logging.info(f"Recieved: user remove colour {ctx.author.name}")
-        doc_ref = dab.collection("users").document(str(ctx.author.id))
-        doc_ref.update({
-            "colour": firestore.DELETE_FIELD
-        })
-        await ctx.send("I've removed your colour")
-        logging.info(f"{ctx.author.name} has removed their colour")
     
-    # User update
     @user.group(invoke_without_command=True, case_insensitive=True)
     async def update(self, ctx):
         logging.info(f"Recieved user update")

@@ -12,7 +12,7 @@ class error_handler(commands.Cog):
         logging.info(f"on_command_error triggered")
         if isinstance(error, commands.BadArgument):
             logging.info("BadArgument handler ran\n----------")
-            return await ctx.send("You've given a bad argument")
+            return await ctx.send(f"You've given a bad argument!\nCheck ``{ctx.prefix}help`` for what arguments you need to give")
 
         elif isinstance(error, commands.CommandNotFound):
             logging.info("CommandNotFound handler ran\n----------")
