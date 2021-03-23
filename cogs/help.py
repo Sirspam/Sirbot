@@ -1,6 +1,6 @@
 import discord
+import logging
 from discord.ext import commands
-from utils import logger
 
 
 class helpClient(commands.Cog):
@@ -10,7 +10,7 @@ class helpClient(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["he"])
     async def help(self, ctx):
-        logger.log_info(self, "Recieved help")
+        logging.info("Recieved help")
         embed = discord.Embed(
             title="Help",
             description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument",
@@ -28,10 +28,11 @@ class helpClient(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
-        logger.log_info("Response: help embed\n----------")
+        logging.info("Response: help embed\n----------")
 
     @help.command(aliases=["u"])
     async def user(self, ctx):
+        logging.info("Recieved help user")
         embed = discord.Embed(
             title="Help User",
             description="These are the valid arguments for the user command",
@@ -57,9 +58,11 @@ class helpClient(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
+        logging.info("Response: help embed\n----------")
     
     @help.command(aliases=["up"])
     async def update(self, ctx):
+        logging.info("Recieved help update")
         embed = discord.Embed(
             title="Help User Update",
             description="These are the valid fields for !s user update <field> <kwarg>\nAny of these can be removed with ``user remove <field>``",
@@ -104,9 +107,11 @@ class helpClient(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
+        logging.info("Response: help embed\n----------")
 
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
+        logging.info("Recieved help scoresaber")
         embed = discord.Embed(
             title="Help ScoreSaber",
             description="These are the valid arguments for >ScoreSaber\n~~certainly not a bad ripoff of bs bot~~",
@@ -143,9 +148,11 @@ class helpClient(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
+        logging.info("Response: help embed\n----------")
 
     @help.command()
     async def neko(self, ctx):
+        logging.info("Recieved help neko")
         embed = discord.Embed(
             title="Help Neko",
             description="These are the valid arguments for >neko",
@@ -174,6 +181,7 @@ class helpClient(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
+        logging.info("Response: help embed\n----------")
 
 
 def setup(bot):

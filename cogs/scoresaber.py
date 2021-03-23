@@ -11,11 +11,11 @@
 import discord
 import requests
 import json
+import logging
 from random import randint
 from discord.ext import commands
 from discord.utils import get
 from firebase_admin import firestore
-from utils import logger
 
 
 dab = firestore.client()
@@ -26,11 +26,11 @@ SS_id = None
 async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     if arg_user is not None:
         ctx.author = arg_user
-        await logger.log_info(self, f"Argument given, now {ctx.author.name}")
+        logging.info(f"Argument given, now {ctx.author.name}")
     ref = dab.collection("users").document(str(ctx.author.id)).get()
     if ref.exists is False:
         await ctx.send("That user isn't in my database!")
-        return await logger.log_info(self, "scoresaber is None")
+        return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
     page = (arg_page / 8)
@@ -43,14 +43,14 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     elif type == "topSong":
         URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}")
     URL1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
-    await logger.log_info(self, URL+"\n"+URL1)
+    logging.info(URL+"\n"+URL1)
     try: 
         json_data = json.loads(requests.get(URL, headers=self.bot.header).text)
     except:
-        await logger.log_info(self, f"scoresaber api returned nothing, probably getting hammered lol")
+        logging.info(f"scoresaber api returned nothing, probably getting hammered lol")
         return await ctx.send("ScoreSaber didn't give a valid response!\nTry again later ^w^")
     if "error" in json_data:
-        await logger.log_info(self, f"scoresaber api returned an error\n{json_data}")
+        logging.info(f"scoresaber api returned an error\n{json_data}")
         return await ctx.send("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
     songsList = json_data["scores"]
     json_data = json.loads(requests.get(URL1, headers=self.bot.header).text)
@@ -130,17 +130,17 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     message.add_field(name="Time Set 🕕🕘", value=(Song["timeSet"])[:10], inline=False)
     message.set_image(url="https://new.scoresaber.com/api/static/covers/" + Song["songHash"] + ".png")
     await ctx.send(embed=message)
-    await logger.log_info(self, "embed message sent")
+    logging.info("embed message sent")
 
 
 async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     if arg_user is not None:
         ctx.author = arg_user
-        await logger.log_info(self, f"Argument given, now {ctx.author.name}")
+        logging.info(f"Argument given, now {ctx.author.name}")
     ref = dab.collection("users").document(str(ctx.author.id)).get()
     if ref.exists is False:
         await ctx.send("That user isn't in my database!")
-        return await logger.log_info(self, "scoresaber is None\n----------")
+        return logging.info("scoresaber is None\n----------")
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
     if type == "recentSongs":
@@ -150,7 +150,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{arg_page}")
         requestType = ("Top Songs")
     URL1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
-    await logger.log_info(self, URL+"\n"+URL1)
+    logging.info(URL+"\n"+URL1)
     response = requests.get(URL, headers=self.bot.header)
     json_data = json.loads(response.text)
     if "error" in json_data:
@@ -207,7 +207,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         timestamp=ctx.message.created_at
     )
     await ctx.send(embed=message)
-    await logger.log_info(self, "embed message sent")
+    logging.info("embed message sent")
 
 
 class scoresaber(commands.Cog):
@@ -216,19 +216,19 @@ class scoresaber(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["ss"])
     async def scoresaber(self, ctx, argument: discord.Member=None):
-        await logger.log_info(self, f"Recieved >scoresaber {ctx.author.name}")
+        logging.info(f"Recieved >scoresaber {ctx.author.name}")
         if argument is not None:
             ctx.author = argument
-            await logger.log_info(self, f"Argument given, now {ctx.author.name}")
+            logging.info(f"Argument given, now {ctx.author.name}")
         async with ctx.channel.typing():
             ref = dab.collection("users").document(str(ctx.author.id)).get()
             if ref.exists is False:
                 await ctx.send("That user isn't in my database!")
-                return await logger.log_info(self, "scoresaber is None\n----------")
+                return logging.info("scoresaber is None\n----------")
             scoresaber = ref.get('scoresaber')
             SS_id = scoresaber[25:]
             URL = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
-            await logger.log_info(self, URL)
+            logging.info(URL)
             response = requests.get(URL, headers=self.bot.header)
             json_data = json.loads(response.text)
             if "error" in json_data:
@@ -275,35 +275,35 @@ class scoresaber(commands.Cog):
                 url="https://new.scoresaber.com" + playerInfo["avatar"]
             )
         await ctx.send(embed=embed)
-        await logger.log_info(self, "Response: ScoreSaber UserData embed\n----------")
+        logging.info("Response: ScoreSaber UserData embed\n----------")
 
     @scoresaber.command(aliases=["rs"])
     async def recentsong(self, ctx, argument1=1, argument2=None):
-        await logger.log_info(self, f"Recieved >scoresaber recentsong {ctx.author.name}")
+        logging.info(f"Recieved >scoresaber recentsong {ctx.author.name}")
         async with ctx.channel.typing():
             await songEmbed(self, ctx, argument1, argument2, type="recentSong")
-        await logger.log_info(self, "Finished\n----------")
+        logging.info("Finished\n----------")
 
     @scoresaber.command(aliases=["ts"])
     async def topsong(self, ctx, argument1=1, argument2=None):
-        await logger.log_info(self, f"Recieved >scoresaber topsong {ctx.author.name}")
+        logging.info(f"Recieved >scoresaber topsong {ctx.author.name}")
         async with ctx.channel.typing():
             await songEmbed(self, ctx, argument1, argument2, type="topSong")
-        await logger.log_info(self, "Finished\n----------")
+        logging.info("Finished\n----------")
 
     @scoresaber.command(aliases=["rss"])
     async def recentsongs(self, ctx, argument1=1, argument2=None):
-        await logger.log_info(self, f"Recieved >scoresaber recentSongs {ctx.author.name}")
+        logging.info(f"Recieved >scoresaber recentSongs {ctx.author.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="recentSongs")
-        await logger.log_info(self, "Response: ScoreSaber recentSongs embed\n----------")
+        logging.info("Response: ScoreSaber recentSongs embed\n----------")
 
     @scoresaber.command(aliases=["tss"])
     async def topsongs(self, ctx, argument1=1, argument2=None):
-        await logger.log_info(self, f"Recieved >scoresaber topSongs {ctx.author.name}")
+        logging.info(f"Recieved >scoresaber topSongs {ctx.author.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="topSongs")
-        await logger.log_info(self, "Response: ScoreSaber topSongs embed\n----------")
+        logging.info("Response: ScoreSaber topSongs embed\n----------")
 
     @scoresaber.command(aliases=["com"])
     async def compare(self, ctx, argument1: discord.Member=None, argument2: discord.Member=None):
@@ -317,14 +317,14 @@ class scoresaber(commands.Cog):
             user2 = dab.collection("users").document(str(argument2.id)).get()
             if user1.exists is False or user2.exists is False:
                 await ctx.send("That user isn't in my database!")
-                return await logger.log_info(self, "scoresaber is None\n----------")
+                return logging.info("scoresaber is None\n----------")
             scoresaber1 = user1.get('scoresaber')
             scoresaber2 = user2.get('scoresaber')
             SS_id1 = scoresaber1[25:]
             SS_id2 = scoresaber2[25:]
             URL1 = (f"https://new.scoresaber.com/api/player/{SS_id1}/full")
             URL2 = (f"https://new.scoresaber.com/api/player/{SS_id2}/full")
-            await logger.log_info(self, f"{URL1}\n{URL2}")
+            logging.info(f"{URL1}\n{URL2}")
             response1 = requests.get(URL1, headers=self.bot.header)
             response2 = requests.get(URL2, headers=self.bot.header)
             json_data1 = json.loads(response1.text)

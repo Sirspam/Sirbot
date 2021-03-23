@@ -24,7 +24,7 @@ cred = credentials.Certificate({
 })
 firebase_admin.initialize_app(cred)
 
-async def get_prefix(bot, ctx):
+async def get_prefix(bot, ctx): # I'll probably try to make this work via firebase instead of manually coding it all
     if ctx.guild.id == 822032743553695745: # Sirserver (home server)
         return ">"
     elif ctx.guild.id == 813981502323818527: # Magicalbackgroundnoise's server
@@ -69,7 +69,6 @@ for cog in initial_cogs:
 @bot.event
 async def on_ready():
     logging.info('Bot has successfully launched as {0.user}'.format(bot))
-
 
 
 bot.run(os.getenv("TOKEN"))
