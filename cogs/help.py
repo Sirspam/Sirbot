@@ -27,6 +27,11 @@ class helpClient(commands.Cog):
             value="Posts important links for Sirbot",
             inline=False
         )
+        embed.add_field(
+            name="set_prefix \"<prefix>\" | Admin only",
+            value="Changes Sirbot's prefix for this guild.\n__New prefix must be wrapped in an__ ``\"``",
+            inline=False
+        )
         await ctx.send(embed=embed)
         logging.info("Response: help embed\n----------")
 

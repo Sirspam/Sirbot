@@ -25,18 +25,32 @@ class text(commands.Cog):
 
     @commands.command(case_insensitive=True)
     @commands.has_permissions(administrator = True)
-    async def setprefix(self, ctx, arg):
-        logging.info(f"{ctx.guild.id} setting prefix to:\t{arg}")
+    async def set_prefix(self, ctx, *, arg):
+        logging.info(f"{ctx.guild.id} setting prefix to: {arg}")
+        if arg[:1]!='"' or arg[-1:]!='"':
+            raise commands.BadArgument
+        if arg == '">"':
+            col_ref = dab.collection("prefixes").document('collectionlist').get().get('array')
+            col_ref.remove(str(ctx.guild.id))
+            dab.collection("prefixes").document('collectionlist').update({'array': col_ref})
+            dab.collection("prefixes").document(str(ctx.guild.id)).delete()
+            await ctx.send("Prefix successfully set to ``>``!")
+            logging.info("Deleted from database (default value)")
+            return
         col_ref = dab.collection("prefixes").document("collectionlist").get().get("array")
-        col_ref.append(str(ctx.author.id))
-        col_ref.sort()
-        dab.collection("prefixes").document("collectionlist").update({"array": col_ref})
+        if str(ctx.guild.id) not in col_ref:
+            col_ref.append(str(ctx.guild.id))
+            col_ref.sort()
+            dab.collection("prefixes").document("collectionlist").update({"array": col_ref})
         doc_ref = dab.collection("prefixes").document(str(ctx.guild.id))
+        arg=arg[1:]
+        arg=arg[:-1]
         doc_ref.set({
-            'prefix': arg
+            "prefix": arg
         })
+        await ctx.send(f"Prefix successfully set to ``{arg}``!")
         logging.info("Prefix successfully set")
-        await prefixes.cache_prefixes
+        await prefixes.cache_prefixes()
 
 
 def setup(bot):

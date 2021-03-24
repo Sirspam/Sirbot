@@ -72,7 +72,7 @@ for cog in initial_cogs:
 @bot.event
 async def on_ready():
     logging.info('Bot has successfully launched as {0.user}'.format(bot))
-    await prefixes.cache_prefixes
+    await prefixes.cache_prefixes()
 
 
 bot.run(os.getenv("TOKEN"))
