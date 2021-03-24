@@ -6,6 +6,7 @@ from discord.ext import commands
 from firebase_admin import credentials
 from dotenv import load_dotenv
 from utils import jskp
+from utils import prefixes
 
 cwd = os.getcwd()
 load_dotenv(f"{cwd}/config.env")
@@ -24,17 +25,19 @@ cred = credentials.Certificate({
 })
 firebase_admin.initialize_app(cred)
 
-async def get_prefix(bot, ctx): # I'll probably try to make this work via firebase instead of manually coding it all
-    if ctx.guild.id == 822032743553695745: # Sirserver (home server)
+async def prefix(bot, ctx):
+    try:
+        result = await prefixes.get_prefix(bot, ctx)
+        if result is None:
+            return ">"
+        else:
+            return result
+    except:
         return ">"
-    elif ctx.guild.id == 813981502323818527: # Magicalbackgroundnoise's server
-        return "!cum "
-    else: # Default
-        return "!s "
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix=get_prefix, intents=intents, case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(replied_user=False))
+bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(replied_user=False))
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
@@ -69,6 +72,7 @@ for cog in initial_cogs:
 @bot.event
 async def on_ready():
     logging.info('Bot has successfully launched as {0.user}'.format(bot))
+    await prefixes.cache_prefixes
 
 
 bot.run(os.getenv("TOKEN"))

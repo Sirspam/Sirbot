@@ -1,6 +1,11 @@
 import discord
 import logging
 from discord.ext import commands
+from firebase_admin import firestore
+from utils import prefixes
+
+
+dab = firestore.client()
 
 
 class text(commands.Cog):
@@ -17,6 +22,22 @@ class text(commands.Cog):
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.send(embed=embed)
         logging.info(f'Link embed sent\n----------')
+
+    @commands.command(case_insensitive=True)
+    @commands.has_permissions(administrator = True)
+    async def setprefix(self, ctx, arg):
+        logging.info(f"{ctx.guild.id} setting prefix to:\t{arg}")
+        col_ref = dab.collection("prefixes").document("collectionlist").get().get("array")
+        col_ref.append(str(ctx.author.id))
+        col_ref.sort()
+        dab.collection("prefixes").document("collectionlist").update({"array": col_ref})
+        doc_ref = dab.collection("prefixes").document(str(ctx.guild.id))
+        doc_ref.set({
+            'prefix': arg
+        })
+        logging.info("Prefix successfully set")
+        await prefixes.cache_prefixes
+
 
 def setup(bot):
     bot.add_cog(text(bot))
