@@ -26,7 +26,7 @@ class user(commands.Cog):
         if ref.exists is False:
             logging.info(f"User not found")
             if argument is None:
-                return await ctx.send("You're not in my database\nUse ``!s user add`` to get started!")
+                return await ctx.send(f"You're not in my database\nUse ``{ctx.prefix} user add`` to get started!")
             elif argument is not None:
                 return await ctx.send("That person isn't in my database")
         username = ref.get("username")
@@ -182,7 +182,7 @@ class user(commands.Cog):
     @user.group(invoke_without_command=True, case_insensitive=True)
     async def update(self, ctx):
         logging.info(f"Recieved user update")
-        await ctx.send("B-Baka!! You need to tell me what you want to update!!\nUse ``>help update`` to check the valid arguments")
+        await ctx.send(f"B-Baka!! You need to tell me what you want to update!!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
         logging.info("no sub command given\n---------")
 
     @update.command(case_insensitive=True)
@@ -286,7 +286,7 @@ class user(commands.Cog):
             pos = valid_HMD_low.index(argument.lower()) 
         except:
             logging.info(f"{argument} not in valid_HMD")
-            return await ctx.send("That HMD isn't valid!\n``Use >help update to check the valid HMDs``")
+            return await ctx.send(f"That HMD isn't valid!\n``Use {ctx.prefix}help update to check the valid HMDs``")
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'hmd': self.bot.valid_HMD[pos]})

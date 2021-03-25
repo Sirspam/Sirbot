@@ -70,7 +70,7 @@ class helpClient(commands.Cog):
         logging.info("Recieved help update")
         embed = discord.Embed(
             title="Help User Update",
-            description="These are the valid fields for !s user update <field> <kwarg>\nAny of these can be removed with ``user remove <field>``",
+            description=f"These are the valid fields for ``{ctx.prefix}user update <field> <kwarg>``\nAny of these can be removed with ``user remove <field>``",
             color=0x00A9E0
         )
         embed.add_field(
