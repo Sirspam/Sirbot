@@ -182,7 +182,7 @@ class user(commands.Cog):
     @user.group(invoke_without_command=True, case_insensitive=True)
     async def update(self, ctx):
         logging.info(f"Recieved user update")
-        await ctx.reply(f"B-Baka!! You need to tell me what you want to update!!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
+        await ctx.reply(f"You need to state what you want to update!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
         logging.info("no sub command given\n---------")
 
     @update.command(case_insensitive=True)
