@@ -32,7 +32,7 @@ class helpClient(commands.Cog):
             value="Changes Sirbot's prefix for this guild.\n__New prefix must be wrapped in an__ ``\"``",
             inline=False
         )
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info("Response: help embed\n----------")
 
     @help.command(aliases=["u"])
@@ -62,7 +62,7 @@ class helpClient(commands.Cog):
             value="Removes you from the database",
             inline=False
         )
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info("Response: help embed\n----------")
     
     @help.command(aliases=["up"])
@@ -111,7 +111,7 @@ class helpClient(commands.Cog):
             value="Updates your profile's embed colour\nMake sure to use a hex code. You can use a site [like this](https://www.color-hex.com/) to find the colour you want!",
             inline=False
         )
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info("Response: help embed\n----------")
 
     @help.command(aliases=["ss"])
@@ -152,7 +152,7 @@ class helpClient(commands.Cog):
             value="Compare two users together. excluse the second user argument if you only want to compare yourself against someone else.",
             inline=False
         )
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info("Response: help embed\n----------")
 
     @help.command()
@@ -185,7 +185,7 @@ class helpClient(commands.Cog):
             value="Posts a lewd gif of a neko. Only works in an NSFW channel",
             inline=False
         )
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info("Response: help embed\n----------")
 
 

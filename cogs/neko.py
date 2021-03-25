@@ -25,14 +25,14 @@ class neko(commands.Cog):
     async def neko(self, ctx):
         logging.info("neko ran")
         async with ctx.channel.typing():
-            await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/neko"), "neko.png"))
+            await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/neko"), "neko.png"))
         logging.info("attachment sent\n----------")
         
     @neko.command()
     async def gif(self, ctx):
         logging.info("neko gif ran")
         async with ctx.channel.typing():
-            await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/ngif"), "neko.gif"))
+            await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/ngif"), "neko.gif"))
         logging.info("attachment sent\n----------")
 
     @neko.group(invoke_without_command=True, case_insensitive=True)
@@ -40,9 +40,9 @@ class neko(commands.Cog):
         logging.info("neko lewd ran")
         if ctx.guild and ctx.channel.is_nsfw() is False:
             logging.info("Ran outside of nsfw channel\n----------")
-            return await ctx.send("How lewd of you <:AYAYAFlushed:822094723199008799>")
+            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
         async with ctx.channel.typing():
-            await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/lewd"), "neko.png"))
+            await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/lewd"), "neko.png"))
         logging.info("attachment sent\n----------")
 
     @lewd.command(aliases=["gif"])
@@ -50,9 +50,9 @@ class neko(commands.Cog):
         logging.info("neko lewd gif ran")
         if ctx.guild and ctx.channel.is_nsfw() is False:
             logging.info("Ran outside of nsfw channel\n----------")
-            return await ctx.send("How lewd of you <:AYAYAFlushed:822094723199008799>")
+            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
         async with ctx.channel.typing():
-            await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/nsfw_neko_gif"), "neko.gif"))
+            await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/nsfw_neko_gif"), "neko.gif"))
         logging.info("attachment sent\n----------")
 
 

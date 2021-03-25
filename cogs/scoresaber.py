@@ -29,7 +29,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         logging.info(f"Argument given, now {ctx.author.name}")
     ref = dab.collection("users").document(str(ctx.author.id)).get()
     if ref.exists is False:
-        await ctx.send("That user isn't in my database!")
+        await ctx.reply("That user isn't in my database!")
         return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
@@ -48,10 +48,10 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         json_data = json.loads(requests.get(URL, headers=self.bot.header).text)
     except:
         logging.info(f"scoresaber api returned nothing, probably getting hammered lol")
-        return await ctx.send("ScoreSaber didn't give a valid response!\nTry again later ^w^")
+        return await ctx.reply("ScoreSaber didn't give a valid response!\nTry again later ^w^")
     if "error" in json_data:
         logging.info(f"scoresaber api returned an error\n{json_data}")
-        return await ctx.send("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
+        return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
     songsList = json_data["scores"]
     json_data = json.loads(requests.get(URL1, headers=self.bot.header).text)
     playerInfo = json_data["playerInfo"]
@@ -129,7 +129,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     )
     message.add_field(name="Time Set 🕕🕘", value=(Song["timeSet"])[:10], inline=False)
     message.set_image(url="https://new.scoresaber.com/api/static/covers/" + Song["songHash"] + ".png")
-    await ctx.send(embed=message)
+    await ctx.reply(embed=message)
     logging.info("embed message sent")
 
 
@@ -139,7 +139,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         logging.info(f"Argument given, now {ctx.author.name}")
     ref = dab.collection("users").document(str(ctx.author.id)).get()
     if ref.exists is False:
-        await ctx.send("That user isn't in my database!")
+        await ctx.reply("That user isn't in my database!")
         return logging.info("scoresaber is None\n----------")
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
@@ -206,7 +206,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         colour=0xffdc1b,
         timestamp=ctx.message.created_at
     )
-    await ctx.send(embed=message)
+    await ctx.reply(embed=message)
     logging.info("embed message sent")
 
 
@@ -223,7 +223,7 @@ class scoresaber(commands.Cog):
         async with ctx.channel.typing():
             ref = dab.collection("users").document(str(ctx.author.id)).get()
             if ref.exists is False:
-                await ctx.send("That user isn't in my database!")
+                await ctx.reply("That user isn't in my database!")
                 return logging.info("scoresaber is None\n----------")
             scoresaber = ref.get('scoresaber')
             SS_id = scoresaber[25:]
@@ -232,7 +232,7 @@ class scoresaber(commands.Cog):
             response = requests.get(URL, headers=self.bot.header)
             json_data = json.loads(response.text)
             if "error" in json_data:
-                return await ctx.send("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
+                return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
             playerInfo = json_data["playerInfo"]
             scoreStats = json_data["scoreStats"]
             embed = discord.Embed(
@@ -274,7 +274,7 @@ class scoresaber(commands.Cog):
             embed.set_thumbnail(
                 url="https://new.scoresaber.com" + playerInfo["avatar"]
             )
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info("Response: ScoreSaber UserData embed\n----------")
 
     @scoresaber.command(aliases=["rs"])
@@ -308,7 +308,7 @@ class scoresaber(commands.Cog):
     @scoresaber.command(aliases=["com"])
     async def compare(self, ctx, argument1: discord.Member=None, argument2: discord.Member=None):
         if argument1 is None:
-            return await ctx.send("You need to mention someone for me to compare you against!")
+            return await ctx.reply("You need to mention someone for me to compare you against!")
         elif argument1 is not None and argument2 is None:
             argument2 = argument1
             argument1 = ctx.author
@@ -316,7 +316,7 @@ class scoresaber(commands.Cog):
             user1 = dab.collection("users").document(str(argument1.id)).get()
             user2 = dab.collection("users").document(str(argument2.id)).get()
             if user1.exists is False or user2.exists is False:
-                await ctx.send("That user isn't in my database!")
+                await ctx.reply("That user isn't in my database!")
                 return logging.info("scoresaber is None\n----------")
             scoresaber1 = user1.get('scoresaber')
             scoresaber2 = user2.get('scoresaber')
@@ -330,7 +330,7 @@ class scoresaber(commands.Cog):
             json_data1 = json.loads(response1.text)
             json_data2 = json.loads(response2.text)
             if "error" in json_data1 or "error" in json_data2:
-                return await ctx.send("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
+                return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
             playerInfo1 = json_data1["playerInfo"]
             scoreStats1 = json_data1["scoreStats"]
             playerInfo2 = json_data2["playerInfo"]
@@ -383,7 +383,7 @@ class scoresaber(commands.Cog):
                 colour=0xffdc1b,
                 timestamp=ctx.message.created_at
             )
-            await ctx.send(embed=embed)
+            await ctx.reply(embed=embed)
 
 def setup(bot):
     bot.add_cog(scoresaber(bot))

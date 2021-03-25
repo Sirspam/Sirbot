@@ -26,9 +26,9 @@ class user(commands.Cog):
         if ref.exists is False:
             logging.info(f"User not found")
             if argument is None:
-                return await ctx.send(f"You're not in my database\nUse ``{ctx.prefix} user add`` to get started!")
+                return await ctx.reply(f"You're not in my database\nUse ``{ctx.prefix} user add`` to get started!")
             elif argument is not None:
-                return await ctx.send("That person isn't in my database")
+                return await ctx.reply("That person isn't in my database")
         username = ref.get("username")
         scoresaber = ref.get("scoresaber")
         links_Message = f"[Scoresaber]({scoresaber}) "
@@ -102,15 +102,15 @@ class user(commands.Cog):
         logging.info(f'Recieved user add {ctx.author.name}')
         col_ref = dab.collection('users').document('collectionlist').get().get('array')
         if str(ctx.author.id) in col_ref:
-            return await ctx.send("You're already in the database!\nUse ``>user update`` instead")
+            return await ctx.reply("You're already in the database!\nUse ``>user update`` instead")
         elif argument is None:
-            sent = await ctx.send('What is your scoresaber link?')
+            sent = await ctx.reply('What is your scoresaber link?')
             try:
                 msg = await self.bot.wait_for('message', timeout=60, check=lambda message: message.author == ctx.author and message.channel == ctx.channel)
                 scoresaber = msg.content
             except asyncio.TimeoutError:
                 await sent.delete()
-                return await ctx.send("You didn't reply in time, please restart the process")
+                return await ctx.reply("You didn't reply in time, please restart the process")
         elif argument is not None:
             scoresaber = argument
         if scoresaber.isdigit():
@@ -121,7 +121,7 @@ class user(commands.Cog):
         response = requests.get(f"https://new.scoresaber.com/api/player/{scoresaber[25:]}/full", headers=self.bot.header)
         json_data = json.loads(response.text)
         if "error" in json_data:
-            await ctx.send("That scoresaber link seems to be invalid!\nPlease try again and use a valid link!")
+            await ctx.reply("That scoresaber link seems to be invalid!\nPlease try again and use a valid link!")
             return
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.set({
@@ -134,7 +134,7 @@ class user(commands.Cog):
             dab.collection('users').document('collectionlist').update({'array': col_ref})
         except Exception as e:
             return logging.info(e+"\n----------")
-        await ctx.send(f'{ctx.author.name} has sucessfully been added to the database!\nUse ``>user update`` to add optional customisation')
+        await ctx.reply(f'{ctx.author.name} has sucessfully been added to the database!\nUse ``>user update`` to add optional customisation')
         logging.info(f'Response: {ctx.author.name} has sucessfully been added to the database\n----------')
     
     @commands.Cog.listener("on_member_remove")
@@ -152,7 +152,7 @@ class user(commands.Cog):
                 col_ref.remove(str(ctx.author.id))
                 dab.collection('users').document('collectionlist').update({'array': col_ref})
                 dab.collection("users").document(str(ctx.author.id)).delete()
-                await ctx.send(f"{ctx.author.name} has been successfully removed from the database")
+                await ctx.reply(f"{ctx.author.name} has been successfully removed from the database")
                 logging.info(f"Response: {ctx.author.id} has been successfully removed to the database\n----------")
             except Exception as e:
                 logging.error(e+"\n----------")
@@ -163,7 +163,7 @@ class user(commands.Cog):
                     dab.collection("users").document(str(ctx.author.id)).update({
                         "username": ctx.author.name
                     })
-                    await ctx.send("I've removed your username")
+                    await ctx.reply("I've removed your username")
                     logging.info(f"{ctx.author.name} has removed their username")
                 else:
                     if argument.lower() == "color":
@@ -173,7 +173,7 @@ class user(commands.Cog):
                     doc_ref.update({
                         argument.lower(): firestore.DELETE_FIELD
                     })
-                    await ctx.send(f"I've removed your {argument.lower()}")
+                    await ctx.reply(f"I've removed your {argument.lower()}")
                     logging.info(f"{ctx.author.name} has removed their {argument.lower()}")
             else:
                 raise commands.BadArgument
@@ -182,7 +182,7 @@ class user(commands.Cog):
     @user.group(invoke_without_command=True, case_insensitive=True)
     async def update(self, ctx):
         logging.info(f"Recieved user update")
-        await ctx.send(f"B-Baka!! You need to tell me what you want to update!!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
+        await ctx.reply(f"B-Baka!! You need to tell me what you want to update!!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
         logging.info("no sub command given\n---------")
 
     @update.command(case_insensitive=True)
@@ -190,7 +190,7 @@ class user(commands.Cog):
         logging.info(f'Recieved user update username {ctx.author.name}')
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({'username': argument})
-        await ctx.send(f"I've updated your username to {argument}!")
+        await ctx.reply(f"I've updated your username to {argument}!")
         logging.info(f"{ctx.author.name} has updated their username to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -204,7 +204,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'scoresaber': argument})
-        await ctx.send("I've updated your Scoresaber")
+        await ctx.reply("I've updated your Scoresaber")
         logging.info(f"{ctx.author.name} has updated their scoresaber to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -213,7 +213,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'steam': argument})
-        await ctx.send("I've updated your Steam")
+        await ctx.reply("I've updated your Steam")
         logging.info(f"{ctx.author.name} has updated their steam to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -222,7 +222,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'twitch': argument})
-        await ctx.send("I've updated your Twitch")
+        await ctx.reply("I've updated your Twitch")
         logging.info(f"{ctx.author.name} has updated their twitch to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -231,7 +231,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'youtube': argument})
-        await ctx.send("I've updated your Youtube")
+        await ctx.reply("I've updated your Youtube")
         logging.info(f"{ctx.author.name} has updated their youtube to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -240,7 +240,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'twitter': argument})
-        await ctx.send("I've updated your Twitter")
+        await ctx.reply("I've updated your Twitter")
         logging.info(f"{ctx.author.name} has updated their twitter to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -249,7 +249,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'reddit': argument})
-        await ctx.send("I've updated your Reddit")
+        await ctx.reply("I've updated your Reddit")
         logging.info(f"{ctx.author.name} has updated their reddit to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -257,25 +257,25 @@ class user(commands.Cog):
         logging.info(f'Recieved user update birthday {ctx.author.name}')
         if ((bool(re.search(r"\d/", argument)))) is False:
             logging.info("Birthday input validation triggered")
-            await ctx.send("Oopsie, looks like you did a woopsie! uwu\n``Don't use characters expect for numbers and /``")
+            await ctx.reply("Oopsie, looks like you did a woopsie! uwu\n``Don't use characters expect for numbers and /``")
             return
         storer = argument.split('/')
         storer[0] = int(storer[0])
         storer[1] = int(storer[1])
         if(storer[1] > 12 or storer[1] < 1 or storer[0] > 31 or storer[0] < 1):
             logging.info("Birthday legitimacy triggered, date and/or month invalid")
-            return await ctx.send("That date doesn't make any sense!\n``Please use a legitimate date``")
+            return await ctx.reply("That date doesn't make any sense!\n``Please use a legitimate date``")
         try: 
             print(int(len(storer[2])))
             if int(len(storer[2])) > 4 or int(len(storer[2])) < 4:
                 logging.info("Birthday legitmacy triggered, year invalid")
-                return await ctx.send("That date doesn't make any sense!\n``Please use a legitimate year, or don't include one``")
+                return await ctx.reply("That date doesn't make any sense!\n``Please use a legitimate year, or don't include one``")
         except IndexError:
             False
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'birthday': argument})
-        await ctx.send(f"I've updated your birthday to {argument}!")
+        await ctx.reply(f"I've updated your birthday to {argument}!")
         logging.info(f"{ctx.author.name} has updated their birthday to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -286,11 +286,11 @@ class user(commands.Cog):
             pos = valid_HMD_low.index(argument.lower()) 
         except:
             logging.info(f"{argument} not in valid_HMD")
-            return await ctx.send(f"That HMD isn't valid!\n``Use {ctx.prefix}help update to check the valid HMDs``")
+            return await ctx.reply(f"That HMD isn't valid!\n``Use {ctx.prefix}help update to check the valid HMDs``")
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'hmd': self.bot.valid_HMD[pos]})
-        await ctx.send(f"I've updated your HMD to {self.bot.valid_HMD[pos]}!")
+        await ctx.reply(f"I've updated your HMD to {self.bot.valid_HMD[pos]}!")
         logging.info(f"{ctx.author.name} has updated their status to {self.bot.valid_HMD[pos]}\n----------")
 
     @update.command(case_insensitive=True)
@@ -298,11 +298,11 @@ class user(commands.Cog):
         logging.info(f"Recieved user update pfp {ctx.author.name}")
         if argument[:4] != "http":
             logging.info(f"Argument is not a link ({argument})")
-            return await ctx.send("You can only use links for your profile picture!")
+            return await ctx.reply("You can only use links for your profile picture!")
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'pfp': argument})
-        await ctx.send("I've updated your pfp")
+        await ctx.reply("I've updated your pfp")
         logging.info(f"{ctx.author.name} has updated their pfp to {argument}\n----------")
 
     @update.command(case_insensitive=True)
@@ -311,7 +311,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'status': argument})
-        await ctx.send("I've updated your status")
+        await ctx.reply("I've updated your status")
         logging.info(f"{ctx.author.name} has updated their status to {argument}\n----------")
 
     @update.command(aliases=["color"])  # Americans ew
@@ -320,12 +320,12 @@ class user(commands.Cog):
         try:
             await commands.ColourConverter().convert(ctx, argument)
         except Exception as e:
-            await ctx.send("Please use a valid hexadecimal colour value. uwu")
+            await ctx.reply("Please use a valid hexadecimal colour value. uwu")
             return logging.info(f"expect triggered: {e}")
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({
             'colour': argument})
-        await ctx.send("I've updated your colour")
+        await ctx.reply("I've updated your colour")
         logging.info(f"{ctx.author.name} has updated their colour to {argument}\n----------")
 
 

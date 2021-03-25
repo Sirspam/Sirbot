@@ -20,7 +20,7 @@ class text(commands.Cog):
             description="[Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot) | [Bot's Home Server](https://discord.gg/dWX6fpGUK9) | [Github Repo](https://github.com/sirspam/Sirbot)\n\n\nI hope you're having a good day :)\nthis text is just filler for the thumbnail\n",
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         logging.info(f'Link embed sent\n----------')
 
     @commands.command(case_insensitive=True)
@@ -35,7 +35,7 @@ class text(commands.Cog):
             col_ref.remove(str(ctx.guild.id))
             dab.collection("prefixes").document('collectionlist').update({'array': col_ref})
             dab.collection("prefixes").document(str(ctx.guild.id)).delete()
-            await ctx.send("Prefix successfully set to ``>``!")
+            await ctx.reply("Prefix successfully set to ``>``!")
             await prefixes.dict_delete(ctx)
             logging.info("Deleted from database (default value)")
             return
@@ -50,7 +50,7 @@ class text(commands.Cog):
         doc_ref.set({
             "prefix": arg
         })
-        await ctx.send(f"Prefix successfully set to ``{arg}``!")
+        await ctx.reply(f"Prefix successfully set to ``{arg}``!")
         logging.info("Prefix successfully set")
         await prefixes.cache_prefixes()
 
