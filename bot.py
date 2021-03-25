@@ -26,14 +26,11 @@ cred = credentials.Certificate({
 firebase_admin.initialize_app(cred)
 
 async def prefix(bot, ctx):
-    try:
-        result = await prefixes.get_prefix(bot, ctx)
-        if result is None:
-            return ">"
-        else:
-            return result
-    except:
-        return ">"
+    result = await prefixes.get_prefix(bot, ctx)
+    if result is None:
+        return commands.when_mentioned_or(">")(bot, ctx)
+    else:
+        return commands.when_mentioned_or(result)(bot, ctx)
 
 intents = discord.Intents.default()
 intents.members = True
