@@ -13,7 +13,7 @@ class text(commands.Cog):
         self.bot = bot
 
 
-    @commands.command(case_insensitive=True, aliases=["link"])
+    @commands.command(case_insensitive=True)
     async def links(self, ctx):
         logging.info(f'Recieved link in {ctx.guild.name}')
         embed = discord.Embed(

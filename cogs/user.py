@@ -97,7 +97,7 @@ class user(commands.Cog):
         logging.info('Response: user embed\n----------')
 
 
-    @user.command(case_insensitive=True)
+    @user.command(case_insensitive=True, aliases=["link"])
     async def add(self, ctx, argument=None):
         logging.info(f'Recieved user add {ctx.author.name}')
         col_ref = dab.collection('users').document('collectionlist').get().get('array')
@@ -314,7 +314,7 @@ class user(commands.Cog):
         await ctx.reply("I've updated your status")
         logging.info(f"{ctx.author.name} has updated their status to {argument}\n----------")
 
-    @update.command(aliases=["color"])  # Americans ew
+    @update.command(case_insensitive=True, aliases=["color"])  # Americans ew
     async def colour(self, ctx, argument):
         logging.info(f"Recieved user update colour {ctx.author.name}")
         try:
