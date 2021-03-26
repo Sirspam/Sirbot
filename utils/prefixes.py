@@ -5,6 +5,7 @@ prefixes_dict = {}
 
 async def cache_prefixes():
     logging.info("Attempting to cache prefixes")
+    prefixes_dict = {}
     dab = firestore.client() # Tried putting this outside the function but it threw a fitty
     prefix_col = dab.collection("prefixes").document("collectionlist").get().get("array")
     for x in prefix_col:

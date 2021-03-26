@@ -1,6 +1,15 @@
 import discord
 import logging
 from discord.ext import commands
+from utils import prefixes
+
+
+async def prefix(self, ctx):
+    result = await prefixes.get_prefix(self, ctx)
+    if result is None:
+        return ">"
+    else:
+        return result
 
 
 class helpClient(commands.Cog):
@@ -11,6 +20,7 @@ class helpClient(commands.Cog):
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["he"])
     async def help(self, ctx):
         logging.info("Recieved help")
+        ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
         embed = discord.Embed(
             title="Help",
             description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument",
@@ -18,18 +28,22 @@ class helpClient(commands.Cog):
         )
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(
-            name="Sub help commands",
-            value="``help user`` | command and subcommands for the user command\n``help update`` | valid fields for the user update subcommand\n``help scoresaber`` | command and subcommands for the scoresaber command\n``help neko`` | command and subcommands for the neko command",
+            name="Sub Help Commands",
+            value="""``help user`` | command and subcommands for the user command
+            \n``help update`` | valid fields for the user update subcommand
+            \n``help scoresaber`` | command and subcommands for the scoresaber command
+            \n``help neko`` | command and subcommands for the neko command""",
             inline=False
         )
         embed.add_field(
-            name="links",
-            value="Posts important links for Sirbot",
+            name="General Commands",
+            value="""``links`` | Posts important links for Sirbot""",
             inline=False
         )
         embed.add_field(
-            name="set_prefix \"<prefix>\" | Admin only",
-            value="Changes Sirbot's prefix for this guild.\n__New prefix must be wrapped in an__ ``\"``",
+            name="Admin Only Commands",
+            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in an__ ``\"``
+            \n``batch_neko <amount> | Posts a batch of neko images. Sub commands specified in help neko also apply""",
             inline=False
         )
         await ctx.reply(embed=embed)
@@ -119,7 +133,7 @@ class helpClient(commands.Cog):
         logging.info("Recieved help scoresaber")
         embed = discord.Embed(
             title="Help ScoreSaber",
-            description="These are the valid arguments for >ScoreSaber\n~~certainly not a bad ripoff of bs bot~~",
+            description=f"These are the valid arguments for ``{ctx.prefix}ScoreSaber``\n~~certainly not a bad ripoff of bs bot~~",
             color=0x00A9E0
         )
         embed.add_field(
@@ -160,7 +174,7 @@ class helpClient(commands.Cog):
         logging.info("Recieved help neko")
         embed = discord.Embed(
             title="Help Neko",
-            description="These are the valid arguments for >neko",
+            description=f"These are the valid arguments for ``{ctx.prefix}``neko",
             colour=0x00A9E0
         )
         #embed.set_thumbnail(url="https://i.imgur.com/7Whb3qK.png")

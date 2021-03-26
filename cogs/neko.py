@@ -5,6 +5,7 @@ import io
 import aiohttp
 import json
 import logging
+import asyncio
 from discord.ext import commands
 
 async def image(self, link):
@@ -55,6 +56,71 @@ class neko(commands.Cog):
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/nsfw_neko_gif"), "neko.gif"))
         logging.info("attachment sent\n----------")
 
+    @commands.group(invoke_without_command=True, case_insensitive=True)
+    @commands.has_permissions(administrator = True)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    async def batch_neko(self, ctx, argument: int):
+        logging.info(f"batch neko ran by {ctx.author.name} ({ctx.author.id})")
+        async with ctx.channel.typing():
+            await ctx.reply("I'm holding you accountable if I get rate limited")
+            count = 0
+            while argument != count:
+                await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/neko"), "neko.png"))
+                count = count + 1
+                await asyncio.sleep(5)
+            await ctx.send("k I'm done, bye")
+        logging.info("attachment sent\n----------")
+
+    @batch_neko.command()
+    @commands.has_permissions(administrator = True)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    async def gif(self, ctx, argument: int):
+        logging.info(f"batch_neko gif ran by {ctx.author.name} ({ctx.author.id})")
+        async with ctx.channel.typing():
+            await ctx.reply("I'm holding you accountable if I get rate limited")
+            count = 0
+            while argument != count:
+                await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/ngif"), "neko.gif"))
+                count = count + 1
+                await asyncio.sleep(5)
+            await ctx.send("k I'm done, bye")
+        logging.info("attachment sent\n----------")
+
+    @batch_neko.group(invoke_without_command=True, case_insensitive=True)
+    @commands.has_permissions(administrator = True)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    async def lewd(self, ctx, argument: int):
+        logging.info(f"neko lewd ran by {ctx.author.name} ({ctx.author.id})")
+        async with ctx.channel.typing():
+            if ctx.guild and ctx.channel.is_nsfw() is False:
+                logging.info("Ran outside of nsfw channel\n----------")
+                return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
+            await ctx.reply("I'm holding you accountable if I get rate limited")
+            count = 0
+            while argument != count:
+                await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/lewd"), "neko.png"))
+                count = count + 1
+                await asyncio.sleep(5)
+            await ctx.send("k I'm done, bye")
+        logging.info("attachment sent\n----------")
+
+    @lewd.command(aliases=["gif"])
+    @commands.has_permissions(administrator = True)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    async def lewd_gif(self, ctx, argument: int):
+        logging.info(f"neko lewd gif ran by {ctx.author.name} ({ctx.author.id})")
+        async with ctx.channel.typing():
+            if ctx.guild and ctx.channel.is_nsfw() is False:
+                logging.info("Ran outside of nsfw channel\n----------")
+                return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
+            await ctx.reply("I'm holding you accountable if I get rate limited")
+            count = 0
+            while argument != count:
+                await ctx.send(file=discord.File(await image(self, "https://nekos.life/api/v2/img/nsfw_neko_gif"), "neko.gif"))
+                count = count + 1
+                await asyncio.sleep(5)
+            await ctx.send("k I'm done, bye")
+        logging.info("attachment sent\n----------")
 
 def setup(bot):
     bot.add_cog(neko(bot))
