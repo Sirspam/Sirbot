@@ -71,5 +71,10 @@ async def on_ready():
     logging.info('Bot has successfully launched as {0.user}'.format(bot))
     await prefixes.cache_prefixes()
 
+@bot.event
+async def on_guild_remove(guild):
+    logging.info(f"Left guild: {guild.name}")
+    await prefixes.prefix_delete(guild.id)
+
 
 bot.run(os.getenv("TOKEN"))

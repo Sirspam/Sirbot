@@ -12,7 +12,7 @@ async def cache_prefixes():
             continue
         ref = dab.collection("prefixes").document(str(x)).get().get("prefix")
         prefixes_dict.update({int(x): ref})
-    logging.info("Finished caching prefixes")
+    logging.info(f"Finished caching prefixes: {prefixes_dict}")
 
 async def get_prefix(bot, ctx):
     if prefixes_dict is {}:
@@ -21,5 +21,13 @@ async def get_prefix(bot, ctx):
         return None
     return str(prefixes_dict[ctx.guild.id])
 
-async def dict_delete(ctx): # Needed to clear a server from the prefixes_dict if they set their prefix back to ">"
-    del prefixes_dict[ctx.guild.id] # Had to make this function for a single line because I can't be bothered to figure out how to get the dictionary into other files kekw
+async def prefix_delete(id):
+    try:
+        del prefixes_dict[id]
+        dab = firestore.client()
+        prefix_col = dab.collection("prefixes").document("collectionlist").get().get("array")
+        prefix_col.remove(str(id))
+        dab.collection("prefixes").document("collectionlist").update({"array": prefix_col})
+        dab.collection("prefixes").document(str(id)).delete()
+    except Exception as e:
+        logging.error(f"Error in prefix_delete: {e}")

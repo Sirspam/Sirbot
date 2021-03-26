@@ -36,7 +36,7 @@ class text(commands.Cog):
             dab.collection("prefixes").document('collectionlist').update({'array': col_ref})
             dab.collection("prefixes").document(str(ctx.guild.id)).delete()
             await ctx.reply("Prefix successfully set to ``>``!")
-            await prefixes.dict_delete(ctx)
+            await prefixes.prefix_delete(ctx.guild.id)
             logging.info("Deleted from database (default value)")
             return
         col_ref = dab.collection("prefixes").document("collectionlist").get().get("array")
