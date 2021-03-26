@@ -3,8 +3,10 @@ import os
 import logging
 import firebase_admin
 from discord.ext import commands
+from discord.ext import tasks
 from firebase_admin import credentials
 from dotenv import load_dotenv
+from random import randint
 from utils import jskp
 from utils import prefixes
 
@@ -49,6 +51,19 @@ bot.valid_HMD = [
             "WMR"
             ]
 
+status_list = [
+    "Aso kinda cute 😳",
+    "Beat Saber",
+    "Yeet Saber",
+    "Feet Saber",
+    "NEKOPARA Vol. 0",
+    "NEKOPARA Vol. 1",
+    "NEKOPARA Vol. 2",
+    "NEKOPARA Vol. 3",
+    "NEKOPARA Vol. 4",
+    "With Nekos 🐾"
+]
+
 initial_cogs = [
     "jishaku",
     "cogs.error_handler",
@@ -66,9 +81,17 @@ for cog in initial_cogs:
     except Exception as e:
         logging.error(f"Failed to load cog {cog}: {e}")
 
+@tasks.loop(hours=1)
+async def status():
+    await bot.wait_until_ready()
+    value = (randint(0, len(status_list)))-1
+    await bot.change_presence(activity=discord.Game(name=status_list[value]))
+    logging.info(f"Status set to: {status_list[value]}")
+
 @bot.event
 async def on_ready():
     logging.info('Bot has successfully launched as {0.user}'.format(bot))
+    status.start()
     await prefixes.cache_prefixes()
 
 @bot.event
