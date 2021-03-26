@@ -51,17 +51,20 @@ bot.valid_HMD = [
             "WMR"
             ]
 
-status_list = [
-    "Aso kinda cute 😳",
+play_status_list = [
     "Beat Saber",
-    "Yeet Saber",
-    "Feet Saber",
     "NEKOPARA Vol. 0",
     "NEKOPARA Vol. 1",
     "NEKOPARA Vol. 2",
     "NEKOPARA Vol. 3",
     "NEKOPARA Vol. 4",
     "With Nekos 🐾"
+]
+
+watch_status_list = [
+    "Aso being cute 😳",
+    "Sirspam shit miss",
+    "Nekopara"
 ]
 
 initial_cogs = [
@@ -84,9 +87,14 @@ for cog in initial_cogs:
 @tasks.loop(hours=1)
 async def status():
     await bot.wait_until_ready()
-    value = (randint(0, len(status_list)))-1
-    await bot.change_presence(activity=discord.Game(name=status_list[value]))
-    logging.info(f"Status set to: {status_list[value]}")
+    if (randint(0, 1)) == 0:
+        value = (randint(0, len(play_status_list)))-1
+        await bot.change_presence(activity=discord.Game(name=play_status_list[value]))
+        logging.info(f"Status set to: {play_status_list[value]}")
+    else:
+        value = (randint(0, len(watch_status_list)))-1
+        await bot.change_presence(activity=discord.Activity(name=watch_status_list[value], type=discord.ActivityType.watching))
+        logging.info(f"Status set to: {watch_status_list[value]}")
 
 @bot.event
 async def on_ready():
