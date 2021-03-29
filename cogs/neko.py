@@ -74,7 +74,7 @@ class neko(commands.Cog):
     @batch_neko.command()
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 30, commands.BucketType.guild)
-    async def gif(self, ctx, argument: int):
+    async def _gif(self, ctx, argument: int):
         logging.info(f"batch_neko gif ran by {ctx.author.name} ({ctx.author.id})")
         async with ctx.channel.typing():
             await ctx.reply("I'm holding you accountable if I get rate limited")
@@ -89,7 +89,7 @@ class neko(commands.Cog):
     @batch_neko.group(invoke_without_command=True, case_insensitive=True)
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 30, commands.BucketType.guild)
-    async def lewd(self, ctx, argument: int):
+    async def _lewd(self, ctx, argument: int):
         logging.info(f"neko lewd ran by {ctx.author.name} ({ctx.author.id})")
         async with ctx.channel.typing():
             if ctx.guild and ctx.channel.is_nsfw() is False:
@@ -104,10 +104,10 @@ class neko(commands.Cog):
             await ctx.send("k I'm done, bye")
         logging.info("attachment sent\n----------")
 
-    @lewd.command(aliases=["gif"])
+    @lewd.command(aliases=["_gif"])
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 30, commands.BucketType.guild)
-    async def lewd_gif(self, ctx, argument: int):
+    async def _lewd_gif(self, ctx, argument: int):
         logging.info(f"neko lewd gif ran by {ctx.author.name} ({ctx.author.id})")
         async with ctx.channel.typing():
             if ctx.guild and ctx.channel.is_nsfw() is False:

@@ -13,11 +13,15 @@ class text(commands.Cog):
         self.bot = bot
 
 
-    @commands.command(case_insensitive=True)
+    @commands.command(case_insensitive=True, aliases=["invite"])
     async def links(self, ctx):
         logging.info(f'Recieved link in {ctx.guild.name}')
         embed = discord.Embed(
-            description="[Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot) | [Bot's Home Server](https://discord.gg/dWX6fpGUK9) | [Github Repo](https://github.com/sirspam/Sirbot)\n\n\nI hope you're having a good day :)\nthis text is just filler for the thumbnail\n",
+            description="""
+            [Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot) | 
+            [Bot's Home Server](https://discord.gg/dWX6fpGUK9) | [Github Repo](https://github.com/sirspam/Sirbot)\n\n\n
+            this text is just filler for the thumbnail\n
+            I hope you're having a good day :)\n""",
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.reply(embed=embed)
