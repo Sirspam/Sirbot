@@ -37,21 +37,17 @@ class neko(commands.Cog):
         logging.info("attachment sent\n----------")
 
     @neko.group(invoke_without_command=True, case_insensitive=True)
+    @commands.is_nsfw()
     async def lewd(self, ctx):
         logging.info("neko lewd ran")
-        if ctx.guild and ctx.channel.is_nsfw() is False:
-            logging.info("Ran outside of nsfw channel\n----------")
-            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
         async with ctx.channel.typing():
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/lewd"), "neko.png"))
         logging.info("attachment sent\n----------")
 
     @lewd.command(aliases=["gif"])
+    @commands.is_nsfw()
     async def lewd_gif(self, ctx):
         logging.info("neko lewd gif ran")
-        if ctx.guild and ctx.channel.is_nsfw() is False:
-            logging.info("Ran outside of nsfw channel\n----------")
-            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
         async with ctx.channel.typing():
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/nsfw_neko_gif"), "neko.gif"))
         logging.info("attachment sent\n----------")
@@ -89,12 +85,10 @@ class neko(commands.Cog):
     @batch_neko.group(invoke_without_command=True, case_insensitive=True)
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.is_nsfw()
     async def _lewd(self, ctx, argument: int):
         logging.info(f"neko lewd ran by {ctx.author.name} ({ctx.author.id})")
         async with ctx.channel.typing():
-            if ctx.guild and ctx.channel.is_nsfw() is False:
-                logging.info("Ran outside of nsfw channel\n----------")
-                return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
             await ctx.reply("I'm holding you accountable if I get rate limited")
             count = 0
             while argument != count:
@@ -107,12 +101,10 @@ class neko(commands.Cog):
     @lewd.command(aliases=["_gif"])
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.is_nsfw()
     async def _lewd_gif(self, ctx, argument: int):
         logging.info(f"neko lewd gif ran by {ctx.author.name} ({ctx.author.id})")
         async with ctx.channel.typing():
-            if ctx.guild and ctx.channel.is_nsfw() is False:
-                logging.info("Ran outside of nsfw channel\n----------")
-                return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>")
             await ctx.reply("I'm holding you accountable if I get rate limited")
             count = 0
             while argument != count:
