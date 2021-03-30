@@ -30,7 +30,7 @@ from random import choice
 colours = ["🟥","🟩","🟪","🟧","🟨","🟫","🆒"]
 
 
-class neko(commands.Cog):
+class amogus(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -51,4 +51,4 @@ class neko(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(neko(bot))
+    bot.add_cog(amogus(bot))
