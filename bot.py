@@ -53,7 +53,7 @@ bot.valid_HMD = [
 initial_cogs = [
     "jishaku",
     "cogs.internal.error_handler",
-    "cogs.internal.help",
+    "cogs.main.help",
     "cogs.main.scoresaber",
     "cogs.main.status",
     "cogs.main.text",
