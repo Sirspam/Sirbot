@@ -41,9 +41,7 @@ class amogus(commands.Cog):
     async def amogus(self, ctx):
         logging.info("Recieved amogus")
         square_colour = choice(colours)
-        a = randint(0,10)
-        print(a)
-        if a == 10:
+        if randint(0,10) == 10:
             await ctx.send(f"""⬛{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}
 ⬛{square_colour}<:sus_glass_1:826440778095394866><:sus_glass_2:826440778297507840><:sus_glass_3:826440778091331614><:sus_glass_4:826440778012295177><:sus_glass_5:826440778242457650>
 {square_colour}{square_colour}<:sus_glass_6:826440777797468181><:sus_glass_7:826440778196320298><:sus_glass_8:826440778220961802><:sus_glass_9:826440777834954794><:sus_glass_10:826440778040475679>
