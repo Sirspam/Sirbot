@@ -30,20 +30,21 @@ class helpClient(commands.Cog):
         embed.add_field(
             name="Sub Help Commands",
             value="""``help user`` | command and subcommands for the user command
-            \n``help update`` | valid fields for the user update subcommand
-            \n``help scoresaber`` | command and subcommands for the scoresaber command
-            \n``help neko`` | command and subcommands for the neko command""",
+            ``help update`` | valid fields for the user update subcommand
+            ``help scoresaber`` | command and subcommands for the scoresaber command
+            ``help neko`` | command and subcommands for the neko command""",
             inline=False
         )
         embed.add_field(
             name="General Commands",
-            value="""``links`` | Posts important links for Sirbot""",
+            value="""``links`` | Posts important links for Sirbot
+            ``amogus`` | <:amogus:826403430905937941>""",
             inline=False
         )
         embed.add_field(
             name="Admin Only Commands",
             value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in an__ ``\"``
-            \n``batch_neko <amount> | Posts a batch of neko images. Sub commands specified in help neko, with _ added to the start, also apply""",
+            ``batch_neko <amount> | Posts a batch of neko images. Sub commands specified in help neko, with _ added to the start, also apply""",
             inline=False
         )
         await ctx.reply(embed=embed)

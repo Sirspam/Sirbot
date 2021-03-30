@@ -52,13 +52,14 @@ bot.valid_HMD = [
 
 initial_cogs = [
     "jishaku",
-    "cogs.error_handler",
-    "cogs.user",
-    "cogs.scoresaber",
-    "cogs.neko",
-    "cogs.text",
-    "cogs.help",
-    "cogs.status"
+    "cogs.internal.error_handler",
+    "cogs.internal.help",
+    "cogs.main.scoresaber",
+    "cogs.main.status",
+    "cogs.main.text",
+    "cogs.main.user",
+    "cogs.fun.neko",
+    "cogs.fun.amogus"
 ]
 
 for cog in initial_cogs:
