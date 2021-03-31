@@ -40,6 +40,7 @@ You know, commands for when you need help with Sirbot.
 | status <kwarg> | Updates your status |
 | pfp <kwarg> | Updates your profile picture, the kwarg has to be a link going to an image |
 | colour <kwarg> | Updates your profile's embed colour |
+
 Color is an alias for colour, in case your country spells colour incorrectly.
   
 ### ScoreSaber Commands
@@ -51,6 +52,7 @@ Color is an alias for colour, in case your country spells colour incorrectly.
 | scoresaber topsongs | Gets a user's page of top songs |
 | scoresaber recentsongs | Gets a user's page of most recent songs |
 | scoresaber compare <first user> <second user> | Compares two users together |
+
 The embed for scoresaber compare is incredibly scuffed kekw
   
 ### Neko Commands
@@ -76,8 +78,8 @@ Clearly the best part about this bot
   
 ## Images
 Just going to post images of Sirbot here
-[user embed](https://cdn.discordapp.com/attachments/822033695778799616/826755754278518784/unknown.png)
-[ScoreSaber embed](https://cdn.discordapp.com/attachments/822033695778799616/826760855223271454/unknown.png)
+![user embed](https://cdn.discordapp.com/attachments/822033695778799616/826755754278518784/unknown.png)
+![ScoreSaber embed](https://cdn.discordapp.com/attachments/822033695778799616/826760855223271454/unknown.png)
 
 
 k, that it
