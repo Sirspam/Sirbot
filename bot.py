@@ -8,8 +8,11 @@ from dotenv import load_dotenv
 from utils import jskp
 from utils import prefixes
 
+
 cwd = os.getcwd()
 load_dotenv(f"{cwd}/config.env")
+default_prefix = os.getenv("DEFAULT_PREFIX")
+
 
 cred = credentials.Certificate({
   "type": "service_account",
@@ -25,7 +28,7 @@ cred = credentials.Certificate({
 })
 firebase_admin.initialize_app(cred)
 
-default_prefix = os.getenv("DEFAULT_PREFIX")
+
 async def prefix(bot, ctx):
     result = await prefixes.get_prefix(bot, ctx)
     if result is None:
@@ -33,13 +36,17 @@ async def prefix(bot, ctx):
     else:
         return commands.when_mentioned_or(result)(bot, ctx)
 
+
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True, help_command=None, allowed_mentions=discord.AllowedMentions(replied_user=False))
 
+
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-bot.header = {"User-Agent": "Sirbot (https://github.com/sirspam/Sirbot)"} # Just guessing the url, need to update it after creating the repo
+
+bot.default_prefix = default_prefix # I'd much prefer to define this at line 14 but this and that means I have to do it like this
+bot.header = {"User-Agent": "Sirbot (https://github.com/sirspam/Sirbot)"}
 bot.valid_HMD = [
             "CV1",
             "Rift S",
