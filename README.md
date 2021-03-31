@@ -33,13 +33,13 @@ You know, commands for when you need help with Sirbot.
 ### User Update
 | Command | Description |
 | --- | --- |
-| username <kwarg> | Updates your username within the user embed to whatever is specified in the kwarg |
-| scoresaber/steam/twitch/youtube/twitter/reddit <kwarg> | Updates your link for the service specified |
-| HMD <kwarg> | Updates what Head Mounted Display you're using |
-| birthday <kwarg> | Updates your birthday |
-| status <kwarg> | Updates your status |
-| pfp <kwarg> | Updates your profile picture, the kwarg has to be a link going to an image |
-| colour <kwarg> | Updates your profile's embed colour |
+| username | Updates your username within the user embed to whatever is specified |
+| scoresaber/steam/twitch/youtube/twitter/reddit | Updates your link for the service specified |
+| HMD | Updates what Head Mounted Display you're using |
+| birthday | Updates your birthday |
+| status | Updates your status |
+| pfp | Updates your profile picture, the kwarg has to be a link going to an image |
+| colour | Updates your profile's embed colour |
 
 Color is an alias for colour, in case your country spells colour incorrectly.
   
@@ -73,9 +73,9 @@ Clearly the best part about this bot
 ### Admin Only Commands
 | Command | Description |
 | --- | --- |
-| set_prefix "<prefix>" | Changes Sirbot's prefix |
-| batch_neko <count> | Posts a batch of nekos, because someone requested this for perfectly understandable reasons | 
-  
+| set_prefix "prefix" | Changes Sirbot's prefix |
+| batch_neko | Posts a batch of nekos, because someone requested this for perfectly understandable reasons | 
+
 ## Images
 Just going to post images of Sirbot here
 
