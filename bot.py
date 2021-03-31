@@ -25,6 +25,7 @@ cred = credentials.Certificate({
 })
 firebase_admin.initialize_app(cred)
 
+default_prefix = os.getenv("DEFAULT_PREFIX")
 async def prefix(bot, ctx):
     result = await prefixes.get_prefix(bot, ctx)
     if result is None:
