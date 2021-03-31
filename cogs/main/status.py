@@ -2,8 +2,8 @@ import discord
 import logging
 from discord.ext import commands
 from discord.ext import tasks
-from random import randint
-from utils import prefixes
+from random import choice
+from random import getrandbits
 
 
 play_status_list = [
@@ -13,13 +13,18 @@ play_status_list = [
     "NEKOPARA Vol. 2",
     "NEKOPARA Vol. 3",
     "NEKOPARA Vol. 4",
-    "With Nekos 🐾"
+    "Among Us",
+    "Amogus"
+    "with Nekos 🐾",
+    "a muffin map"
 ]
 
 watch_status_list = [
     "Aso being cute 😳",
     "Sirspam shit miss",
-    "Nekopara"
+    "Aqua being useless",
+    "Nekopara",
+    "KonoSuba"
 ]
 
 
@@ -30,14 +35,14 @@ class status(commands.Cog):
     @tasks.loop(hours=1)
     async def status(self):
         await self.bot.wait_until_ready()
-        if (randint(0, 1)) == 0:
-            value = (randint(0, len(play_status_list)))-1
-            await self.bot.change_presence(activity=discord.Game(name=play_status_list[value]))
-            logging.info(f"Status set to: {play_status_list[value]}")
+        if getrandbits(1) == 1:
+            value = choice(play_status_list)
+            await self.bot.change_presence(activity=discord.Game(name=value))
+            logging.info(f"Status set to: {value}")
         else:
-            value = (randint(0, len(watch_status_list)))-1
-            await self.bot.change_presence(activity=discord.Activity(name=watch_status_list[value], type=discord.ActivityType.watching))
-            logging.info(f"Status set to: {watch_status_list[value]}")
+            value = choice(watch_status_list)
+            await self.bot.change_presence(activity=discord.Activity(name=value, type=discord.ActivityType.watching))
+            logging.info(f"Status set to: {value}")
 
     @commands.Cog.listener()
     async def on_ready(self):
