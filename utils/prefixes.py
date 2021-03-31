@@ -1,10 +1,10 @@
 import logging
 from firebase_admin import firestore
 
-prefixes_dict = {}
 
 async def cache_prefixes():
     logging.info("Attempting to cache prefixes")
+    global prefixes_dict
     prefixes_dict = {}
     dab = firestore.client() # Tried putting this outside the function but it threw a fitty
     prefix_col = dab.collection("prefixes").document("collectionlist").get().get("array")
@@ -18,7 +18,7 @@ async def cache_prefixes():
 async def get_prefix(bot, ctx):
     if prefixes_dict is {}:
         await cache_prefixes()
-    if ctx.guild.id not in prefixes_dict:
+    if int(ctx.guild.id) not in prefixes_dict:
         return None
     return str(prefixes_dict[ctx.guild.id])
 
