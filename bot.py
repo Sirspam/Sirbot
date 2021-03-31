@@ -29,7 +29,7 @@ default_prefix = os.getenv("DEFAULT_PREFIX")
 async def prefix(bot, ctx):
     result = await prefixes.get_prefix(bot, ctx)
     if result is None:
-        return commands.when_mentioned_or(os.getenv("DEFAULT_PREFIX"))(bot, ctx)
+        return commands.when_mentioned_or(default_prefix)(bot, ctx)
     else:
         return commands.when_mentioned_or(result)(bot, ctx)
 
