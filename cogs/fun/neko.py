@@ -1,4 +1,6 @@
 # I can assure you, this cog is vital for the performance and useability of Scuffed b- I mean Sirbot
+#https://www.nekos.life/api/v2/endpoints
+
 
 import discord
 import io

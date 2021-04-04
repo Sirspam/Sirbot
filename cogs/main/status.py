@@ -14,7 +14,7 @@ play_status_list = [
     "NEKOPARA Vol. 3",
     "NEKOPARA Vol. 4",
     "Among Us",
-    "Amogus"
+    "Amogus",
     "with Nekos 🐾",
     "a muffin map"
 ]
