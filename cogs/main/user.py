@@ -76,7 +76,7 @@ class user(commands.Cog):
         # try:
         #   this on for size, Mister
         try:
-            colour = await commands.ColourConverter().convert(ctx, ref.get("colour"))
+            colour = await commands.ColourConverter().convert(ctx, "0x"+ref.get("colour"))
             embed = discord.Embed(title=username, colour=colour)
         except BaseException:
             embed = discord.Embed(
@@ -318,7 +318,7 @@ class user(commands.Cog):
     async def colour(self, ctx, argument):
         logging.info(f"Recieved user update colour {ctx.author.name}")
         try:
-            await commands.ColourConverter().convert(ctx, argument)
+            await commands.ColourConverter().convert(ctx, "0x"+argument)
         except Exception as e:
             await ctx.reply("Please use a valid hexadecimal colour value. uwu")
             return logging.info(f"expect triggered: {e}")
