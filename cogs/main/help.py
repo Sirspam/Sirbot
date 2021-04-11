@@ -12,7 +12,7 @@ async def prefix(self, ctx):
         return result
 
 
-class helpClient(commands.Cog):
+class HelpClient(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -205,4 +205,4 @@ class helpClient(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(helpClient(bot))
+    bot.add_cog(HelpClient(bot))

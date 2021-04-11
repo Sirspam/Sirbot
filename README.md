@@ -74,7 +74,6 @@ Clearly the best part about this bot
 | Command | Description |
 | --- | --- |
 | set_prefix "prefix" | Changes Sirbot's prefix |
-| batch_neko | Posts a batch of nekos, because someone requested this for perfectly understandable reasons | 
 
 ## Images
 Just going to post images of Sirbot here
