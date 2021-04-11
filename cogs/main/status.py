@@ -15,6 +15,7 @@ play_status_list = [
     "NEKOPARA Vol. 4",
     "Among Us",
     "Amogus",
+    "Katawa Shoujo",
     "with Nekos 🐾",
     "a muffin map"
 ]
@@ -24,11 +25,16 @@ watch_status_list = [
     "Sirspam shit miss",
     "Aqua being useless",
     "Nekopara",
-    "KonoSuba"
+    "KonoSuba",
+    "Highschool DxD",
+    "Interspecies Reviewers",
+    "Uzaki-chan Wants to Hang Out!",
+    "Don't Toy With Me, Miss Nagatoro",
+    "My Little Sister Can't Be This Cute"
 ]
 
 
-class status(commands.Cog):
+class Status(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -50,4 +56,4 @@ class status(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(status(bot))
+    bot.add_cog(Status(bot))
