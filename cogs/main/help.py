@@ -43,8 +43,7 @@ class HelpClient(commands.Cog):
         )
         embed.add_field(
             name="Admin Only Commands",
-            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in an__ ``\"``
-            ``batch_neko <amount>`` | Posts a batch of neko images. Sub commands specified in help neko, with _ added to the start, also apply""",
+            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in an__ ``""",
             inline=False
         )
         await ctx.reply(embed=embed)
