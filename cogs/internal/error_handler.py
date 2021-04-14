@@ -10,6 +10,7 @@ class error_handler(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         logging.info(f"on_command_error triggered")
+        
         if isinstance(error, commands.BadArgument):
             logging.info("BadArgument handler ran\n----------")
             return await ctx.send(f"You've given a bad argument!\nCheck ``{ctx.prefix}help`` for what arguments you need to give", delete_after=20)
@@ -31,8 +32,7 @@ class error_handler(commands.Cog):
             return await ctx.send(f"Command on cooldown, ``{math.ceil(error.retry_after)} seconds``", delete_after=int(math.ceil(error.retry_after)))
 
         elif isinstance(error, commands.MissingRequiredArgument):
-            logging.info("MissingRequiredArgument handler ran\n----------")
-            # \n``Missing: {error.param.name}``")
+            logging.info(f"MissingRequiredArgument handler ran. Missing: {error.param.name}\n----------")
             return await ctx.send("You didn't give a required argument.", delete_after=20)
 
         elif isinstance(error, commands.MissingPermissions):
@@ -41,7 +41,7 @@ class error_handler(commands.Cog):
         
         elif isinstance(error, commands.NSFWChannelRequired):
             logging.info("NSFWChannelRequired hander ran\n----------")
-            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>", delete_after=20)
+            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>\n``This command can only be ran in an nsfw channel``")
 
         elif isinstance(error, commands.CheckFailure):
             logging.error(f"{error}\n----------")
