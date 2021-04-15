@@ -43,7 +43,7 @@ class HelpClient(commands.Cog):
         )
         embed.add_field(
             name="Admin Only Commands",
-            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in ``""``s__ ``""",
+            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in ``"``s__""",
             inline=False
         )
         await ctx.reply(embed=embed)
