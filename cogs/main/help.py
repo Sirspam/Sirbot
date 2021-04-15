@@ -43,7 +43,7 @@ class HelpClient(commands.Cog):
         )
         embed.add_field(
             name="Admin Only Commands",
-            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in an__ ``""",
+            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in ``""``s__ ``""",
             inline=False
         )
         await ctx.reply(embed=embed)
@@ -54,7 +54,7 @@ class HelpClient(commands.Cog):
         logging.info("Recieved help user")
         embed = discord.Embed(
             title="Help User",
-            description="These are the valid arguments for the user command",
+            description=f"These are the valid arguments for ``{ctx.prefix}user",
             color=0x00A9E0)
         embed.add_field(
             name="user [mention]",
@@ -133,7 +133,7 @@ class HelpClient(commands.Cog):
         logging.info("Recieved help scoresaber")
         embed = discord.Embed(
             title="Help ScoreSaber",
-            description=f"These are the valid arguments for ``{ctx.prefix}ScoreSaber``\n~~certainly not a bad ripoff of bs bot~~",
+            description=f"These are the valid arguments for ``{ctx.prefix}scoresaber``\n~~certainly not a bad ripoff of bs bot~~",
             color=0x00A9E0
         )
         embed.add_field(
@@ -174,10 +174,9 @@ class HelpClient(commands.Cog):
         logging.info("Recieved help neko")
         embed = discord.Embed(
             title="Help Neko",
-            description=f"These are the valid arguments for ``{ctx.prefix}``neko",
+            description=f"These are the valid arguments for ``{ctx.prefix}neko``",
             colour=0x00A9E0
         )
-        #embed.set_thumbnail(url="https://i.imgur.com/7Whb3qK.png")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/754643335511015505/810691863610523668/unknown.png")
         embed.add_field(
             name="neko",
