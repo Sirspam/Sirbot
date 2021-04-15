@@ -140,7 +140,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     ref = dab.collection("users").document(str(ctx.author.id)).get()
     if ref.exists is False:
         await ctx.reply("That user isn't in my database!")
-        return logging.info("scoresaber is None\n----------")
+        return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
     if type == "recentSongs":
@@ -224,7 +224,7 @@ class scoresaber(commands.Cog):
             ref = dab.collection("users").document(str(ctx.author.id)).get()
             if ref.exists is False:
                 await ctx.reply("That user isn't in my database!")
-                return logging.info("scoresaber is None\n----------")
+                return logging.info("scoresaber is None")
             scoresaber = ref.get('scoresaber')
             SS_id = scoresaber[25:]
             URL = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
@@ -275,35 +275,35 @@ class scoresaber(commands.Cog):
                 url="https://new.scoresaber.com" + playerInfo["avatar"]
             )
         await ctx.reply(embed=embed)
-        logging.info("Response: ScoreSaber UserData embed\n----------")
+        logging.info("Response: ScoreSaber UserData embed")
 
     @scoresaber.command(aliases=["rs"])
     async def recentsong(self, ctx, argument1=1, argument2=None):
         logging.info(f"Recieved >scoresaber recentsong {ctx.author.name}")
         async with ctx.channel.typing():
             await songEmbed(self, ctx, argument1, argument2, type="recentSong")
-        logging.info("Finished\n----------")
+        logging.info("Finished")
 
     @scoresaber.command(aliases=["ts"])
     async def topsong(self, ctx, argument1=1, argument2=None):
         logging.info(f"Recieved >scoresaber topsong {ctx.author.name}")
         async with ctx.channel.typing():
             await songEmbed(self, ctx, argument1, argument2, type="topSong")
-        logging.info("Finished\n----------")
+        logging.info("Finished")
 
     @scoresaber.command(aliases=["rss"])
     async def recentsongs(self, ctx, argument1=1, argument2=None):
         logging.info(f"Recieved >scoresaber recentSongs {ctx.author.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="recentSongs")
-        logging.info("Response: ScoreSaber recentSongs embed\n----------")
+        logging.info("Response: ScoreSaber recentSongs embed")
 
     @scoresaber.command(aliases=["tss"])
     async def topsongs(self, ctx, argument1=1, argument2=None):
         logging.info(f"Recieved >scoresaber topSongs {ctx.author.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="topSongs")
-        logging.info("Response: ScoreSaber topSongs embed\n----------")
+        logging.info("Response: ScoreSaber topSongs embed")
 
     @scoresaber.command(aliases=["com"])
     async def compare(self, ctx, argument1: discord.Member=None, argument2: discord.Member=None):
@@ -317,7 +317,7 @@ class scoresaber(commands.Cog):
             user2 = dab.collection("users").document(str(argument2.id)).get()
             if user1.exists is False or user2.exists is False:
                 await ctx.reply("That user isn't in my database!")
-                return logging.info("scoresaber is None\n----------")
+                return logging.info("scoresaber is None")
             scoresaber1 = user1.get('scoresaber')
             scoresaber2 = user2.get('scoresaber')
             SS_id1 = scoresaber1[25:]

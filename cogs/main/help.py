@@ -47,7 +47,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed\n----------")
+        logging.info("Response: help embed")
 
     @help.command(aliases=["u"])
     async def user(self, ctx):
@@ -77,7 +77,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed\n----------")
+        logging.info("Response: help embed")
     
     @help.command(aliases=["up"])
     async def update(self, ctx):
@@ -126,7 +126,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed\n----------")
+        logging.info("Response: help embed")
 
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
@@ -167,7 +167,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed\n----------")
+        logging.info("Response: help embed")
 
     @help.command()
     async def neko(self, ctx):
@@ -199,7 +199,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed\n----------")
+        logging.info("Response: help embed")
 
 
 def setup(bot):

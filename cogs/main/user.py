@@ -94,7 +94,7 @@ class user(commands.Cog):
         else:
             embed.set_thumbnail(url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
-        logging.info('Response: user embed\n----------')
+        logging.info('Response: user embed')
 
 
     @user.command(case_insensitive=True, aliases=["link"])
@@ -133,9 +133,9 @@ class user(commands.Cog):
             col_ref.sort()
             dab.collection('users').document('collectionlist').update({'array': col_ref})
         except Exception as e:
-            return logging.info(e+"\n----------")
+            return logging.info(e+"")
         await ctx.reply(f'{ctx.author.name} has sucessfully been added to the database!\nUse ``>user update`` to add optional customisation')
-        logging.info(f'Response: {ctx.author.name} has sucessfully been added to the database\n----------')
+        logging.info(f'Response: {ctx.author.name} has sucessfully been added to the database')
     
     @commands.Cog.listener("on_member_remove")
     async def on_member_remove(self, member):
@@ -153,9 +153,9 @@ class user(commands.Cog):
                 dab.collection('users').document('collectionlist').update({'array': col_ref})
                 dab.collection("users").document(str(ctx.author.id)).delete()
                 await ctx.reply(f"{ctx.author.name} has been successfully removed from the database")
-                logging.info(f"Response: {ctx.author.id} has been successfully removed to the database\n----------")
+                logging.info(f"Response: {ctx.author.id} has been successfully removed to the database")
             except Exception as e:
-                logging.error(e+"\n----------")
+                logging.error(e+"")
         elif argument is not None:
             if argument.lower() in ["username", "steam", "twitch", "youtube", "twitter", "reddit", "birthday", "pfp", "hmd", "status", "colour", "color"]:
                 if argument.lower() == "username":
@@ -183,7 +183,7 @@ class user(commands.Cog):
     async def update(self, ctx):
         logging.info(f"Recieved user update")
         await ctx.reply(f"You need to state what you want to update!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
-        logging.info("no sub command given\n---------")
+        logging.info("no sub command given")
 
     @update.command(case_insensitive=True)
     async def username(self, ctx, *, argument):
@@ -191,7 +191,7 @@ class user(commands.Cog):
         doc_ref = dab.collection("users").document(str(ctx.author.id))
         doc_ref.update({'username': argument})
         await ctx.reply(f"I've updated your username to {argument}!")
-        logging.info(f"{ctx.author.name} has updated their username to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their username to {argument}")
 
     @update.command(case_insensitive=True)
     async def scoresaber(self, ctx, argument):
@@ -205,7 +205,7 @@ class user(commands.Cog):
         doc_ref.update({
             'scoresaber': argument})
         await ctx.reply("I've updated your Scoresaber")
-        logging.info(f"{ctx.author.name} has updated their scoresaber to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their scoresaber to {argument}")
 
     @update.command(case_insensitive=True)
     async def steam(self, ctx, argument):
@@ -214,7 +214,7 @@ class user(commands.Cog):
         doc_ref.update({
             'steam': argument})
         await ctx.reply("I've updated your Steam")
-        logging.info(f"{ctx.author.name} has updated their steam to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their steam to {argument}")
 
     @update.command(case_insensitive=True)
     async def twitch(self, ctx, argument):
@@ -223,7 +223,7 @@ class user(commands.Cog):
         doc_ref.update({
             'twitch': argument})
         await ctx.reply("I've updated your Twitch")
-        logging.info(f"{ctx.author.name} has updated their twitch to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their twitch to {argument}")
 
     @update.command(case_insensitive=True)
     async def youtube(self, ctx, argument):
@@ -232,7 +232,7 @@ class user(commands.Cog):
         doc_ref.update({
             'youtube': argument})
         await ctx.reply("I've updated your Youtube")
-        logging.info(f"{ctx.author.name} has updated their youtube to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their youtube to {argument}")
 
     @update.command(case_insensitive=True)
     async def twitter(self, ctx, argument):
@@ -241,7 +241,7 @@ class user(commands.Cog):
         doc_ref.update({
             'twitter': argument})
         await ctx.reply("I've updated your Twitter")
-        logging.info(f"{ctx.author.name} has updated their twitter to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their twitter to {argument}")
 
     @update.command(case_insensitive=True)
     async def reddit(self, ctx, argument):
@@ -250,7 +250,7 @@ class user(commands.Cog):
         doc_ref.update({
             'reddit': argument})
         await ctx.reply("I've updated your Reddit")
-        logging.info(f"{ctx.author.name} has updated their reddit to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their reddit to {argument}")
 
     @update.command(case_insensitive=True)
     async def birthday(self, ctx, argument):
@@ -276,7 +276,7 @@ class user(commands.Cog):
         doc_ref.update({
             'birthday': argument})
         await ctx.reply(f"I've updated your birthday to {argument}!")
-        logging.info(f"{ctx.author.name} has updated their birthday to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their birthday to {argument}")
 
     @update.command(case_insensitive=True)
     async def hmd(self, ctx, *, argument):
@@ -291,7 +291,7 @@ class user(commands.Cog):
         doc_ref.update({
             'hmd': self.bot.valid_HMD[pos]})
         await ctx.reply(f"I've updated your HMD to {self.bot.valid_HMD[pos]}!")
-        logging.info(f"{ctx.author.name} has updated their status to {self.bot.valid_HMD[pos]}\n----------")
+        logging.info(f"{ctx.author.name} has updated their status to {self.bot.valid_HMD[pos]}")
 
     @update.command(case_insensitive=True)
     async def pfp(self, ctx, argument):
@@ -303,7 +303,7 @@ class user(commands.Cog):
         doc_ref.update({
             'pfp': argument})
         await ctx.reply("I've updated your pfp")
-        logging.info(f"{ctx.author.name} has updated their pfp to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their pfp to {argument}")
 
     @update.command(case_insensitive=True)
     async def status(self, ctx, *, argument):
@@ -312,7 +312,7 @@ class user(commands.Cog):
         doc_ref.update({
             'status': argument})
         await ctx.reply("I've updated your status")
-        logging.info(f"{ctx.author.name} has updated their status to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their status to {argument}")
 
     @update.command(case_insensitive=True, aliases=["color"])  # Americans ew
     async def colour(self, ctx, argument):
@@ -326,7 +326,7 @@ class user(commands.Cog):
         doc_ref.update({
             'colour': argument})
         await ctx.reply("I've updated your colour")
-        logging.info(f"{ctx.author.name} has updated their colour to {argument}\n----------")
+        logging.info(f"{ctx.author.name} has updated their colour to {argument}")
 
 
 def setup(bot):

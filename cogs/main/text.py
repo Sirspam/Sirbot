@@ -25,7 +25,7 @@ class text(commands.Cog):
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.reply(embed=embed)
-        logging.info(f'Link embed sent\n----------')
+        logging.info(f'Link embed sent')
 
     @commands.command(case_insensitive=True)
     @commands.has_permissions(administrator = True)
