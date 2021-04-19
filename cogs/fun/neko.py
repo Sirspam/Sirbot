@@ -7,7 +7,6 @@ import io
 import aiohttp
 import json
 import logging
-import asyncio
 from discord.ext import commands
 
 async def image(self, link):
