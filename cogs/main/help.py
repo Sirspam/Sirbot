@@ -23,7 +23,7 @@ class HelpClient(commands.Cog):
         ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
         embed = discord.Embed(
             title="Help",
-            description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument",
+            description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument\nCommands with (NSFW) will only work within NSFW channels.",
             color=0x00A9E0
         )
         embed.set_thumbnail(url=self.bot.user.avatar_url)
@@ -38,7 +38,8 @@ class HelpClient(commands.Cog):
         embed.add_field(
             name="General Commands",
             value="""``links`` | Posts important links for Sirbot
-            ``amogus`` | <:amogus:826403430905937941>""",
+            ``amogus`` | <:amogus:826403430905937941>
+            ``nhentai [ID]`` | Gets a doujin from nhentai, will be random if no ID is given. (NSFW)""",
             inline=False
         )
         embed.add_field(
@@ -190,12 +191,12 @@ class HelpClient(commands.Cog):
         )
         embed.add_field(
             name="neko lewd",
-            value="Posts a lewd image of a neko. Only works in an NSFW channel",
+            value="Posts a lewd image of a neko. (NSFW)",
             inline=False
         )
         embed.add_field(
             name="neko lewd gif",
-            value="Posts a lewd gif of a neko. Only works in an NSFW channel",
+            value="Posts a lewd gif of a neko. (NSFW)",
             inline=False
         )
         await ctx.reply(embed=embed)

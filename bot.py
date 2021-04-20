@@ -66,8 +66,9 @@ initial_cogs = [
     "cogs.main.status",
     "cogs.main.text",
     "cogs.main.user",
+    "cogs.fun.amogus",
     "cogs.fun.neko",
-    "cogs.fun.amogus"
+    "cogs.fun.nhentai"
 ]
 
 for cog in initial_cogs:
@@ -80,7 +81,7 @@ for cog in initial_cogs:
 
 @bot.event
 async def on_ready():
-    logging.info('Bot has successfully launched as {0.user}'.format(bot))
+    logging.info(f"Bot has successfully launched as {bot.user}")
     await prefixes.cache_prefixes()
 
 @bot.event
