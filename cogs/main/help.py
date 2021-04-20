@@ -19,7 +19,7 @@ class HelpClient(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["he"])
     async def help(self, ctx):
-        logging.info("Recieved help")
+        logging.info(f"Recieved help in {ctx.guild.name}")
         ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
         embed = discord.Embed(
             title="Help",
@@ -52,7 +52,7 @@ class HelpClient(commands.Cog):
 
     @help.command(aliases=["u"])
     async def user(self, ctx):
-        logging.info("Recieved help user")
+        logging.info(f"Recieved help user in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help User",
             description=f"These are the valid arguments for ``{ctx.prefix}user",
@@ -82,7 +82,7 @@ class HelpClient(commands.Cog):
     
     @help.command(aliases=["up"])
     async def update(self, ctx):
-        logging.info("Recieved help update")
+        logging.info(f"Recieved help update in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help User Update",
             description=f"These are the valid fields for ``{ctx.prefix}user update <field> <kwarg>``\nAny of these can be removed with ``user remove <field>``",
@@ -131,7 +131,7 @@ class HelpClient(commands.Cog):
 
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
-        logging.info("Recieved help scoresaber")
+        logging.info(f"Recieved help scoresaber in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help ScoreSaber",
             description=f"These are the valid arguments for ``{ctx.prefix}scoresaber``\n~~certainly not a bad ripoff of bs bot~~",
@@ -172,7 +172,7 @@ class HelpClient(commands.Cog):
 
     @help.command()
     async def neko(self, ctx):
-        logging.info("Recieved help neko")
+        logging.info(f"Recieved help neko in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help Neko",
             description=f"These are the valid arguments for ``{ctx.prefix}neko``",

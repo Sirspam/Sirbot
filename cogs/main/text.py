@@ -15,7 +15,7 @@ class text(commands.Cog):
 
     @commands.command(case_insensitive=True, aliases=["invite"])
     async def links(self, ctx):
-        logging.info(f'Recieved link in {ctx.guild.name}')
+        logging.info(f"Recieved link in {ctx.guild.name}")
         embed = discord.Embed(
             description="""
             [Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot) | 
@@ -31,7 +31,7 @@ class text(commands.Cog):
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 15, commands.BucketType.guild)
     async def set_prefix(self, ctx, *, arg):
-        logging.info(f"{ctx.guild.id} setting prefix to: {arg}")
+        logging.info(f"Recieved set_prefix {arg} in {ctx.guild.name}")
         if arg[:1]!='"' or arg[-1:]!='"':
             raise commands.BadArgument
         if arg == '">"':

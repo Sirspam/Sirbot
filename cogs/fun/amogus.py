@@ -39,7 +39,7 @@ class amogus(commands.Cog):
 
     @commands.command()
     async def amogus(self, ctx):
-        logging.info("Recieved amogus")
+        logging.info(f"Recieved amogus in {ctx.guild.name}")
         square_colour = choice(colours)
         if randint(0,10) == 10:
             await ctx.send(f"""⬛{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}

@@ -72,7 +72,7 @@ class NHentaiCog(commands.Cog):
     @commands.is_nsfw()
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["nh"])
     async def nhentai(self, ctx, *, argument=None):
-        logging.info("nhentai ran")
+        logging.info(f"nhentai ran in {ctx.guild.name}")
         if argument is None:
             sauce = nhentai.get_random()
             logging.info(sauce)
