@@ -9,19 +9,19 @@ nhentai = NHentai()
 
 
 async def sauce_embed(sauce):
-    Tags = ""
+    tags = str()
     for x in getattr(sauce, "tags"):
-        Tags = Tags + x + ", "
-    Artist = ""
+        tags = tags + x + ", "
+    artist = str()
     for x in getattr(sauce, "artists"):
-        Artist = Artist + x + ", "
-    Parodies = ""
+        artist = artist + x + ", "
+    parodies = str()
     for x in getattr(sauce, "parodies"):
-        Parodies = Parodies + x + ", "
+        parodies = parodies + x + ", "
     sec_title = "**Alternative Title:** "
     for x in getattr(sauce, "secondary_title"):
         sec_title = sec_title + x
-    characters = ""
+    characters = str()
     for x in getattr(sauce, "characters"):
         characters = characters + x + ", "
     if "english" in getattr(sauce, "languages"):
@@ -40,30 +40,32 @@ async def sauce_embed(sauce):
     )
     embed.add_field(
         name="Tags",
-        value=Tags,
+        value=tags,
         inline=False
     )
     embed.add_field(
         name="Artists",
-        value=Artist,
+        value=artist,
         inline=True
     )
-    embed.add_field(
-        name="Parodies",
-        value=Parodies,
-        inline=True
-    )
-    embed.add_field(
-        name="Characters",
-        value=characters,
-        inline=False
-    )
+    if parodies:
+        embed.add_field(
+            name="Parodies",
+            value=parodies,
+            inline=True
+        )
+    if characters:
+        embed.add_field(
+            name="Characters",
+            value=characters,
+            inline=False
+        )
     embed.set_footer(text=str(getattr(sauce,"total_pages"))+" total pages")
     embed.set_image(url=(getattr(sauce,"images"))[0])
     return embed
 
 
-class nhen(commands.Cog):
+class NHentaiCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -71,9 +73,7 @@ class nhen(commands.Cog):
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["nh"])
     async def nhentai(self, ctx, *, argument=None):
         logging.info("nhentai ran")
-        if not ctx.guild:
-            await self.bot.get_channel(754632208257515541).send(f"{ctx.author.name} is being lewd in my DMs! <a:GabiEmbarrased:807384551646560286>")
-        elif argument is None:
+        if argument is None:
             sauce = nhentai.get_random()
             logging.info(sauce)
             await ctx.send(embed=await sauce_embed(sauce))
@@ -87,4 +87,4 @@ class nhen(commands.Cog):
             logging.info("Posted embed\n----------")
 
 def setup(bot):
-    bot.add_cog(nhen(bot))
+    bot.add_cog(NHentaiCog(bot))
