@@ -26,14 +26,14 @@ class Neko(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def neko(self, ctx):
-        logging.info("neko ran")
+        logging.info(f"Recieved neko in {ctx.guild.name}")
         async with ctx.channel.typing():
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/neko"), "neko.png"))
         logging.info("attachment sent")
         
     @neko.command()
     async def gif(self, ctx):
-        logging.info("neko gif ran")
+        logging.info(f"Recieved neko gif in {ctx.guild.name}")
         async with ctx.channel.typing():
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/ngif"), "neko.gif"))
         logging.info("attachment sent")
@@ -41,7 +41,7 @@ class Neko(commands.Cog):
     @neko.group(invoke_without_command=True, case_insensitive=True)
     @commands.is_nsfw()
     async def lewd(self, ctx):
-        logging.info("neko lewd ran")
+        logging.info(f"Recieved neko lewd in {ctx.guild.name}")
         async with ctx.channel.typing():
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/lewd"), "neko.png"))
         logging.info("attachment sent")
@@ -49,7 +49,7 @@ class Neko(commands.Cog):
     @lewd.command(aliases=["gif"])
     @commands.is_nsfw()
     async def lewd_gif(self, ctx):
-        logging.info("neko lewd gif ran")
+        logging.info(f"Recieved neko lewd gif in {ctx.guild.name}")
         async with ctx.channel.typing():
             await ctx.reply(file=discord.File(await image(self, "https://nekos.life/api/v2/img/nsfw_neko_gif"), "neko.gif"))
         logging.info("attachment sent")

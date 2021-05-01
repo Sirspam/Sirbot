@@ -19,11 +19,11 @@ class HelpClient(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["he"])
     async def help(self, ctx):
-        logging.info("Recieved help")
+        logging.info(f"Recieved help in {ctx.guild.name}")
         ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
         embed = discord.Embed(
             title="Help",
-            description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument",
+            description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument\nCommands with (NSFW) will only work within NSFW channels.",
             color=0x00A9E0
         )
         embed.set_thumbnail(url=self.bot.user.avatar_url)
@@ -38,7 +38,8 @@ class HelpClient(commands.Cog):
         embed.add_field(
             name="General Commands",
             value="""``links`` | Posts important links for Sirbot
-            ``amogus`` | <:amogus:826403430905937941>""",
+            ``amogus`` | <:amogus:826403430905937941>
+            ``nhentai [ID]`` | Gets a doujin from nhentai, will be random if no ID is given. (NSFW)""",
             inline=False
         )
         embed.add_field(
@@ -51,7 +52,7 @@ class HelpClient(commands.Cog):
 
     @help.command(aliases=["u"])
     async def user(self, ctx):
-        logging.info("Recieved help user")
+        logging.info(f"Recieved help user in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help User",
             description=f"These are the valid arguments for ``{ctx.prefix}user",
@@ -81,7 +82,7 @@ class HelpClient(commands.Cog):
     
     @help.command(aliases=["up"])
     async def update(self, ctx):
-        logging.info("Recieved help update")
+        logging.info(f"Recieved help update in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help User Update",
             description=f"These are the valid fields for ``{ctx.prefix}user update <field> <kwarg>``\nAny of these can be removed with ``user remove <field>``",
@@ -130,7 +131,7 @@ class HelpClient(commands.Cog):
 
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
-        logging.info("Recieved help scoresaber")
+        logging.info(f"Recieved help scoresaber in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help ScoreSaber",
             description=f"These are the valid arguments for ``{ctx.prefix}scoresaber``\n~~certainly not a bad ripoff of bs bot~~",
@@ -171,7 +172,7 @@ class HelpClient(commands.Cog):
 
     @help.command()
     async def neko(self, ctx):
-        logging.info("Recieved help neko")
+        logging.info(f"Recieved help neko in {ctx.guild.name}")
         embed = discord.Embed(
             title="Help Neko",
             description=f"These are the valid arguments for ``{ctx.prefix}neko``",
@@ -190,12 +191,12 @@ class HelpClient(commands.Cog):
         )
         embed.add_field(
             name="neko lewd",
-            value="Posts a lewd image of a neko. Only works in an NSFW channel",
+            value="Posts a lewd image of a neko. (NSFW)",
             inline=False
         )
         embed.add_field(
             name="neko lewd gif",
-            value="Posts a lewd gif of a neko. Only works in an NSFW channel",
+            value="Posts a lewd gif of a neko. (NSFW)",
             inline=False
         )
         await ctx.reply(embed=embed)
