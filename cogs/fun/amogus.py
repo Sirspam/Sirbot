@@ -32,7 +32,7 @@ from random import randint
 colours = ["🟥","🟩","🟪","🟧","🟨","🟫","🆒"]
 
 
-class amogus(commands.Cog):
+class Amogus(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -64,6 +64,6 @@ class amogus(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(amogus(bot))
+    bot.add_cog(Amogus(bot))
 
 # this single py file should put me on a suicide watch list

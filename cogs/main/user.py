@@ -11,7 +11,7 @@ from firebase_admin import firestore
 dab = firestore.client()
 
 
-class user(commands.Cog):
+class User(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -330,4 +330,4 @@ class user(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(user(bot))
+    bot.add_cog(User(bot))

@@ -14,7 +14,6 @@ import json
 import logging
 from random import randint
 from discord.ext import commands
-from discord.utils import get
 from firebase_admin import firestore
 
 
@@ -210,7 +209,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     logging.info("embed message sent")
 
 
-class scoresaber(commands.Cog):
+class ScoreSaber(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -386,4 +385,4 @@ class scoresaber(commands.Cog):
             await ctx.reply(embed=embed)
 
 def setup(bot):
-    bot.add_cog(scoresaber(bot))
+    bot.add_cog(ScoreSaber(bot))

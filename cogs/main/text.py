@@ -8,7 +8,7 @@ from utils import prefixes
 dab = firestore.client()
 
 
-class text(commands.Cog):
+class Text(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -60,4 +60,4 @@ class text(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(text(bot))
+    bot.add_cog(Text(bot))
