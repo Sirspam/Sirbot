@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 import discord
 import asyncio
 import re
@@ -119,7 +120,11 @@ class User(commands.Cog):
             scoresaber = scoresaber.split("?", 1)[0]
             scoresaber = scoresaber.split("&", 1)[0]
         response = requests.get(f"https://new.scoresaber.com/api/player/{scoresaber[25:]}/full", headers=self.bot.header)
-        json_data = json.loads(response.text)
+        try:
+            json_data = json.loads(response.text)
+        except JSONDecodeError:
+            logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
+            return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
         if "error" in json_data:
             await ctx.reply("That scoresaber link seems to be invalid!\nPlease try again and use a valid link!")
             return

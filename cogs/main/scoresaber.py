@@ -8,6 +8,7 @@
 # Ranking Pages
 
 
+from json.decoder import JSONDecodeError
 import discord
 import requests
 import json
@@ -45,9 +46,9 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     logging.info(URL+"\n"+URL1)
     try: 
         json_data = json.loads(requests.get(URL, headers=self.bot.header).text)
-    except:
-        logging.info(f"scoresaber api returned nothing, probably getting hammered lol")
-        return await ctx.reply("ScoreSaber didn't give a valid response!\nTry again later ^w^")
+    except JSONDecodeError:
+            logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
+            return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
     if "error" in json_data:
         logging.info(f"scoresaber api returned an error\n{json_data}")
         return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
@@ -151,7 +152,11 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     URL1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
     logging.info(URL+"\n"+URL1)
     response = requests.get(URL, headers=self.bot.header)
-    json_data = json.loads(response.text)
+    try:
+        json_data = json.loads(response.text)
+    except JSONDecodeError:
+        logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
+        return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
     if "error" in json_data:
         message = discord.Embed(
             title="Uh Oh, the codie wodie did an oopsie woopsie! uwu",
@@ -229,7 +234,11 @@ class ScoreSaber(commands.Cog):
             URL = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
             logging.info(URL)
             response = requests.get(URL, headers=self.bot.header)
-            json_data = json.loads(response.text)
+            try:
+                json_data = json.loads(response.text)
+            except JSONDecodeError:
+                logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
+                return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
             if "error" in json_data:
                 return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
             playerInfo = json_data["playerInfo"]
