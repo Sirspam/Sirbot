@@ -1,16 +1,15 @@
 # https://new.scoresaber.com/api/player/76561198091128855/full
 # https://new.scoresaber.com/api/static/covers/69E494F4A295197BF03720029086FABE6856FBCE.png
-# URL = (f"https://new.scoresaber.com/api/player/{SS_id}/full") - Get UserData
-# URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}") - #Get Top Songs
-# URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}") - #Get Recent Songs
-# URL = (f"https://new.scoresaber.com/api/players/{page}") - #Get Global Rankings
-# URL = (f"https://new.scoresaber.com/api/players/pages") - #Get Global
+# url = (f"https://new.scoresaber.com/api/player/{SS_id}/full") - Get UserData
+# url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}") - #Get Top Songs
+# url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}") - #Get Recent Songs
+# url = (f"https://new.scoresaber.com/api/players/{page}") - #Get Global Rankings
+# url = (f"https://new.scoresaber.com/api/players/pages") - #Get Global
 # Ranking Pages
 
 
 from json.decoder import JSONDecodeError
 import discord
-import requests
 import json
 import logging
 from random import randint
@@ -39,13 +38,14 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     else:
         page = int(page)
     if type == "recentSong":
-        URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}")
+        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}")
     elif type == "topSong":
-        URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}")
-    URL1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
-    logging.info(URL+"\n"+URL1)
+        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}")
+    url1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
+    logging.info(url+"\n"+url1)
     try: 
-        json_data = json.loads(requests.get(URL, headers=self.bot.header).text)
+        async with self.bot.session.get(url) as resp:
+            json_data = json.loads(await resp.text())
     except JSONDecodeError:
             logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
             return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
@@ -53,14 +53,16 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         logging.info(f"scoresaber api returned an error\n{json_data}")
         return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
     songsList = json_data["scores"]
-    json_data = json.loads(requests.get(URL1, headers=self.bot.header).text)
+    async with self.bot.session.get(url1) as resp:
+        json_data = json.loads(await resp.text())
     playerInfo = json_data["playerInfo"]
     if page > 1:
         while arg_page >= 8:
             arg_page = (arg_page - 8)
     Song = songsList[(arg_page - 1)]
-    URL2 = (f"https://beatsaver.com/api/maps/by-hash/"+Song["songHash"])
-    json_data = json.loads(requests.get(URL2, headers=self.bot.header).text)
+    url2 = (f"https://beatsaver.com/api/maps/by-hash/"+Song["songHash"])
+    async with self.bot.session.get(url2) as resp:
+        json_data = json.loads(await resp.text())
     songBSLink = (f"https://beatsaver.com/beatmap/"+json_data["key"])
     if Song["maxScore"] == 0:
         songAcc = f"ScoreSaber API being fucky wucky,\nso you get {randint(0, 100)}"
@@ -144,16 +146,16 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
     if type == "recentSongs":
-        URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{arg_page}")
+        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{arg_page}")
         requestType = ("Recent Songs")
     elif type == "topSongs":
-        URL = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{arg_page}")
+        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{arg_page}")
         requestType = ("Top Songs")
-    URL1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
-    logging.info(URL+"\n"+URL1)
-    response = requests.get(URL, headers=self.bot.header)
+    url1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
+    logging.info(url+"\n"+url1)
     try:
-        json_data = json.loads(response.text)
+        async with self.bot.session.get(url) as resp:
+            json_data = json.loads(await resp.text())
     except JSONDecodeError:
         logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
         return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
@@ -164,7 +166,8 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
             colour=0xff0000)
         return message
     songsList = json_data["scores"]
-    json_data = json.loads(requests.get(URL1, headers=self.bot.header).text)
+    async with self.bot.session.get(url1) as resp:
+        json_data = json.loads(await resp.text())
     playerInfo = json_data["playerInfo"]
     songsMessage = ""
     count = 0
@@ -231,11 +234,11 @@ class ScoreSaber(commands.Cog):
                 return logging.info("scoresaber is None")
             scoresaber = ref.get('scoresaber')
             SS_id = scoresaber[25:]
-            URL = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
-            logging.info(URL)
-            response = requests.get(URL, headers=self.bot.header)
+            url = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
+            logging.info(url)
             try:
-                json_data = json.loads(response.text)
+                async with self.bot.session.get(url) as response:
+                    json_data = json.loads(await response.text())
             except JSONDecodeError:
                 logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
                 return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
@@ -331,13 +334,13 @@ class ScoreSaber(commands.Cog):
             scoresaber2 = user2.get('scoresaber')
             SS_id1 = scoresaber1[25:]
             SS_id2 = scoresaber2[25:]
-            URL1 = (f"https://new.scoresaber.com/api/player/{SS_id1}/full")
-            URL2 = (f"https://new.scoresaber.com/api/player/{SS_id2}/full")
-            logging.info(f"{URL1}\n{URL2}")
-            response1 = requests.get(URL1, headers=self.bot.header)
-            response2 = requests.get(URL2, headers=self.bot.header)
-            json_data1 = json.loads(response1.text)
-            json_data2 = json.loads(response2.text)
+            url1 = (f"https://new.scoresaber.com/api/player/{SS_id1}/full")
+            url2 = (f"https://new.scoresaber.com/api/player/{SS_id2}/full")
+            logging.info(f"{url1}\n{url2}")
+            async with self.bot.session.get(url1) as resp:
+                json_data1 = json.loads(await resp.text())
+            async with self.bot.session.get(url2) as resp:
+                json_data2 = json.loads(await resp.text())
             if "error" in json_data1 or "error" in json_data2:
                 return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
             playerInfo1 = json_data1["playerInfo"]
@@ -365,8 +368,8 @@ class ScoreSaber(commands.Cog):
             elif val1 < val2:
                 val2 = f"__{val2}__"
             message = message + f"{val1} - <a:PogLick:822072557389217842> **Performance Points** <a:PogLick:822072557389217842> - {val2}\n"
-            val1 = float(round(scoreStats2["averageRankedAccuracy"], 2))
-            val2 = float(round(scoreStats1["averageRankedAccuracy"], 2))
+            val1 = float(round(scoreStats1["averageRankedAccuracy"], 2))
+            val2 = float(round(scoreStats2["averageRankedAccuracy"], 2))
             if val1 > val2:
                 val1 = f"__{val1}__"
             elif val1 < val2:
