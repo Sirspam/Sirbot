@@ -48,7 +48,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed")
+        logging.info("Embed successfully sent")
 
     @help.command(aliases=["u"])
     async def user(self, ctx):
@@ -78,7 +78,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed")
+        logging.info("Embed successfully sent")
     
     @help.command(aliases=["up"])
     async def update(self, ctx):
@@ -127,7 +127,7 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed")
+        logging.info("Embed successfully sent")
 
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
@@ -168,39 +168,55 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed")
+        logging.info("Embed successfully sent")
 
-    @help.command()
-    async def neko(self, ctx):
-        logging.info(f"Recieved help neko in {ctx.guild.name}")
+
+    @help.group(invoke_without_command=True)
+    async def waifu(self, ctx):
+        logging.info(f"Recieved help waifu in {ctx.guild.name}")
         embed = discord.Embed(
-            title="Help Neko",
-            description=f"These are the valid arguments for ``{ctx.prefix}neko``",
+            title="Help Waifu",
+            description=f"These are the valid arguments for ``{ctx.prefix}waifu``",
             colour=0x00A9E0
         )
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/754643335511015505/810691863610523668/unknown.png")
         embed.add_field(
-            name="neko",
-            value="Posts an image of a neko",
+            name="waifu [category]",
+            value=f"Posts a waifu.\nUse ``{ctx.prefix}help waifu categories`` for a list of all the valid category arguments!",
             inline=False
         )
         embed.add_field(
-            name="neko gif",
-            value="Posts a gif of a neko",
-            inline=False
+            name="waifu nsfw",
+            value="Posts an nsfw waifu. (NSFW)",
+            inline=True
         )
         embed.add_field(
-            name="neko lewd",
-            value="Posts a lewd image of a neko. (NSFW)",
-            inline=False
+            name="waifu nsfw neko",
+            value="Posts an nsfw neko. (NSFW)",
+            inline=True
         )
         embed.add_field(
-            name="neko lewd gif",
-            value="Posts a lewd gif of a neko. (NSFW)",
-            inline=False
+            name="waifu nsfw trap",
+            value="Posts an nsfw trap. (NSFW)",
+            inline=True
         )
+        embed.set_footer(text="Powered by Waifu.pics",icon_url="https://waifu.pics/favicon.png")
         await ctx.reply(embed=embed)
-        logging.info("Response: help embed")
+        logging.info("Embed successfully sent")
+
+    @waifu.command()
+    async def categories(self, ctx):
+        logging.info(f"Recieved help waifu categories in {ctx.guild.name}")
+        wc_list = str()
+        for category in self.bot.waifu_categories:
+            wc_list = wc_list + f"{category}\n"
+        embed = discord.Embed(
+            title="Waifu Categories",
+            description=f"```{wc_list}```",
+            colour=0x00A9E0
+        )
+        await ctx.author.send(embed=embed)
+        await ctx.message.add_reaction("✅")
+        logging.info("Embed successfully sent")
 
 
 def setup(bot):

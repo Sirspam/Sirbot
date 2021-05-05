@@ -48,7 +48,6 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 
 bot.default_prefix = default_prefix # I'd much prefer to define this at line 14 but this and that means I have to do it like this
-# bot.header = {"User-Agent": "Sirbot (https://github.com/sirspam/Sirbot)"}
 bot.session = aiohttp.ClientSession(loop=asyncio.get_event_loop(), headers={"User-Agent": "Sirbot (https://github.com/sirspam/Sirbot)"})
 bot.valid_HMD = [
             "CV1",
@@ -70,8 +69,8 @@ initial_cogs = [
     "cogs.main.text",
     "cogs.main.user",
     "cogs.fun.amogus",
-    "cogs.fun.neko",
-    "cogs.fun.nhentai"
+    "cogs.fun.nhentai",
+    "cogs.fun.waifu"
 ]
 
 for cog in initial_cogs:
