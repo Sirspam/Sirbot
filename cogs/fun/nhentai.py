@@ -77,14 +77,14 @@ class NHentaiCog(commands.Cog):
             sauce = nhentai.get_random()
             logging.info(sauce)
             await ctx.send(embed=await sauce_embed(sauce))
-            logging.info("Posted embed\n----------")
+            logging.info("Posted embed")
         elif argument.isdigit():
             sauce = nhentai._get_doujin(id=argument)
             logging.info(sauce)
             if sauce is None:
                 return await ctx.send("S-Sorry, I can't find that id qwq")
             await ctx.send(embed=await sauce_embed(sauce))
-            logging.info("Posted embed\n----------")
+            logging.info("Posted embed")
 
 def setup(bot):
     bot.add_cog(NHentaiCog(bot))
