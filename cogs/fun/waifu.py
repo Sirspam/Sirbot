@@ -12,7 +12,7 @@ class Waifu(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         # haha very long list
-        self.bot.waifu_categories = ["waifu", "neko", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "kill", "happy", "wink", "poke", "dance", "cringe", "blush"]
+        self.bot.waifu_categories = ["waifu", "neko", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "happy", "wink", "poke", "dance", "cringe", "blush"]
 
 
     @commands.cooldown(1, 5, commands.BucketType.user)
