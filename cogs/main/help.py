@@ -37,7 +37,8 @@ class HelpClient(commands.Cog):
         )
         embed.add_field(
             name="General Commands",
-            value="""``links`` | Posts important links for Sirbot
+            value="""``beatsaver <key> [diff]`` | Posts information about a beatsaver map
+            ``links`` | Posts important links for Sirbot
             ``amogus`` | <:amogus:826403430905937941>
             ``nhentai [ID]`` | Gets a doujin from nhentai, will be random if no ID is given. (NSFW)""",
             inline=False
