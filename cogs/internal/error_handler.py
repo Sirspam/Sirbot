@@ -1,5 +1,6 @@
 import math
 import logging
+import asyncio
 from discord.ext import commands
 
 
@@ -29,7 +30,9 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.CommandOnCooldown):
             logging.info("CommandOnCooldown handler ran")
-            return await ctx.send(f"Command on cooldown, ``{math.ceil(error.retry_after)} seconds``", delete_after=int(math.ceil(error.retry_after)))
+            message = await ctx.send(f"Command on cooldown, ``{math.ceil(error.retry_after)} seconds``")
+            await asyncio.sleep(int(math.ceil(error.retry_after)))
+            return await message.add_reaction("✅")
 
         elif isinstance(error, commands.MissingRequiredArgument):
             logging.info(f"MissingRequiredArgument handler ran. Missing: {error.param.name}")
