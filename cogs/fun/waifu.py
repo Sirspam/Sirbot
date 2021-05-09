@@ -64,7 +64,6 @@ def setup(bot):
 async def get_image(self, endpoint):
     logging.info(f"get_image function invoked with {endpoint}")
     link = "https://api.waifu.pics/"+endpoint
-    logging.info(link)
     async with self.bot.session.get(link) as resp:
         json_data = json.loads(await resp.text())
         logging.info(json_data["url"])

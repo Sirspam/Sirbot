@@ -73,9 +73,9 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     elif Song["difficulty"] == 7:
         difficulty = "<:Expert_1:822072552556855317><:Expert_2:822072552532738068>"
     elif Song["difficulty"] == 5:
-        difficulty = "<:Hard_1:822072552288813108><:Hard_2:822072552452522035> "
+        difficulty = "<:Hard_1:822072552288813108><:Hard_2:822072552452522035>"
     elif Song["difficulty"] == 3:
-        difficulty = "<:Normal_1:822072552544927774><:Normal_2:822072552582021120><:Normal_3:822072552540864532> "
+        difficulty = "<:Normal_1:822072552544927774><:Normal_2:822072552582021120><:Normal_3:822072552540864532>"
     elif Song["difficulty"] == 1:
         difficulty = "<:Easy_1:822072552570486804><:Easy_2:822072552407040051>"
     else:
