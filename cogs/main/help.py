@@ -32,7 +32,7 @@ class HelpClient(commands.Cog):
             value="""``help user`` | command and subcommands for the user command
             ``help update`` | valid fields for the user update subcommand
             ``help scoresaber`` | command and subcommands for the scoresaber command
-            ``help neko`` | command and subcommands for the neko command""",
+            ``help waifu`` | command and subcommands for the waifu command""",
             inline=False
         )
         embed.add_field(
