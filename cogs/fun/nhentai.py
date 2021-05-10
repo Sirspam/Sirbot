@@ -12,18 +12,26 @@ async def sauce_embed(sauce):
     tags = str()
     for x in getattr(sauce, "tags"):
         tags = tags + x + ", "
+    if tags == str():
+        tags = "None"
     artist = str()
     for x in getattr(sauce, "artists"):
         artist = artist + x + ", "
+    if artist == str():
+        artist = "None"
     parodies = str()
     for x in getattr(sauce, "parodies"):
         parodies = parodies + x + ", "
+    if artist == str():
+        artist = "None"
     sec_title = "**Alternative Title:** "
     for x in getattr(sauce, "secondary_title"):
         sec_title = sec_title + x
     characters = str()
     for x in getattr(sauce, "characters"):
         characters = characters + x + ", "
+    if artist == str():
+        artist = "None"
     if "english" in getattr(sauce, "languages"):
         lang = "🇬🇧"
     elif "japanese" in getattr(sauce, "languages"):
@@ -77,14 +85,14 @@ class NHentaiCog(commands.Cog):
             sauce = nhentai.get_random()
             logging.info(sauce)
             await ctx.send(embed=await sauce_embed(sauce))
-            logging.info("Posted embed")
+            logging.info("Posted embed\n----------")
         elif argument.isdigit():
             sauce = nhentai._get_doujin(id=argument)
             logging.info(sauce)
             if sauce is None:
                 return await ctx.send("S-Sorry, I can't find that id qwq")
             await ctx.send(embed=await sauce_embed(sauce))
-            logging.info("Posted embed")
+            logging.info("Posted embed\n----------")
 
 def setup(bot):
     bot.add_cog(NHentaiCog(bot))
