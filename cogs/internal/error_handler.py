@@ -46,10 +46,8 @@ class ErrorHandler(commands.Cog):
             logging.info("NSFWChannelRequired hander ran")
             return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>\n``This command can only be ran in an nsfw channel``")
 
-        elif isinstance(error, commands.CheckFailure):
-            logging.error(f"{error}")
-
-        logging.error(f"{error}")
+        logging.error(error)
+        return await self.bot.get_channel(841306797985234954).send(error)
 
 
 def setup(bot):
