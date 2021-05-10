@@ -4,6 +4,7 @@ import discord
 import io
 import json
 import logging
+from discord.errors import HTTPException
 from discord.ext import commands
 from random import choice
 from os.path import splitext
@@ -35,7 +36,10 @@ class Waifu(commands.Cog):
         logging.info(f"nsfw invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/waifu")
+        try:
             await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
+        except HTTPException:
+            await ctx.reply(results[2])
         logging.info("attachment sent")
 
     @nsfw.command()
@@ -44,7 +48,10 @@ class Waifu(commands.Cog):
         logging.info(f"nsfw neko invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/neko")
-            await ctx.reply(file=discord.File(results[0], f"nsfw_neko{results[1]}"))
+        try:
+            await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
+        except HTTPException:
+            await ctx.reply(results[2])
         logging.info("attachment sent")
 
     @nsfw.command()
@@ -53,7 +60,10 @@ class Waifu(commands.Cog):
         logging.info(f"nsfw trap invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/trap")
-            await ctx.reply(file=discord.File(results[0], f"nsfw_trap{results[1]}"))
+        try:
+            await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
+        except HTTPException:
+            await ctx.reply(results[2])
         logging.info("attachment sent")
 
 
@@ -65,8 +75,8 @@ async def get_image(self, endpoint):
     logging.info(f"get_image function invoked with {endpoint}")
     link = "https://api.waifu.pics/"+endpoint
     async with self.bot.session.get(link) as resp:
-        json_data = json.loads(await resp.text())
-        logging.info(json_data["url"])
-        async with self.bot.session.get(json_data["url"]) as resp:
-            root, ext = splitext(json_data["url"])
-            return (io.BytesIO(await resp.read()),ext)
+        url = json.loads(await resp.text())["url"]
+        logging.info(url)
+        async with self.bot.session.get(url) as resp:
+            root, ext = splitext(url)
+            return (io.BytesIO(await resp.read()),ext,url)
