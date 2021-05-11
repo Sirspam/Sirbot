@@ -27,7 +27,10 @@ class Waifu(commands.Cog):
             raise commands.BadArgument
         async with ctx.channel.typing():
             results = await get_image(self, f"sfw/{category}")
-            await ctx.reply(file=discord.File(results[0], f"{category}{results[1]}"))
+            try:
+                await ctx.reply(file=discord.File(results[0], f"{category}{results[1]}"))
+            except HTTPException:
+                await ctx.reply(results[2])
         logging.info("attachment sent")
 
     @waifu.group(invoke_without_command=True)
@@ -36,10 +39,10 @@ class Waifu(commands.Cog):
         logging.info(f"nsfw invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/waifu")
-        try:
-            await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
-        except HTTPException:
-            await ctx.reply(results[2])
+            try:
+                await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
+            except HTTPException:
+                await ctx.reply(results[2])
         logging.info("attachment sent")
 
     @nsfw.command()
@@ -48,10 +51,10 @@ class Waifu(commands.Cog):
         logging.info(f"nsfw neko invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/neko")
-        try:
-            await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
-        except HTTPException:
-            await ctx.reply(results[2])
+            try:
+                await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
+            except HTTPException:
+                await ctx.reply(results[2])
         logging.info("attachment sent")
 
     @nsfw.command()
@@ -60,10 +63,10 @@ class Waifu(commands.Cog):
         logging.info(f"nsfw trap invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/trap")
-        try:
-            await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
-        except HTTPException:
-            await ctx.reply(results[2])
+            try:
+                await ctx.reply(file=discord.File(results[0], f"nsfw_waifu{results[1]}"))
+            except HTTPException:
+                await ctx.reply(results[2])
         logging.info("attachment sent")
 
 
