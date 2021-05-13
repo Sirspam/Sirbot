@@ -20,7 +20,7 @@ You know, commands for when you need help with Sirbot.
 | help user | Help for the user command and it's subcommands |
 | help update | A massive ass list of the things you can change with your user embed |
 | help scoresaber | Makes the bot leave the guild. Requires admin privilages. |
-| help neko | Help for the neko command and it's subcommands. Damn right this bot posts cat girls |
+| help waifu | Help for the neko command and it's subcommands. Damn right this bot posts cat girls |
 
 ### User Commands
 | Command | Description |
@@ -55,20 +55,22 @@ Color is an alias for colour, in case your country spells colour incorrectly.
 
 The embed for scoresaber compare is incredibly scuffed kekw
   
-### Neko Commands
+### Waifu Commands
 Clearly the best part about this bot
 | Command | Description |
 | --- | --- |
-| neko | Posts an image of a neko |
-| neko gif | posts a gif of a neko |
-| neko lewd | posts a lewd image of a neko, only works in NSFW channels
-| neko lewd gif | You can probably figure out what this one does, also only works in NSFW channels |
+| waifu <category> | Posts a waifu image |
+| waifu nsfw | Posts an NSFW waifu. (NSFW) |
+| waifu nsfw neko | Posts an NSFW neko. (NSFW) |
+| waifu nsfw trap | Posts an NSFW trap. (NSFW) |
 
 ### General Commands
 | Command | Description |
 | --- | --- |
+| beatsaver <key> <diff> | Posts information about a beatsaver map |
 | links | Posts an embed with important links relating to Sirbot |
 | amogus | ![amogus](https://cdn.discordapp.com/emojis/826403430905937941.png?v=1) |
+| nhentai <ID> | Gets a doujin from nhentai, will be random if no ID is given. (NSFW) |
 
 ### Admin Only Commands
 | Command | Description |
