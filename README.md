@@ -6,7 +6,7 @@ Basically [Scuffed Bot](https://github.com/thijnmens/ScuffedBot) but adapted to 
 Sirbot's main function is interaction with the [ScoreSaber](https://scoresaber.com/) API, although it does feature some other functions. 
 
 ## How to use Sirbot
-Sirbot's default prefix is **>** although a server admin can change this to a custom prefix. Mentioning the bot is also a valid prefix.
+Sirbot's default prefix is **.** although a server admin can change this to a custom prefix. Mentioning the bot is also a valid prefix.
 
 The rest of the bot is just your usual discord bot, put in the prefix then the command you want. "But what commands does Sirbot have?" I hearing you asking, well that leads us onto our next header, **Sirbot Commands**.
 
