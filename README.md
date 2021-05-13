@@ -82,9 +82,9 @@ Just going to post images of Sirbot here
 
 ![user embed](https://cdn.discordapp.com/attachments/822033695778799616/826755754278518784/unknown.png)
 ![ScoreSaber embed](https://cdn.discordapp.com/attachments/822033695778799616/826760855223271454/unknown.png)
+![BeatSaver embed](https://cdn.discordapp.com/attachments/823851280212557845/842345339692646400/unknown.png)
 
-
-k, that it
+ok, that it
 
 that's the end of the readme
 
@@ -92,4 +92,4 @@ thanks for reading it
 
 hope you had fun
 
-bye
+bye bye
