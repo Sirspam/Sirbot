@@ -8,24 +8,23 @@ from utils import prefixes
 dab = firestore.client()
 
 
-class Text(commands.Cog):
+class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
 
     @commands.command(case_insensitive=True, aliases=["invite"])
     async def links(self, ctx):
-        logging.info(f"Recieved link in {ctx.guild.name}")
+        logging.info(f"Recieved links in {ctx.guild.name}")
         embed = discord.Embed(
             description="""
             [Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot) | 
-            [Bot's Home Server](https://discord.gg/dWX6fpGUK9) | [Github Repo](https://github.com/sirspam/Sirbot)\n\n\n
-            this text is just filler for the thumbnail\n
-            I hope you're having a good day :)\n""",
+            [Home Server](https://discord.gg/dWX6fpGUK9) | [Github Repo](https://github.com/sirspam/Sirbot)\n
+            I hope you're having a good day :)""",
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.reply(embed=embed)
-        logging.info(f'Link embed sent')
+        logging.info(f'Links embed sent')
 
     @commands.command(case_insensitive=True)
     @commands.has_permissions(administrator = True)
@@ -60,4 +59,4 @@ class Text(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Text(bot))
+    bot.add_cog(General(bot))
