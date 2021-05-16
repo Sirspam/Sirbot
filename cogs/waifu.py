@@ -12,11 +12,11 @@ from os.path import splitext
 class Waifu(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        # haha very long list
+        # haha funny long list
         self.bot.waifu_categories = ["waifu", "neko", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "happy", "wink", "poke", "dance", "cringe", "blush"]
 
 
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.group(invoke_without_command=True, aliases=["wa"])
     async def waifu(self, ctx, category="waifu"):
         logging.info(f"waifu invoked in {ctx.guild.name}")
