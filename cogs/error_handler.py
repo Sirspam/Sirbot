@@ -12,7 +12,10 @@ class ErrorHandler(commands.Cog):
     async def on_command_error(self, ctx, error):
         logging.info(f"on_command_error triggered")
         
-        if isinstance(error, commands.BadArgument):
+        if hasattr(ctx.command, "on_error"):
+            return
+        
+        elif isinstance(error, commands.BadArgument):
             logging.info("BadArgument handler ran")
             return await ctx.send(f"You've given a bad argument!\nCheck ``{ctx.prefix}help`` for what arguments you need to give")
 
