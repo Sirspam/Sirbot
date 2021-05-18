@@ -80,7 +80,7 @@ class BeatSaver(commands.Cog):
                 inline=False
             )
             embed.set_image(url="https://beatsaver.com"+detail_text["coverURL"])
-            await ctx.send(embed=embed)
+            await ctx.reply(embed=embed)
 
 
 def setup(bot):
