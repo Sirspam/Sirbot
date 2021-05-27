@@ -86,6 +86,9 @@ class BeatSaver(commands.Cog):
     async def beatsaver_error(self, ctx, error):
         if isinstance (error, commands.BadArgument):
             await ctx.send("You've given a bad argument!\nYou should totally try ``e970`` though <:AYAYATroll:839891422140432405>")
+        elif isinstance (error, commands.MissingRequiredArgument):
+            return await ctx.send("You didn't give a required argument.\nYou should totally try ``e970`` though <:AquaTroll:845802819634462780>")
+        logging.error(error)
 
 
 def setup(bot):
