@@ -1,13 +1,13 @@
 import discord
 import logging
-from discord.ext import commands
-from discord.ext import tasks
-from random import choice
-from random import getrandbits
+from discord.ext import commands, tasks
+from random import choice, getrandbits
 
 
 play_status_list = [
     "Beat Saber",
+    "Shiny Happy Days",
+    "USAO Ultimate Hyper Mega Mix",
     "NEKOPARA Vol. 0",
     "NEKOPARA Vol. 1",
     "NEKOPARA Vol. 2",
@@ -15,8 +15,6 @@ play_status_list = [
     "NEKOPARA Vol. 4",
     "Among Us",
     "Amogus",
-    "Katawa Shoujo",
-    "with Nekos 🐾",
     "a muffin map"
 ]
 
@@ -26,11 +24,6 @@ watch_status_list = [
     "Aqua being useless",
     "Nekopara",
     "KonoSuba",
-    "Highschool DxD",
-    "Interspecies Reviewers",
-    "Uzaki-chan Wants to Hang Out!",
-    "Don't Toy With Me, Miss Nagatoro",
-    "My Little Sister Can't Be This Cute"
 ]
 
 
