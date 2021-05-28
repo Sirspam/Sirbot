@@ -22,11 +22,9 @@
 # ⢀⠢⡑⡀⢂⢊⠠⠁⡂⡐⠀⠅⡈⠪⠪⠪⠣⠫⠑⡁⢔⠕⣜⣜⢦⡰⡎⡯⡾⡽
 
 
-import discord
 import logging
 from discord.ext import commands
-from random import choice
-from random import randint
+from random import choice, randint
 
 
 colours = ["🟥","🟩","🟪","🟧","🟨","🟫","🆒"]
