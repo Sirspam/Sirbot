@@ -69,15 +69,15 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     else:
         songAcc = round((int(Song["score"]) / int(Song["maxScore"])) * 100, 2)
     if Song["difficulty"] == 9:
-        difficulty = "<:ExpertPlus_1:822072552268496917><:ExpertPlus_2:822072552506916884><:ExpertPlus_3:822072552514912328>"
+        difficulty = "<:ExpertPlus_1:848911334392201246><:ExpertPlus_2:848911334426148874><:ExpertPlus_3:848911334400983050>"
     elif Song["difficulty"] == 7:
-        difficulty = "<:Expert_1:822072552556855317><:Expert_2:822072552532738068>"
+        difficulty = "<:Expert_1:848911334405177364><:Expert_2:848911334422216714>"
     elif Song["difficulty"] == 5:
-        difficulty = "<:Hard_1:822072552288813108><:Hard_2:822072552452522035>"
+        difficulty = "<:Hard_1:848911334430212156><:Hard_2:848911334422478899>"
     elif Song["difficulty"] == 3:
-        difficulty = "<:Normal_1:822072552544927774><:Normal_2:822072552582021120><:Normal_3:822072552540864532>"
+        difficulty = "<:Normal_1:848911334108299265><:Normal_2:848911334442926100><:Normal_3:848911334447513651>"
     elif Song["difficulty"] == 1:
-        difficulty = "<:Easy_1:822072552570486804><:Easy_2:822072552407040051>"
+        difficulty = "<:Easy_1:848911334237012030><:Easy_2:848911334435455007>"
     else:
         difficulty = "Please ping Sirspam, k thanks uwu"
     if Song["songSubName"] == '':
