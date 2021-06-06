@@ -39,48 +39,57 @@ class BeatSaver(commands.Cog):
             async with self.bot.session.get(f"https://beatsaver.com/api/maps/detail/{key}") as resp:
                 if await resp.text() == "Not Found":
                     raise commands.BadArgument
-                detail_text = json.loads(await resp.text())
-            async with self.bot.session.get(f"https://beatsaver.com/api/stats/key/{key}") as resp:
-                stats_text = json.loads(await resp.text())
+                response = json.loads(await resp.text())
             difficulties = []
-            for x in detail_text["metadata"]["difficulties"]:
-                if detail_text["metadata"]["difficulties"][x] is True:
+            for x in response["metadata"]["difficulties"]:
+                if response["metadata"]["difficulties"][x] is True:
                     difficulties.append(x)
             difficulties = await diff_sort(difficulties)
             if diff is not None and diff in difficulties:
-                diff_stats = detail_text["metadata"]["characteristics"][0]["difficulties"][diff]
+                diff_stats = response["metadata"]["characteristics"][0]["difficulties"][diff]
             else:
                 diff = difficulties[-1]
-                diff_stats = detail_text["metadata"]["characteristics"][0]["difficulties"][diff]
-            if detail_text["metadata"]["songSubName"] == '':
-                title = detail_text["metadata"]["songName"]
+                diff_stats = response["metadata"]["characteristics"][0]["difficulties"][diff]
+            if response["metadata"]["songSubName"] == '':
+                title = response["metadata"]["songName"]
             else:
-                title = detail_text["metadata"]["songName"]+" - "+detail_text["metadata"]["songSubName"]
-            m, s = divmod(detail_text["metadata"]["duration"], 60)
+                title = response["metadata"]["songName"]+" - "+response["metadata"]["songSubName"]
+            m, s = divmod(response["metadata"]["duration"], 60)
             embed = discord.Embed(
                 title=title,
                 url=f"https://beatsaver.com/beatmap/{key}",
-                description=f"**{detail_text['metadata']['songAuthorName']}**",
+                description=f"**{response['metadata']['songAuthorName']}**",
                 colour=0x232325,
                 timestamp=ctx.message.created_at
             )
             embed.add_field(
                 name="Map Stats",
-                value=f"Duration: {m:02d}:{s:02d}\nBPM: {detail_text['metadata']['bpm']}\nMapper: {detail_text['metadata']['levelAuthorName']}",
+                value=f"Duration: {m:02d}:{s:02d}\nBPM: {response['metadata']['bpm']}\nMapper: {response['metadata']['levelAuthorName']}",
                 inline=True
             )
+            embed.add_field(name="\u200b",value="\u200b",inline=True)
             embed.add_field(
                 name="BeatSaver Stats",
-                value=f"Key: {stats_text['key']}\nDownloads: {stats_text['stats']['downloads']}\nRating: {int(stats_text['stats']['rating']*100)}%",
+                value=f"Key: {response['key']}\nDownloads: {response['stats']['downloads']}\nRating: {int(response['stats']['rating']*100)}%",
                 inline=True
             )
             embed.add_field(
                 name=f"Difficulty Stats {diff_emotes[diff]}",
                 value=f"NJS: {diff_stats['njs']}\nOffset: {diff_stats['njsOffset']}\n Notes: {diff_stats['notes']}\n Bombs: {diff_stats['bombs']}\n Obstacles: {diff_stats['obstacles']}",
-                inline=False
+                inline=True
             )
-            embed.set_image(url="https://beatsaver.com"+detail_text["coverURL"])
+            embed.add_field(name="\u200b",value="\u200b",inline=True)
+            message=str()
+            for diff in difficulties:
+                message=f"{message}\n{diff_emotes[diff]}"
+            embed.add_field(
+                name="Difficulties",
+                value=message,
+                inline=True
+            )
+            embed.set_image(url="https://beatsaver.com"+response["coverURL"])
             await ctx.reply(embed=embed)
+        logging.info("successfully concluded beatsaver")
 
     @beatsaver.error
     async def beatsaver_error(self, ctx, error):
