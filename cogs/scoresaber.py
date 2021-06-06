@@ -1,3 +1,4 @@
+# I need to rewrite this cog tehe
 # https://new.scoresaber.com/api/player/76561198091128855/full
 # https://new.scoresaber.com/api/static/covers/69E494F4A295197BF03720029086FABE6856FBCE.png
 # url = (f"https://new.scoresaber.com/api/player/{SS_id}/full") - Get UserData
@@ -8,7 +9,6 @@
 # Ranking Pages
 
 
-from json.decoder import JSONDecodeError
 import discord
 import json
 import logging
@@ -22,7 +22,7 @@ SS_id = None
 
 
 # Makes the embed message for topSong and recentSong
-async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
+async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
     if arg_user is not None:
         ctx.author = arg_user
         logging.info(f"Argument given, now {ctx.author.name}")
@@ -37,16 +37,16 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         page = int(page + 1)
     else:
         page = int(page)
-    if type == "recentSong":
+    if arg_type == "recentSong":
         url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}")
-    elif type == "topSong":
+    elif arg_type == "topSong":
         url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}")
     url1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
     logging.info(url+"\n"+url1)
     try: 
         async with self.bot.session.get(url) as resp:
             json_data = json.loads(await resp.text())
-    except JSONDecodeError:
+    except json.JSONDecodeError:
             logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
             return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
     if "error" in json_data:
@@ -135,7 +135,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     logging.info("embed message sent")
 
 
-async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
+async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
     if arg_user is not None:
         ctx.author = arg_user
         logging.info(f"Argument given, now {ctx.author.name}")
@@ -145,10 +145,10 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
         return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
     SS_id = scoresaber[25:]
-    if type == "recentSongs":
+    if arg_type == "recentSongs":
         url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{arg_page}")
         requestType = ("Recent Songs")
-    elif type == "topSongs":
+    elif arg_type == "topSongs":
         url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{arg_page}")
         requestType = ("Top Songs")
     url1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
@@ -156,7 +156,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
     try:
         async with self.bot.session.get(url) as resp:
             json_data = json.loads(await resp.text())
-    except JSONDecodeError:
+    except json.JSONDecodeError:
         logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
         return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
     if "error" in json_data:
@@ -188,7 +188,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, type):
             songWeightedPP = "Unranked"
         else:
             songPP = Song["pp"]
-            songPP == round(songPP, 2)
+            songPP = round(songPP, 2)
             songWeightedPP = round((Song["weight"] * Song["pp"]), 2)
         if Song["difficulty"] == 9:
             difficulty = "Expert+"
@@ -239,7 +239,7 @@ class ScoreSaber(commands.Cog):
             try:
                 async with self.bot.session.get(url) as response:
                     json_data = json.loads(await response.text())
-            except JSONDecodeError:
+            except json.JSONDecodeError:
                 logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
                 return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
             if "error" in json_data:
@@ -286,7 +286,7 @@ class ScoreSaber(commands.Cog):
                 url="https://new.scoresaber.com" + playerInfo["avatar"]
             )
         await ctx.reply(embed=embed)
-        logging.info("Response: ScoreSaber UserData embed")
+        logging.info("Successfully sent ScoreSaber UserData embed")
 
     @scoresaber.command(aliases=["rs"])
     async def recentsong(self, ctx, argument1=1, argument2=None):
@@ -307,21 +307,21 @@ class ScoreSaber(commands.Cog):
         logging.info(f"Recieved >scoresaber recentSongs in {ctx.guild.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="recentSongs")
-        logging.info("Response: ScoreSaber recentSongs embed")
+        logging.info("Successfully sent ScoreSaber recentSongs embed")
 
     @scoresaber.command(aliases=["tss"])
     async def topsongs(self, ctx, argument1=1, argument2=None):
         logging.info(f"Recieved >scoresaber topSongs in {ctx.guild.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="topSongs")
-        logging.info("Response: ScoreSaber topSongs embed")
+        logging.info("Successfully sent ScoreSaber topSongs embed")
 
     @scoresaber.command(aliases=["com"])
     async def compare(self, ctx, argument1: discord.Member=None, argument2: discord.Member=None):
         logging.info(f"Recieved compare {argument1} {argument2} in {ctx.guild.name}")
         if argument1 is None:
             return await ctx.reply("You need to mention someone for me to compare you against!")
-        elif argument1 is not None and argument2 is None:
+        if argument1 is not None and argument2 is None:
             argument2 = argument1
             argument1 = ctx.author
         async with ctx.channel.typing():

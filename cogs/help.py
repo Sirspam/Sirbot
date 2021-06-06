@@ -8,8 +8,7 @@ async def prefix(self, ctx):
     result = await prefixes.get_prefix(self, ctx)
     if result is None:
         return self.bot.default_prefix
-    else:
-        return result
+    return result
 
 
 class HelpClient(commands.Cog):
