@@ -1,4 +1,3 @@
-from array import array
 import discord
 import asyncio
 import re
@@ -62,7 +61,7 @@ class User(commands.Cog):
         logging.info(f"Recieved user add {ctx.author.id} in {ctx.guild.name}")
         col_ref = dab.collection('users').document('collectionlist').get().get('array')
         if str(ctx.author.id) in col_ref:
-            return await ctx.reply("You're already in the database!\nUse ``>user update`` instead")
+            return await ctx.reply(f"You're already in the database!\nUse ``{ctx.prefix}user update`` instead")
         if argument is None:
             sent = await ctx.reply('What is your scoresaber link?')
             try:
@@ -96,7 +95,7 @@ class User(commands.Cog):
         col_ref.append(str(ctx.author.id))
         col_ref.sort()
         dab.collection('users').document('collectionlist').update({'array': col_ref})
-        await ctx.reply(f'{ctx.author.name} has sucessfully been added to the database!\nUse ``>user update`` to add optional customisation')
+        await ctx.reply(f'{ctx.author.name} has sucessfully been added to the database!\nUse ``{ctx.prefix}user update`` to add optional customisation')
         logging.info(f"Successfully added {ctx.author.name} to the database")
     
     # @commands.Cog.listener("on_member_remove")
