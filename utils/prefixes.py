@@ -18,8 +18,6 @@ async def cache_prefixes():
     logging.info(f"Finished caching prefixes: {prefixes_dict}")
 
 async def get_prefix(bot, ctx):
-    if not prefixes_dict:
-        await cache_prefixes()
     if int(ctx.guild.id) not in prefixes_dict:
         return None
     return str(prefixes_dict[ctx.guild.id])
