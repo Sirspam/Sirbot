@@ -3,9 +3,9 @@
 import discord
 import logging
 from discord.ext import commands
-from NHentai import NHentai
+from NHentai.nhentai_async import NHentaiAsync
 
-nhentai = NHentai()
+nhentai = NHentaiAsync()
 
 
 async def sauce_embed(sauce):
@@ -82,17 +82,15 @@ class NHentaiCog(commands.Cog):
     async def nhentai(self, ctx, *, argument=None):
         logging.info(f"nhentai ran in {ctx.guild.name}")
         if argument is None:
-            sauce = nhentai.get_random()
-            logging.info(sauce)
-            await ctx.send(embed=await sauce_embed(sauce))
-            logging.info("Posted embed\n----------")
+            sauce = await nhentai.get_random()
         elif argument.isdigit():
-            sauce = nhentai._get_doujin(id=argument)
-            logging.info(sauce)
+            sauce = await nhentai._get_doujin(id=argument)
             if sauce is None:
-                return await ctx.send("S-Sorry, I can't find that id qwq")
-            await ctx.send(embed=await sauce_embed(sauce))
-            logging.info("Posted embed\n----------")
+                raise commands.BadArgument
+        else:
+            raise commands.BadArgument
+        await ctx.send(embed=await sauce_embed(sauce))
+        logging.info("successfully concluded nhentai")
 
 def setup(bot):
     bot.add_cog(NHentaiCog(bot))
