@@ -80,8 +80,8 @@ class BeatSaver(commands.Cog):
             )
             embed.add_field(name="\u200b",value="\u200b",inline=True)
             message=str()
-            for diff in difficulties:
-                message=f"{message}\n{diff_emotes[diff]}"
+            for difficulty in difficulties:
+                message=f"{message}\n{diff_emotes[difficulty]}"
             embed.add_field(
                 name="Difficulties",
                 value=message,
