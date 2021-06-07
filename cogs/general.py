@@ -33,12 +33,12 @@ class General(commands.Cog):
         logging.info(f"Recieved set_prefix {arg} in {ctx.guild.name}")
         if arg[:1]!='"' or arg[-1:]!='"':
             raise commands.BadArgument
-        if arg == '">"':
+        if arg == f'"{self.bot.default_prefix}"':
             col_ref = dab.collection("prefixes").document('collectionlist').get().get('array')
             col_ref.remove(str(ctx.guild.id))
             dab.collection("prefixes").document('collectionlist').update({'array': col_ref})
             dab.collection("prefixes").document(str(ctx.guild.id)).delete()
-            await ctx.reply("Prefix successfully set to ``>``!")
+            await ctx.reply(f"Prefix successfully set to ``{self.bot.default_prefix}``!")
             await prefixes.prefix_delete(ctx.guild.id)
             logging.info("Deleted from database (default value)")
             return
