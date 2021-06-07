@@ -32,7 +32,7 @@ firebase_admin.initialize_app(cred)
 
 
 async def prefix(bot, ctx):
-    result = await prefixes.get_prefix(bot, ctx)
+    result = await prefixes.get_prefix(ctx)
     print(result)
     if result is None:
         return commands.when_mentioned_or(default_prefix)(bot, ctx)
