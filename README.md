@@ -1,5 +1,5 @@
 # Sirbot
-![CodeFactor](https://www.codefactor.io/repository/github/sirspam/sirbot/badge/main)
+[![CodeFactor](https://www.codefactor.io/repository/github/sirspam/sirbot/badge)](https://www.codefactor.io/repository/github/sirspam/sirbot)
 
 [Discord invite link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot)
 

@@ -1,11 +1,8 @@
-#https://beatsaver.com/api/maps/detail/{key} - Map stats
-#https://beatsaver.com/api/stats/key/{key} - BS stats
-
-
 import discord
 import json
 import logging
 from discord.ext import commands
+from datetime import datetime
 
 
 diff_emotes = { # Emotes from sus
@@ -59,18 +56,24 @@ class BeatSaver(commands.Cog):
                 title=title,
                 url=f"https://beatsaver.com/beatmap/{key}",
                 description=f"**{response['metadata']['songAuthorName']}**",
-                colour=0x232325,
-                timestamp=ctx.message.created_at
+                colour=0x232325
             )
             embed.add_field(
                 name="Map Stats",
                 value=f"Duration: {m:02d}:{s:02d}\nBPM: {response['metadata']['bpm']}\nMapper: {response['metadata']['levelAuthorName']}",
                 inline=True
             )
-            embed.add_field(name="\u200b",value="\u200b",inline=True)
             embed.add_field(
                 name="BeatSaver Stats",
-                value=f"Key: {response['key']}\nDownloads: {response['stats']['downloads']}\nRating: {int(response['stats']['rating']*100)}%",
+                value=f"Key: {response['key']}\nDownloads: {response['stats']['downloads']}\nRating: {int(response['stats']['rating']*100)}%\nUploaded: {(datetime.fromisoformat(response['uploaded'][:-1])).strftime('%Y-%m-%d')}",
+                inline=True
+            )
+            message=str()
+            for difficulty in difficulties:
+                message=f"{message}\n{diff_emotes[difficulty]}"
+            embed.add_field(
+                name="Difficulties",
+                value=message,
                 inline=True
             )
             embed.add_field(
@@ -78,13 +81,9 @@ class BeatSaver(commands.Cog):
                 value=f"NJS: {diff_stats['njs']}\nOffset: {diff_stats['njsOffset']}\n Notes: {diff_stats['notes']}\n Bombs: {diff_stats['bombs']}\n Obstacles: {diff_stats['obstacles']}",
                 inline=True
             )
-            embed.add_field(name="\u200b",value="\u200b",inline=True)
-            message=str()
-            for difficulty in difficulties:
-                message=f"{message}\n{diff_emotes[difficulty]}"
             embed.add_field(
-                name="Difficulties",
-                value=message,
+                name="Links",
+                value=f"[Preview Map](https://skystudioapps.com/bs-viewer/?id={response['key']})\n[Download Map](https://beatsaver.com/api/download/key/{response['key']})\n[Song on Youtube](https://www.youtube.com/results?search_query={response['metadata']['songAuthorName'].replace(' ','+')}+{title.replace(' ','+')})\n[Song on Spotify](https://open.spotify.com/search/{response['metadata']['songName'].replace(' ','%20')})",
                 inline=True
             )
             embed.set_image(url="https://beatsaver.com"+response["coverURL"])
