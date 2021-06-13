@@ -5,7 +5,7 @@ from utils import prefixes
 
 
 async def prefix(self, ctx):
-    result = await prefixes.get_prefix(self, ctx)
+    result = await prefixes.get_prefix(ctx)
     if result is None:
         return self.bot.default_prefix
     return result
