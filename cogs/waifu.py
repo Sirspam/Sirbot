@@ -23,6 +23,8 @@ class Waifu(commands.Cog):
         category = category.lower()
         if category == "random":
             category = choice(self.bot.waifu_categories)
+        elif "nya" in category:
+            category = "neko"
         elif category not in self.bot.waifu_categories:
             raise commands.BadArgument
         async with ctx.channel.typing():
