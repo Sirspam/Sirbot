@@ -17,10 +17,7 @@ class General(commands.Cog):
     async def links(self, ctx):
         logging.info(f"Recieved links in {ctx.guild.name}")
         embed = discord.Embed(
-            description="""
-            [Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot) | 
-            [Home Server](https://discord.gg/dWX6fpGUK9) | [Github Repo](https://github.com/sirspam/Sirbot)\n
-            I hope you're having a good day :)""",
+            description="[Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot)\n[Home Server](https://discord.gg/dWX6fpGUK9)\n[Github Repo](https://github.com/sirspam/Sirbot)\n\nI hope you're having a good day :)",
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.reply(embed=embed)
