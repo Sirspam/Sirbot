@@ -7,7 +7,6 @@ import aiohttp
 from discord.ext import commands
 from firebase_admin import credentials
 from dotenv import load_dotenv
-from utils import jskp
 from utils import prefixes
 
 
