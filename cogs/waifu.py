@@ -23,8 +23,11 @@ class Waifu(commands.Cog):
         category = category.lower()
         if category == "random":
             category = choice(self.bot.waifu_categories)
+        # The nya and awoo ifs allow a wee bit of tomfoolery and have a long nya/awoo still work. There's likely a better alternative for doing it though.
         elif "nya" in category:
             category = "neko"
+        elif "awoo" in category:
+            category = "awoo"
         elif category not in self.bot.waifu_categories:
             raise commands.BadArgument
         async with ctx.channel.typing():
