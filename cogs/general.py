@@ -1,8 +1,10 @@
-import discord
 import logging
-from discord.ext import commands
+
+from discord import Embed
 from firebase_admin import firestore
+
 from utils import prefixes
+from discord.ext import commands
 
 
 dab = firestore.client()
@@ -13,10 +15,17 @@ class General(commands.Cog):
         self.bot = bot
 
 
+    async def cog_before_invoke(self, ctx):
+        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
+
+    async def cog_after_invoke(self, ctx):
+        logging.info(f"Concluded {ctx.command}")
+
+
     @commands.command(case_insensitive=True, aliases=["invite"])
     async def links(self, ctx):
         logging.info(f"Recieved links in {ctx.guild.name}")
-        embed = discord.Embed(
+        embed = Embed(
             description="[Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot)\n[Home Server](https://discord.gg/dWX6fpGUK9)\n[Github Repo](https://github.com/sirspam/Sirbot)\n\nI hope you're having a good day :)",
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")

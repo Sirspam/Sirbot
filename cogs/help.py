@@ -1,7 +1,9 @@
-import discord
 import logging
-from discord.ext import commands
+
+from discord import Embed
+
 from utils import prefixes
+from discord.ext import commands
 
 
 async def prefix(self, ctx):
@@ -16,11 +18,18 @@ class HelpClient(commands.Cog):
         self.bot = bot
 
 
+    async def cog_before_invoke(self, ctx):
+        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
+
+    async def cog_after_invoke(self, ctx):
+        logging.info(f"Concluded {ctx.command}")
+
+
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["he"])
     async def help(self, ctx):
         logging.info(f"Recieved help in {ctx.guild.name}")
         ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
-        embed = discord.Embed(
+        embed = Embed(
             title="Help",
             description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument\nCommands with (NSFW) will only work within NSFW channels.",
             color=0x00A9E0
@@ -53,7 +62,7 @@ class HelpClient(commands.Cog):
     @help.command(aliases=["u"])
     async def user(self, ctx):
         logging.info(f"Recieved help user in {ctx.guild.name}")
-        embed = discord.Embed(
+        embed = Embed(
             title="Help User",
             description=f"These are the valid arguments for ``{ctx.prefix}user",
             color=0x00A9E0)
@@ -83,7 +92,7 @@ class HelpClient(commands.Cog):
     @help.command(aliases=["up"])
     async def update(self, ctx):
         logging.info(f"Recieved help update in {ctx.guild.name}")
-        embed = discord.Embed(
+        embed = Embed(
             title="Help User Update",
             description=f"These are the valid fields for ``{ctx.prefix}user update <field> <kwarg>``\nAny of these can be removed with ``user remove <field>``",
             color=0x00A9E0
@@ -132,7 +141,7 @@ class HelpClient(commands.Cog):
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
         logging.info(f"Recieved help scoresaber in {ctx.guild.name}")
-        embed = discord.Embed(
+        embed = Embed(
             title="Help ScoreSaber",
             description=f"These are the valid arguments for ``{ctx.prefix}scoresaber``\n~~certainly not a bad ripoff of bs bot~~",
             color=0x00A9E0
@@ -174,7 +183,7 @@ class HelpClient(commands.Cog):
     @help.group(invoke_without_command=True)
     async def waifu(self, ctx):
         logging.info(f"Recieved help waifu in {ctx.guild.name}")
-        embed = discord.Embed(
+        embed = Embed(
             title="Help Waifu",
             description=f"These are the valid arguments for ``{ctx.prefix}waifu``",
             colour=0x00A9E0
@@ -209,7 +218,7 @@ class HelpClient(commands.Cog):
         wc_list = str()
         for category in self.bot.waifu_categories:
             wc_list = wc_list + f"{category}\n"
-        embed = discord.Embed(
+        embed = Embed(
             title="Waifu Categories",
             description=f"```{wc_list}```",
             colour=0x00A9E0

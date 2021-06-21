@@ -1,7 +1,9 @@
 # https://pypi.org/project/NHentai-API/
 
-import discord
 import logging
+
+from discord import Embed
+
 from discord.ext import commands
 from NHentai.nhentai_async import NHentaiAsync
 
@@ -40,7 +42,7 @@ async def sauce_embed(sauce):
         lang = "🇨🇳"
     else: 
         lang = "❔"
-    embed = discord.Embed(
+    embed = Embed(
         title=f"{lang} "+getattr(sauce,"title"),
         url="https://nhentai.net/g/"+getattr(sauce,"id")+"/",
         description=sec_title,
@@ -76,6 +78,14 @@ async def sauce_embed(sauce):
 class NHentaiCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+
+    async def cog_before_invoke(self, ctx):
+        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
+
+    async def cog_after_invoke(self, ctx):
+        logging.info(f"Concluded {ctx.command}")
+
 
     @commands.is_nsfw()
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["nh"])

@@ -1,10 +1,13 @@
-import discord
-import asyncio
-import re
-import json
 import logging
-from discord.ext import commands
+from asyncio import TimeoutError
+from re import search
+from json import loads, JSONDecodeError
+
+from discord import Embed, Member, Colour
 from firebase_admin import firestore
+
+from discord.ext import commands
+
 
 dab = firestore.client()
 
@@ -14,9 +17,16 @@ class User(commands.Cog):
         self.bot = bot
 
 
+    async def cog_before_invoke(self, ctx):
+        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
+
+    async def cog_after_invoke(self, ctx):
+        logging.info(f"Concluded {ctx.command}")
+
+
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["u"])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def user(self, ctx, argument: discord.Member = None):
+    async def user(self, ctx, argument: Member = None):
         if argument is not None:
             ctx.author = argument
         logging.info(f"Recieved user {ctx.author.id} in {ctx.guild.name}")
@@ -33,13 +43,13 @@ class User(commands.Cog):
         links_message = f"[Scoresaber]({scoresaber}) "
         for field in user_links:
             links_message = f"{links_message}| [{field.capitalize()}]({user_links[field]}) "
-        colour = discord.Colour.random()
+        colour = Colour.random()
         if "colour" in user_fields:
             colour = colour = await commands.ColourConverter().convert(ctx, "0x"+user_fields["colour"])
         username = ctx.author.name
         if "username" in user_fields:
             username = user_fields["username"]
-        embed = discord.Embed(title=username, colour=colour)
+        embed = Embed(title=username, colour=colour)
         embed.add_field(name="Links", value=links_message, inline=False)
         # Couldn't for loop this because of the inline :(
         if "hmd" in user_fields:
@@ -67,7 +77,7 @@ class User(commands.Cog):
             try:
                 msg = await self.bot.wait_for('message', timeout=60, check=lambda message: message.author == ctx.author and message.channel == ctx.channel)
                 scoresaber = msg.content
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 await sent.delete()
                 return await ctx.reply("You didn't reply in time, please restart the process")
         elif argument is not None:
@@ -79,8 +89,8 @@ class User(commands.Cog):
             scoresaber = scoresaber.split("&", 1)[0]
         try:
             async with self.bot.session.get(f"https://new.scoresaber.com/api/player/{scoresaber[25:]}/full") as resp:
-                json_data = json.loads(await resp.text())
-        except json.JSONDecodeError:
+                json_data = loads(await resp.text())
+        except JSONDecodeError:
             logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
             return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
         if "error" in json_data:
@@ -193,7 +203,7 @@ class User(commands.Cog):
     @update.command(case_insensitive=True)
     async def birthday(self, ctx, argument):
         logging.info(f"Recieved user update birthday {ctx.author.id} in {ctx.guild.name}")
-        if ((bool(re.search(r"\d/", argument)))) is False:
+        if ((bool(search(r"\d/", argument)))) is False:
             logging.info("Birthday input validation triggered")
             await ctx.reply("Oopsie, looks like you did a woopsie! uwu\n``Don't use characters expect for numbers and /``")
             return

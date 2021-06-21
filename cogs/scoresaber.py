@@ -9,20 +9,22 @@
 # Ranking Pages
 
 
-import discord
-import json
 import logging
+
 from random import randint
-from discord.ext import commands
+
+from discord import Embed, Member
+from json import loads, JSONDecodeError
 from firebase_admin import firestore
+
+from discord.ext import commands
 
 
 dab = firestore.client()
-SS_id = None
 
 
 # Makes the embed message for topSong and recentSong
-async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
+async def songEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
     if arg_user is not None:
         ctx.author = arg_user
         logging.info(f"Argument given, now {ctx.author.name}")
@@ -45,8 +47,8 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
     logging.info(url+"\n"+url1)
     try: 
         async with self.bot.session.get(url) as resp:
-            json_data = json.loads(await resp.text())
-    except json.JSONDecodeError:
+            json_data = loads(await resp.text())
+    except JSONDecodeError:
             logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
             return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
     if "error" in json_data:
@@ -54,7 +56,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
         return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
     songsList = json_data["scores"]
     async with self.bot.session.get(url1) as resp:
-        json_data = json.loads(await resp.text())
+        json_data = loads(await resp.text())
     playerInfo = json_data["playerInfo"]
     if page > 1:
         while arg_page >= 8:
@@ -62,7 +64,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
     Song = songsList[(arg_page - 1)]
     url2 = (f"https://beatsaver.com/api/maps/by-hash/"+Song["songHash"])
     async with self.bot.session.get(url2) as resp:
-        json_data = json.loads(await resp.text())
+        json_data = loads(await resp.text())
     songBSLink = (f"https://beatsaver.com/beatmap/"+json_data["key"])
     if Song["maxScore"] == 0:
         songAcc = f"ScoreSaber API being fucky wucky,\nso you get {randint(0, 100)}"
@@ -84,7 +86,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
         title = Song["songName"]
     else:
         title = Song["songName"]+" - "+Song["songSubName"]
-    message = discord.Embed(
+    message = Embed(
         title=title,
         url=songBSLink,
         description="**"+Song["songAuthorName"]+" - "+Song["levelAuthorName"]+f"** {difficulty}",
@@ -135,7 +137,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
     logging.info("embed message sent")
 
 
-async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
+async def songsEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
     if arg_user is not None:
         ctx.author = arg_user
         logging.info(f"Argument given, now {ctx.author.name}")
@@ -155,19 +157,19 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
     logging.info(url+"\n"+url1)
     try:
         async with self.bot.session.get(url) as resp:
-            json_data = json.loads(await resp.text())
-    except json.JSONDecodeError:
+            json_data = loads(await resp.text())
+    except JSONDecodeError:
         logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
         return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
     if "error" in json_data:
-        message = discord.Embed(
+        message = Embed(
             title="Uh Oh, the codie wodie did an oopsie woopsie! uwu",
             description="Check if your ScoreSaber link is valid <:AYAYASmile:789578607688417310>",
             colour=0xff0000)
         return message
     songsList = json_data["scores"]
     async with self.bot.session.get(url1) as resp:
-        json_data = json.loads(await resp.text())
+        json_data = loads(await resp.text())
     playerInfo = json_data["playerInfo"]
     songsMessage = ""
     count = 0
@@ -206,7 +208,7 @@ async def songsEmbed(self, ctx, arg_page, arg_user: discord.Member, arg_type):
             f"```Song: {songTitle}, "+Song["songAuthorName"]+" - "+Song["levelAuthorName"]+f" ({difficulty})\nRank: #"+str(Song["rank"])+f"\nAcc: {songAcc}%\nScore: {songScore}\nPP: {songPP}\nWeighted PP: {songWeightedPP}\nTime Set: "+(Song["timeSet"])[:10]+"```")
         songsMessage = songsMessage + songMessage
         count = count + 1
-    message = discord.Embed(
+    message = Embed(
         title=playerInfo["playerName"]+f"'s {requestType}",
         url=scoresaber,
         description=songsMessage,
@@ -221,8 +223,16 @@ class ScoreSaber(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+    async def cog_before_invoke(self, ctx):
+        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
+
+    async def cog_after_invoke(self, ctx):
+        logging.info(f"Concluded {ctx.command}")
+
+
     @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["ss"])
-    async def scoresaber(self, ctx, argument: discord.Member=None):
+    async def scoresaber(self, ctx, argument: Member=None):
         logging.info(f"Recieved scoresaber {argument} in {ctx.guild.name}")
         if argument is not None:
             ctx.author = argument
@@ -238,15 +248,15 @@ class ScoreSaber(commands.Cog):
             logging.info(url)
             try:
                 async with self.bot.session.get(url) as response:
-                    json_data = json.loads(await response.text())
-            except json.JSONDecodeError:
+                    json_data = loads(await response.text())
+            except JSONDecodeError:
                 logging.info("JSONDecodeError raised. ScoreSaber API likely dead")
                 return await ctx.reply("ScoreSaber returned an invalid json object, meaning the API is probably dead")
             if "error" in json_data:
                 return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
             playerInfo = json_data["playerInfo"]
             scoreStats = json_data["scoreStats"]
-            embed = discord.Embed(
+            embed = Embed(
                 title=playerInfo["playerName"]+"'s ScoreSaber Stats <:PeepoWideHappy_1:822072552683470879><:PeepoWideHappy_2:822072552964882472><:PeepoWideHappy_3:822072553014165573><:PeepoWideHappy_4:822072552800256061>",
                 url=scoresaber,
                 colour=0xffdc1b,
@@ -317,7 +327,7 @@ class ScoreSaber(commands.Cog):
         logging.info("Successfully sent ScoreSaber topSongs embed")
 
     @scoresaber.command(aliases=["com"])
-    async def compare(self, ctx, argument1: discord.Member=None, argument2: discord.Member=None):
+    async def compare(self, ctx, argument1: Member=None, argument2: Member=None):
         logging.info(f"Recieved compare {argument1} {argument2} in {ctx.guild.name}")
         if argument1 is None:
             return await ctx.reply("You need to mention someone for me to compare you against!")
@@ -338,9 +348,9 @@ class ScoreSaber(commands.Cog):
             url2 = (f"https://new.scoresaber.com/api/player/{SS_id2}/full")
             logging.info(f"{url1}\n{url2}")
             async with self.bot.session.get(url1) as resp:
-                json_data1 = json.loads(await resp.text())
+                json_data1 = loads(await resp.text())
             async with self.bot.session.get(url2) as resp:
-                json_data2 = json.loads(await resp.text())
+                json_data2 = loads(await resp.text())
             if "error" in json_data1 or "error" in json_data2:
                 return await ctx.reply("ScoreSaber returned an error!\nCheck if your ScoreSaber link is valid")
             playerInfo1 = json_data1["playerInfo"]
@@ -389,7 +399,7 @@ class ScoreSaber(commands.Cog):
             elif val1 < val2:
                 val2 = f"__{val2}__"
             message = message + f"{val1} -  🧑‍🌾 **Ranked Play Count**  🧑‍🌾 - {val2}\n"
-            embed = discord.Embed(
+            embed = Embed(
                 title=playerInfo1["playerName"]+" 🆚 "+playerInfo2["playerName"],
                 description=message,
                 colour=0xffdc1b,

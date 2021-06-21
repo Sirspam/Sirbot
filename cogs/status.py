@@ -1,7 +1,9 @@
-import discord
 import logging
-from discord.ext import commands, tasks
 from random import choice, getrandbits
+
+from discord import Game, Activity, ActivityType
+
+from discord.ext import commands, tasks
 
 
 play_status_list = [
@@ -36,11 +38,11 @@ class Status(commands.Cog):
         await self.bot.wait_until_ready()
         if getrandbits(1) == 1:
             value = choice(play_status_list)
-            await self.bot.change_presence(activity=discord.Game(name=value))
+            await self.bot.change_presence(activity=Game(name=value))
             logging.info(f"Status set to: {value}")
         else:
             value = choice(watch_status_list)
-            await self.bot.change_presence(activity=discord.Activity(name=value, type=discord.ActivityType.watching))
+            await self.bot.change_presence(activity=Activity(name=value, type=ActivityType.watching))
             logging.info(f"Status set to: {value}")
 
     @commands.Cog.listener()
