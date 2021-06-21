@@ -3,10 +3,10 @@ import logging
 from firebase_admin import firestore
 
 
+prefixes_dict = dict()
+
 async def cache_prefixes():
     logging.info("Attempting to cache prefixes")
-    global prefixes_dict
-    prefixes_dict = dict()
     dab = firestore.client()
     prefix_col = dab.collection("prefixes").document("collectionlist").get().get("array")
     for x in prefix_col:
