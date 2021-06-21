@@ -1,5 +1,5 @@
 import logging
-from asyncio import TimeoutError
+from asyncio import TimeoutError as asyncio_TimeoutError
 from re import search
 from json import loads, JSONDecodeError
 
@@ -77,7 +77,7 @@ class User(commands.Cog):
             try:
                 msg = await self.bot.wait_for('message', timeout=60, check=lambda message: message.author == ctx.author and message.channel == ctx.channel)
                 scoresaber = msg.content
-            except TimeoutError:
+            except asyncio_TimeoutError:
                 await sent.delete()
                 return await ctx.reply("You didn't reply in time, please restart the process")
         elif argument is not None:
