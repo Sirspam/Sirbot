@@ -49,6 +49,9 @@ class ErrorHandler(commands.Cog):
             logging.info("MissingPermissions handler ran")
             return await ctx.send("You don't have the permissions for this command.")
 
+        if isinstance(error, commands.NSFWChannelRequired):
+            logging.info("NSFWChannelRequired hander ran")
+            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>\n``This command can only be ran in an nsfw channel``")
 
         logging.error(error)
         await ctx.send(embed=Embed(
