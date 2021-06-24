@@ -3,4 +3,4 @@ python-dotenv==0.17.1
 jishaku==2.0.0
 firebase-admin==5.0.0
 NHentai-API==0.0.16
-discord-ext-menus==1.0.0a30+g309c702
+git+https://github.com/Rapptz/discord-ext-menus@309c70222eec33acacb8c21bbb0fbe9bc57de661#egg=discord-ext-menus
