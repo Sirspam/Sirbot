@@ -24,7 +24,7 @@ class User(commands.Cog):
         logging.info(f"Concluded {ctx.command}")
 
 
-    @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["u"])
+    @commands.group(invoke_without_command=True, aliases=["u"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def user(self, ctx, argument: Member = None):
         if argument is not None:
@@ -66,7 +66,7 @@ class User(commands.Cog):
         logging.info('Response: user embed')
 
 
-    @user.command(case_insensitive=True, aliases=["link"])
+    @user.command(aliases=["link"])
     async def add(self, ctx, argument=None):
         logging.info(f"Recieved user add {ctx.author.id} in {ctx.guild.name}")
         col_ref = dab.collection('users').document('collectionlist').get().get('array')
@@ -266,7 +266,7 @@ class User(commands.Cog):
         await ctx.reply("I've updated your status")
         logging.info(f"{ctx.author.name} has updated their status to {argument}")
 
-    @update.command(case_insensitive=True, aliases=["color"])  # Americans ew
+    @update.command(aliases=["color"])  # Americans ew
     async def colour(self, ctx, argument):
         logging.info(f"Recieved user update colour {ctx.author.id} in {ctx.guild.name}")
         try:

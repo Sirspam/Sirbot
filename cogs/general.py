@@ -22,7 +22,7 @@ class General(commands.Cog):
         logging.info(f"Concluded {ctx.command}")
 
 
-    @commands.command(case_insensitive=True, aliases=["invite"])
+    @commands.command(aliases=["invite"])
     async def links(self, ctx):
         logging.info(f"Recieved links in {ctx.guild.name}")
         embed = Embed(

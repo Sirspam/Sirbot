@@ -231,7 +231,7 @@ class ScoreSaber(commands.Cog):
         logging.info(f"Concluded {ctx.command}")
 
 
-    @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["ss"])
+    @commands.group(invoke_without_command=True, aliases=["ss"])
     async def scoresaber(self, ctx, argument: Member=None):
         logging.info(f"Recieved scoresaber {argument} in {ctx.guild.name}")
         if argument is not None:

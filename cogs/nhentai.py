@@ -88,7 +88,7 @@ class NHentaiCog(commands.Cog):
 
 
     @commands.is_nsfw()
-    @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["nh"])
+    @commands.group(invoke_without_command=True, aliases=["nh"])
     async def nhentai(self, ctx, *, argument=None):
         logging.info(f"nhentai ran in {ctx.guild.name}")
         if argument is None:

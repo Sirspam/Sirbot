@@ -25,7 +25,7 @@ class HelpClient(commands.Cog):
         logging.info(f"Concluded {ctx.command}")
 
 
-    @commands.group(invoke_without_command=True, case_insensitive=True, aliases=["he"])
+    @commands.group(invoke_without_command=True, aliases=["he"])
     async def help(self, ctx):
         logging.info(f"Recieved help in {ctx.guild.name}")
         ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
