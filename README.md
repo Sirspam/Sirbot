@@ -70,7 +70,7 @@ Clearly the best part about this bot
 | Command | Description |
 | --- | --- |
 | beatsaver <key> <diff> | Posts information about a beatsaver map |
-| beatsaver search <query> | Searches for a map on BeatSaver |
+| beatsaver search <query> | Searches for maps on BeatSaver |
 | links | Posts an embed with important links relating to Sirbot |
 | amogus | ![amogus](https://cdn.discordapp.com/emojis/826403430905937941.png?v=1) |
 | nhentai <ID> | Gets a doujin from nhentai, will be random if no ID is given. (NSFW) |
