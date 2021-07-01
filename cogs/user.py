@@ -17,19 +17,11 @@ class User(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.group(invoke_without_command=True, aliases=["u"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def user(self, ctx, argument: Member = None):
         if argument is not None:
             ctx.author = argument
-        logging.info(f"Recieved user {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id)).get()
         if ref.exists is False:
             logging.info(f"User not found")
@@ -63,12 +55,10 @@ class User(commands.Cog):
         else:
             embed.set_thumbnail(url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
-        logging.info('Response: user embed')
 
 
     @user.command(aliases=["link"])
     async def add(self, ctx, argument=None):
-        logging.info(f"Recieved user add {ctx.author.id} in {ctx.guild.name}")
         col_ref = dab.collection('users').document('collectionlist').get().get('array')
         if str(ctx.author.id) in col_ref:
             return await ctx.reply(f"You're already in the database!\nUse ``{ctx.prefix}user update`` instead")
@@ -115,23 +105,20 @@ class User(commands.Cog):
 
     @user.group(invoke_without_command=True, case_insensitive=True)
     async def remove(self, ctx):
-        logging.info(f"Recieved user remove {ctx.author.id} in {ctx.guild.name}")
         col_ref = dab.collection('users').document('collectionlist').get().get('array')
         col_ref.remove(str(ctx.author.id))
         dab.collection('users').document('collectionlist').update({'array': col_ref})
         dab.collection("users").document(str(ctx.author.id)).delete()
         await ctx.reply(f"{ctx.author.name} has been successfully removed from the database")
-        logging.info(f"Successfully added {ctx.author.id} to the database")
+        logging.info(f"Successfully removed {ctx.author.id} from the database")
 
     @user.group(invoke_without_command=True, case_insensitive=True)
     async def update(self, ctx):
-        logging.info(f"Recieved user update")
         await ctx.reply(f"You need to state what you want to update!\nUse ``{ctx.prefix}help update`` to check the valid arguments")
         logging.info("no sub command given")
 
     @update.command(case_insensitive=True)
     async def username(self, ctx, *, argument):
-        logging.info(f"Recieved user update username {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_fields")
         temp.update({"username": argument})
@@ -141,7 +128,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def scoresaber(self, ctx, argument):
-        logging.info(f"Recieved user update scoresaber {ctx.author.id} in {ctx.guild.name}")
         if argument.isdigit():
             argument = "https://scoresaber.com/u/"+argument
         else:
@@ -154,7 +140,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def steam(self, ctx, argument):
-        logging.info(f"Recieved user update steam {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_links")
         temp.update({"steam": argument})
@@ -164,7 +149,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def twitch(self, ctx, argument):
-        logging.info(f"Recieved user update twitch {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_links")
         temp.update({"twitch": argument})
@@ -174,7 +158,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def youtube(self, ctx, argument):
-        logging.info(f"Recieved user update youtube {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_links")
         temp.update({"youtube": argument})
@@ -183,7 +166,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def twitter(self, ctx, argument):
-        logging.info(f"Recieved user update twitter {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_links")
         temp.update({"twitter": argument})
@@ -193,7 +175,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def reddit(self, ctx, argument):
-        logging.info(f"Recieved user update reddit {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_links")
         temp.update({"reddit": argument})
@@ -202,7 +183,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def birthday(self, ctx, argument):
-        logging.info(f"Recieved user update birthday {ctx.author.id} in {ctx.guild.name}")
         if ((bool(search(r"\d/", argument)))) is False:
             logging.info("Birthday input validation triggered")
             await ctx.reply("Oopsie, looks like you did a woopsie! uwu\n``Don't use characters expect for numbers and /``")
@@ -229,7 +209,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def hmd(self, ctx, *, argument):
-        logging.info(f"Recieved user update hmd {ctx.author.id} in {ctx.guild.name}")
         valid_HMD_low = [x.lower() for x in self.bot.valid_HMD]
         try:
             pos = valid_HMD_low.index(argument.lower()) 
@@ -245,7 +224,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def pfp(self, ctx, argument):
-        logging.info(f"Recieved user update pfp {ctx.author.id} in {ctx.guild.name}")
         if argument[:4] != "http":
             logging.info(f"Argument is not a link ({argument})")
             return await ctx.reply("You can only use links for your profile picture!")
@@ -258,7 +236,6 @@ class User(commands.Cog):
 
     @update.command(case_insensitive=True)
     async def status(self, ctx, *, argument):
-        logging.info(f"Recieved user update status {ctx.author.id} in {ctx.guild.name}")
         ref = dab.collection("users").document(str(ctx.author.id))
         temp = ref.get().get("user_fields")
         temp.update({"status": argument})

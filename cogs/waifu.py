@@ -18,17 +18,9 @@ class Waifu(commands.Cog):
         self.bot.waifu_categories = ["waifu", "neko", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "happy", "wink", "poke", "dance", "cringe", "blush"]
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.group(invoke_without_command=True, aliases=["wa"])
     async def waifu(self, ctx, category="waifu"):
-        logging.info(f"waifu invoked in {ctx.guild.name}")
         category = category.lower()
         if category == "random":
             category = choice(self.bot.waifu_categories)
@@ -45,43 +37,36 @@ class Waifu(commands.Cog):
                 await ctx.reply(file=File(results[0], f"{category}{results[1]}"))
             except HTTPException:
                 await ctx.reply(results[2])
-        logging.info("attachment sent")
 
     @waifu.group(invoke_without_command=True)
     @commands.is_nsfw()
     async def nsfw(self, ctx):
-        logging.info(f"nsfw invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/waifu")
             try:
                 await ctx.reply(file=File(results[0], f"nsfw_waifu{results[1]}"))
             except HTTPException:
                 await ctx.reply(results[2])
-        logging.info("attachment sent")
 
     @nsfw.command()
     @commands.is_nsfw()
     async def neko(self, ctx):
-        logging.info(f"nsfw neko invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/neko")
             try:
                 await ctx.reply(file=File(results[0], f"nsfw_waifu{results[1]}"))
             except HTTPException:
                 await ctx.reply(results[2])
-        logging.info("attachment sent")
 
     @nsfw.command()
     @commands.is_nsfw()
     async def trap(self, ctx):
-        logging.info(f"nsfw trap invoked in {ctx.guild.name}")
         async with ctx.channel.typing():
             results = await get_image(self, f"nsfw/trap")
             try:
                 await ctx.reply(file=File(results[0], f"nsfw_waifu{results[1]}"))
             except HTTPException:
                 await ctx.reply(results[2])
-        logging.info("attachment sent")
 
 
 def setup(bot):

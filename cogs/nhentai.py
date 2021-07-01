@@ -80,17 +80,9 @@ class NHentaiCog(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.is_nsfw()
     @commands.group(invoke_without_command=True, aliases=["nh"])
     async def nhentai(self, ctx, *, argument=None):
-        logging.info(f"nhentai ran in {ctx.guild.name}")
         if argument is None:
             sauce = await nhentai.get_random()
         elif argument.isdigit():
@@ -100,7 +92,6 @@ class NHentaiCog(commands.Cog):
         else:
             raise commands.BadArgument
         await ctx.send(embed=await sauce_embed(sauce))
-        logging.info("successfully concluded nhentai")
 
 def setup(bot):
     bot.add_cog(NHentaiCog(bot))

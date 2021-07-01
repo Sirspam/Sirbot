@@ -15,28 +15,18 @@ class General(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.command(aliases=["invite"])
     async def links(self, ctx):
-        logging.info(f"Recieved links in {ctx.guild.name}")
         embed = Embed(
             description="[Bot Invite Link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot)\n[Home Server](https://discord.gg/dWX6fpGUK9)\n[Github Repo](https://github.com/sirspam/Sirbot)\n\nI hope you're having a good day :)",
             color=0x00A9E0)
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
         await ctx.reply(embed=embed)
-        logging.info(f'Links embed sent')
 
     @commands.command(case_insensitive=True)
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 15, commands.BucketType.guild)
     async def set_prefix(self, ctx, *, arg):
-        logging.info(f"Recieved set_prefix {arg} in {ctx.guild.name}")
         if arg[:1]!='"' or arg[-1:]!='"':
             raise commands.BadArgument
         if arg == f'"{self.bot.default_prefix}"':
@@ -60,7 +50,6 @@ class General(commands.Cog):
             "prefix": arg
         })
         await ctx.reply(f"Prefix successfully set to ``{arg}``!")
-        logging.info("Prefix successfully set")
         await prefixes.cache_prefixes()
 
 

@@ -18,16 +18,8 @@ class HelpClient(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.group(invoke_without_command=True, aliases=["he"])
     async def help(self, ctx):
-        logging.info(f"Recieved help in {ctx.guild.name}")
         ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
         embed = Embed(
             title="Help",
@@ -57,11 +49,9 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Embed successfully sent")
 
     @help.command(aliases=["u"])
     async def user(self, ctx):
-        logging.info(f"Recieved help user in {ctx.guild.name}")
         embed = Embed(
             title="Help User",
             description=f"These are the valid arguments for ``{ctx.prefix}user",
@@ -87,11 +77,9 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Embed successfully sent")
     
     @help.command(aliases=["up"])
     async def update(self, ctx):
-        logging.info(f"Recieved help update in {ctx.guild.name}")
         embed = Embed(
             title="Help User Update",
             description=f"These are the valid fields for ``{ctx.prefix}user update <field> <kwarg>``\nAny of these can be removed with ``user remove <field>``",
@@ -136,11 +124,9 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Embed successfully sent")
 
     @help.command(aliases=["ss"])
     async def scoresaber(self, ctx):
-        logging.info(f"Recieved help scoresaber in {ctx.guild.name}")
         embed = Embed(
             title="Help ScoreSaber",
             description=f"These are the valid arguments for ``{ctx.prefix}scoresaber``\n~~certainly not a bad ripoff of bs bot~~",
@@ -177,12 +163,10 @@ class HelpClient(commands.Cog):
             inline=False
         )
         await ctx.reply(embed=embed)
-        logging.info("Embed successfully sent")
 
 
     @help.group(invoke_without_command=True)
     async def waifu(self, ctx):
-        logging.info(f"Recieved help waifu in {ctx.guild.name}")
         embed = Embed(
             title="Help Waifu",
             description=f"These are the valid arguments for ``{ctx.prefix}waifu``",
@@ -210,11 +194,9 @@ class HelpClient(commands.Cog):
         )
         embed.set_footer(text="Powered by Waifu.pics",icon_url="https://waifu.pics/favicon.png")
         await ctx.reply(embed=embed)
-        logging.info("Embed successfully sent")
 
     @waifu.command()
     async def categories(self, ctx):
-        logging.info(f"Recieved help waifu categories in {ctx.guild.name}")
         wc_list = str()
         for category in self.bot.waifu_categories:
             wc_list = wc_list + f"{category}\n"
@@ -225,7 +207,6 @@ class HelpClient(commands.Cog):
         )
         await ctx.author.send(embed=embed)
         await ctx.message.add_reaction("✅")
-        logging.info("Embed successfully sent")
 
 
 def setup(bot):

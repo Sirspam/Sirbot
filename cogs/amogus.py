@@ -37,16 +37,8 @@ class Amogus(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.command()
     async def amogus(self, ctx):
-        logging.info(f"Recieved amogus in {ctx.guild.name}")
         square_colour = choice(colours)
         if randint(0,10) == 10:
             await ctx.send(f"""⬛{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}
@@ -57,7 +49,6 @@ class Amogus(commands.Cog):
 {square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}
 ⬛{square_colour}{square_colour}⬛⬛{square_colour}{square_colour}
 ⬛{square_colour}{square_colour}⬛⬛{square_colour}{square_colour}""")
-            logging.info("Sussy amogus sent.")
         else:
             await ctx.send(f"""⬛{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}
 ⬛{square_colour}🟦🟦⬜⬜⬜
@@ -67,7 +58,6 @@ class Amogus(commands.Cog):
 {square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}
 ⬛{square_colour}{square_colour}⬛⬛{square_colour}{square_colour}
 ⬛{square_colour}{square_colour}⬛⬛{square_colour}{square_colour}""")
-            logging.info("Amogus sent.")
 
 
 def setup(bot):

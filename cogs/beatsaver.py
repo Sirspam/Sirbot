@@ -57,13 +57,6 @@ class BeatSaver(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.group(invoke_without_command=True, aliases=["bs","bsr"])
     async def beatsaver(self, ctx, key, diff=None):
@@ -123,7 +116,6 @@ class BeatSaver(commands.Cog):
             )
             embed.set_image(url="https://beatsaver.com"+response["coverURL"])
             await ctx.reply(embed=embed)
-        logging.info("successfully concluded beatsaver")
 
 
 # https://beatsaver.com/api/search/text/0?q=nekopara&?automapper=1

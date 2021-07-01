@@ -224,16 +224,8 @@ class ScoreSaber(commands.Cog):
         self.bot = bot
 
 
-    async def cog_before_invoke(self, ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    async def cog_after_invoke(self, ctx):
-        logging.info(f"Concluded {ctx.command}")
-
-
     @commands.group(invoke_without_command=True, aliases=["ss"])
     async def scoresaber(self, ctx, argument: Member=None):
-        logging.info(f"Recieved scoresaber {argument} in {ctx.guild.name}")
         if argument is not None:
             ctx.author = argument
             logging.info(f"Argument given, now {ctx.author.name}")
@@ -296,39 +288,29 @@ class ScoreSaber(commands.Cog):
                 url="https://new.scoresaber.com" + playerInfo["avatar"]
             )
         await ctx.reply(embed=embed)
-        logging.info("Successfully sent ScoreSaber UserData embed")
 
     @scoresaber.command(aliases=["rs"])
     async def recentsong(self, ctx, argument1=1, argument2=None):
-        logging.info(f"Recieved scoresaber recentsong in {ctx.guild.name}")
         async with ctx.channel.typing():
             await songEmbed(self, ctx, argument1, argument2, type="recentSong")
-        logging.info("Finished")
 
     @scoresaber.command(aliases=["ts"])
     async def topsong(self, ctx, argument1=1, argument2=None):
-        logging.info(f"Recieved >scoresaber topsong in {ctx.guild.name}")
         async with ctx.channel.typing():
             await songEmbed(self, ctx, argument1, argument2, type="topSong")
-        logging.info("Finished")
 
     @scoresaber.command(aliases=["rss"])
     async def recentsongs(self, ctx, argument1=1, argument2=None):
-        logging.info(f"Recieved >scoresaber recentSongs in {ctx.guild.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="recentSongs")
-        logging.info("Successfully sent ScoreSaber recentSongs embed")
 
     @scoresaber.command(aliases=["tss"])
     async def topsongs(self, ctx, argument1=1, argument2=None):
-        logging.info(f"Recieved >scoresaber topSongs in {ctx.guild.name}")
         async with ctx.channel.typing():
             await songsEmbed(self, ctx, argument1, argument2, type="topSongs")
-        logging.info("Successfully sent ScoreSaber topSongs embed")
 
     @scoresaber.command(aliases=["com"])
     async def compare(self, ctx, argument1: Member=None, argument2: Member=None):
-        logging.info(f"Recieved compare {argument1} {argument2} in {ctx.guild.name}")
         if argument1 is None:
             return await ctx.reply("You need to mention someone for me to compare you against!")
         if argument1 is not None and argument2 is None:
