@@ -194,7 +194,6 @@ class User(commands.Cog):
             logging.info("Birthday legitimacy triggered, date and/or month invalid")
             return await ctx.reply("That date doesn't make any sense!\n``Please use a legitimate date``")
         try: 
-            print(int(len(storer[2])))
             if int(len(storer[2])) > 4 or int(len(storer[2])) < 4:
                 logging.info("Birthday legitmacy triggered, year invalid")
                 return await ctx.reply("That date doesn't make any sense!\n``Please use a legitimate year, or don't include one``")
