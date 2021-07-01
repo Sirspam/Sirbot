@@ -12,8 +12,9 @@ from firebase_admin import credentials
 from utils import prefixes
 
 
-cwd = getcwd()
-load_dotenv(f"{cwd}/config.env")
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+
+load_dotenv(getcwd()+"/.env")
 default_prefix = getenv("DEFAULT_PREFIX")
 
 
@@ -42,9 +43,6 @@ async def prefix(bot, ctx):
 intents = Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True, help_command=None, allowed_mentions=AllowedMentions(replied_user=False))
-
-
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 
 bot.default_prefix = default_prefix # I'd much prefer to define this at line 14 but this and that means I have to do it like this
@@ -91,6 +89,14 @@ async def on_ready():
 async def on_guild_remove(guild):
     logging.info(f"Left guild: {guild.name}")
     await prefixes.prefix_delete(guild.id)
+
+@bot.before_invoke
+async def before_invoke(ctx):
+    logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
+
+@bot.after_invoke
+async def after_invoke(ctx):
+    logging.info(f"Concluded {ctx.command}")
 
 
 bot.run(getenv("TOKEN"))
