@@ -29,7 +29,6 @@ class General(commands.Cog):
         perms.update(**dict.fromkeys(permission_names, True))
         embed = Embed(
             description=
-# https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot
 f"""[**Bot Invite Link**]({oauth_url(self.bot.user.id, perms)})
 [**Home Server**](https://discord.gg/dWX6fpGUK9)
 [**Github Repo**](https://github.com/sirspam/Sirbot)\n
