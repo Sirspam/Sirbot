@@ -22,24 +22,20 @@
 # ⢀⠢⡑⡀⢂⢊⠠⠁⡂⡐⠀⠅⡈⠪⠪⠪⠣⠫⠑⡁⢔⠕⣜⣜⢦⡰⡎⡯⡾⡽
 
 
-import logging
-
 from random import choice, randint
 
 from discord.ext import commands
 
 
-colours = ["🟥","🟩","🟪","🟧","🟨","🟫","🆒"]
-
-
 class Amogus(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.colours = ["🟥","🟩","🟪","🟧","🟨","🟫","🆒"]
 
 
-    @commands.command()
+    @commands.command(description="<:amogus:826403430905937941>") # Need to check this emote will actually appear in the help embed
     async def amogus(self, ctx):
-        square_colour = choice(colours)
+        square_colour = choice(self.colours)
         if randint(0,10) == 10:
             await ctx.send(f"""⬛{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}{square_colour}
 ⬛{square_colour}<:sus_glass_1:826440778095394866><:sus_glass_2:826440778297507840><:sus_glass_3:826440778091331614><:sus_glass_4:826440778012295177><:sus_glass_5:826440778242457650>
