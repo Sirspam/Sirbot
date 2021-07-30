@@ -1,9 +1,9 @@
 # I need to rewrite this cog tehe
 # https://new.scoresaber.com/api/player/76561198091128855/full
 # https://new.scoresaber.com/api/static/covers/69E494F4A295197BF03720029086FABE6856FBCE.png
-# url = (f"https://new.scoresaber.com/api/player/{SS_id}/full") - Get UserData
-# url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}") - #Get Top Songs
-# url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}") - #Get Recent Songs
+# url = (f"https://new.scoresaber.com/api/player/{ss_id}/full") - Get UserData
+# url = (f"https://new.scoresaber.com/api/player/{ss_id}/scores/top/{page}") - #Get Top Songs
+# url = (f"https://new.scoresaber.com/api/player/{ss_id}/scores/recent/{page}") - #Get Recent Songs
 # url = (f"https://new.scoresaber.com/api/players/{page}") - #Get Global Rankings
 # url = (f"https://new.scoresaber.com/api/players/pages") - #Get Global
 # Ranking Pages
@@ -25,25 +25,23 @@ dab = firestore.client()
 
 # Makes the embed message for topSong and recentSong
 async def songEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
-    if arg_user is not None:
-        ctx.author = arg_user
-        logging.info(f"Argument given, now {ctx.author.name}")
-    ref = dab.collection("users").document(str(ctx.author.id)).get()
+    ref = dab.collection("users").document(str(arg_user.id)).get()
     if ref.exists is False:
         await ctx.reply("That user isn't in my database!")
         return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
-    SS_id = scoresaber[25:]
+    print(scoresaber)
+    ss_id = scoresaber[25:]
     page = (arg_page / 8)
     if page.is_integer() is False:
         page = int(page + 1)
     else:
         page = int(page)
     if arg_type == "recentSong":
-        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{page}")
+        url = (f"https://new.scoresaber.com/api/player/{ss_id}/scores/recent/{page}")
     elif arg_type == "topSong":
-        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{page}")
-    url1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
+        url = (f"https://new.scoresaber.com/api/player/{ss_id}/scores/top/{page}")
+    url1 = (f"https://new.scoresaber.com/api/player/{ss_id}/full")
     logging.info(url+"\n"+url1)
     try: 
         async with self.bot.session.get(url) as resp:
@@ -138,22 +136,19 @@ async def songEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
 
 
 async def songsEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
-    if arg_user is not None:
-        ctx.author = arg_user
-        logging.info(f"Argument given, now {ctx.author.name}")
-    ref = dab.collection("users").document(str(ctx.author.id)).get()
+    ref = dab.collection("users").document(str(arg_user.id)).get()
     if ref.exists is False:
         await ctx.reply("That user isn't in my database!")
         return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
-    SS_id = scoresaber[25:]
+    ss_id = scoresaber[25:]
     if arg_type == "recentSongs":
-        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/recent/{arg_page}")
+        url = (f"https://new.scoresaber.com/api/player/{ss_id}/scores/recent/{arg_page}")
         requestType = ("Recent Songs")
     elif arg_type == "topSongs":
-        url = (f"https://new.scoresaber.com/api/player/{SS_id}/scores/top/{arg_page}")
+        url = (f"https://new.scoresaber.com/api/player/{ss_id}/scores/top/{arg_page}")
         requestType = ("Top Songs")
-    url1 = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
+    url1 = (f"https://new.scoresaber.com/api/player/{ss_id}/full")
     logging.info(url+"\n"+url1)
     try:
         async with self.bot.session.get(url) as resp:
@@ -235,8 +230,8 @@ class ScoreSaber(commands.Cog):
                 await ctx.reply("That user isn't in my database!")
                 return logging.info("scoresaber is None")
             scoresaber = ref.get('scoresaber')
-            SS_id = scoresaber[25:]
-            url = (f"https://new.scoresaber.com/api/player/{SS_id}/full")
+            ss_id = scoresaber[25:]
+            url = (f"https://new.scoresaber.com/api/player/{ss_id}/full")
             logging.info(url)
             try:
                 async with self.bot.session.get(url) as response:
@@ -290,24 +285,32 @@ class ScoreSaber(commands.Cog):
         await ctx.reply(embed=embed)
 
     @scoresaber.command(aliases=["rs"])
-    async def recentsong(self, ctx, argument1=1, argument2=None):
+    async def recentsong(self, ctx, page=1, user=None):
         async with ctx.channel.typing():
-            await songEmbed(self, ctx, argument1, argument2, type="recentSong")
+            if user is None:
+                user = ctx.author
+            await songEmbed(self, ctx, page, user, arg_type="recentSong")
 
     @scoresaber.command(aliases=["ts"])
-    async def topsong(self, ctx, argument1=1, argument2=None):
+    async def topsong(self, ctx, page=1, user=None):
         async with ctx.channel.typing():
-            await songEmbed(self, ctx, argument1, argument2, type="topSong")
+            if user is None:
+                user = ctx.author
+            await songEmbed(self, ctx, page, user, arg_type="topSong")
 
     @scoresaber.command(aliases=["rss"])
-    async def recentsongs(self, ctx, argument1=1, argument2=None):
+    async def recentsongs(self, ctx, page=1, user=None):
         async with ctx.channel.typing():
-            await songsEmbed(self, ctx, argument1, argument2, type="recentSongs")
+            if user is None:
+                user = ctx.author
+            await songsEmbed(self, ctx, page, user, arg_type="recentSongs")
 
     @scoresaber.command(aliases=["tss"])
-    async def topsongs(self, ctx, argument1=1, argument2=None):
+    async def topsongs(self, ctx, page=1, user=None):
         async with ctx.channel.typing():
-            await songsEmbed(self, ctx, argument1, argument2, type="topSongs")
+            if user is None:
+                user = ctx.author
+            await songsEmbed(self, ctx, page, user, arg_type="topSongs")
 
     @scoresaber.command(aliases=["com"])
     async def compare(self, ctx, argument1: Member=None, argument2: Member=None):
@@ -324,10 +327,10 @@ class ScoreSaber(commands.Cog):
                 return logging.info("scoresaber is None")
             scoresaber1 = user1.get('scoresaber')
             scoresaber2 = user2.get('scoresaber')
-            SS_id1 = scoresaber1[25:]
-            SS_id2 = scoresaber2[25:]
-            url1 = (f"https://new.scoresaber.com/api/player/{SS_id1}/full")
-            url2 = (f"https://new.scoresaber.com/api/player/{SS_id2}/full")
+            ss_id1 = scoresaber1[25:]
+            ss_id2 = scoresaber2[25:]
+            url1 = (f"https://new.scoresaber.com/api/player/{ss_id1}/full")
+            url2 = (f"https://new.scoresaber.com/api/player/{ss_id2}/full")
             logging.info(f"{url1}\n{url2}")
             async with self.bot.session.get(url1) as resp:
                 json_data1 = loads(await resp.text())
