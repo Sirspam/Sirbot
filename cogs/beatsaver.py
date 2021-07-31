@@ -1,24 +1,15 @@
 import logging
 from json import loads
 
-from discord import Embed
+from discord import Embed, Colour
 from datetime import datetime
 
 from discord.ext import commands, menus
-
-
-diff_emotes = { # Emotes from sus
-    "easy": "<:Easy_1:848911334237012030><:Easy_2:848911334435455007>",
-    "normal": "<:Normal_1:848911334108299265><:Normal_2:848911334442926100><:Normal_3:848911334447513651>",
-    "hard": "<:Hard_1:848911334430212156><:Hard_2:848911334422478899>",
-    "expert": "<:Expert_1:848911334405177364><:Expert_2:848911334422216714>",
-    "expertPlus": "<:ExpertPlus_1:848911334392201246><:ExpertPlus_2:848911334426148874><:ExpertPlus_3:848911334400983050>",
-}
+from utils.emotes import diff_emotes
 
 
 async def diff_sort(difficulties):
-    diff_order = ["easy","normal","hard","expert","expertPlus"]
-    diff_copy = ["easy","normal","hard","expert","expertPlus"]
+    diff_order = diff_copy = ["easy","normal","hard","expert","expertPlus"]
     for diff in diff_order:
         if diff not in difficulties:
             diff_copy.remove(diff)
@@ -84,11 +75,14 @@ class BeatSaver(commands.Cog):
                 title=title,
                 url=f"https://beatsaver.com/beatmap/{key}",
                 description=f"**{response['metadata']['songAuthorName']}**",
-                colour=0x232325
+                colour=Colour.dark_blue()
             )
+            message=str()
+            for difficulty in difficulties:
+                message=f"{message} {diff_emotes[difficulty]}"
             embed.add_field(
                 name="Map Stats",
-                value=f"Duration: {m:02d}:{s:02d}\nBPM: {response['metadata']['bpm']}\nMapper: {response['metadata']['levelAuthorName']}",
+                value=f"Duration: {m:02d}:{s:02d}\nBPM: {response['metadata']['bpm']}\nMapper: {response['metadata']['levelAuthorName']}\n{message}",
                 inline=True
             )
             embed.add_field(
@@ -96,17 +90,10 @@ class BeatSaver(commands.Cog):
                 value=f"🔑: {response['key']}\n💾: {response['stats']['downloads']:,}\n💯: {int(response['stats']['rating']*100)}%\n📅: {(datetime.fromisoformat(response['uploaded'][:-1])).strftime('%Y/%m/%d')}",
                 inline=True
             )
-            message=str()
-            for difficulty in difficulties:
-                message=f"{message}\n{diff_emotes[difficulty]}"
-            embed.add_field(
-                name="Difficulties",
-                value=message,
-                inline=True
-            )
+            embed.add_field(name="\u200B",value="\u200B",inline=True)
             embed.add_field(
                 name=f"Difficulty Stats {diff_emotes[diff]}",
-                value=f"NPS: {round(diff_stats['notes']/diff_stats['length'],2)}\nNJS: {diff_stats['njs']}\nOffset: {round(diff_stats['njsOffset'],2)}\nNotes: {diff_stats['notes']}\n Bombs: {diff_stats['bombs']}\n Obstacles: {diff_stats['obstacles']}",
+                value=f"NPS: {round(diff_stats['notes']/diff_stats['length'],2)}\nNJS: {diff_stats['njs']}\nNotes: {diff_stats['notes']}\nBombs: {diff_stats['bombs']}",
                 inline=True
             )
             embed.add_field(
@@ -114,18 +101,18 @@ class BeatSaver(commands.Cog):
                 value=f"[Preview Map](https://skystudioapps.com/bs-viewer/?id={response['key']})\n[Download Map](https://beatsaver.com/api/download/key/{response['key']})\n[Song on Youtube](https://www.youtube.com/results?search_query={response['metadata']['songAuthorName'].replace(' ','+')}+{title.replace(' ','+')})\n[Song on Spotify](https://open.spotify.com/search/{response['metadata']['songName'].replace(' ','%20')})",
                 inline=True
             )
+            embed.add_field(name="\u200B",value="\u200B",inline=True)
             embed.set_image(url="https://beatsaver.com"+response["coverURL"])
             await ctx.reply(embed=embed)
 
 
-# https://beatsaver.com/api/search/text/0?q=nekopara&?automapper=1
     @beatsaver.command(aliases=["s", "map"])
     async def search(self, ctx, *, query):
         async with ctx.channel.typing():
             query = query.replace(' ','%20')
             async with self.bot.session.get(f"https://beatsaver.com/api/search/text/0?q={query}&?automapper=1") as resp:
                 response = loads(await resp.text())
-        embed = Embed(colour=0x232325)
+        embed = Embed(colour=Colour.dark_blue())
         embed.set_thumbnail(url="https://beatsaver.com"+response["docs"][0]["coverURL"])
         embed.set_author(
             name="BeatSaver Search",
@@ -165,14 +152,21 @@ class BeatSaver(commands.Cog):
 
     @beatsaver.error
     async def beatsaver_error(self, ctx, error):
-        # The local error handler seems to print the errors and I'm not too sure why :/
         logging.info("beatsaver local error handler invoked")
         if isinstance (error, commands.BadArgument):
             logging.info("BadArgument handler ran")
-            return await ctx.send("You've given a bad argument!\nYou should totally try ``e970`` though <:AYAYATroll:839891422140432405>")
+            return await ctx.reply(embed=Embed(
+                title="Bad Argument",
+                description="You should totally try ``e970`` though <:AYAYATroll:839891422140432405>",
+                colour=Colour.red()
+            ))
         if isinstance (error, commands.MissingRequiredArgument):
-            logging.info(f"MissingRequiredArgument handler ran. Missing: {error.param.name}")
-            return await ctx.send("You didn't give a required argument.\nYou should totally try ``e970`` though <:AquaTroll:845802819634462780>")
+            logging.info(f"MissingRequiredArgument handler ran")
+            return await ctx.reply(embed=Embed(
+                title="Missing Required Arguments",
+                description="You should totally try ``e970`` though <:AquaTroll:845802819634462780>",
+                colour=Colour.red()
+            ))
         logging.info("Error unhandled by local handler")
         return delattr(ctx.command, "on_error")
 
