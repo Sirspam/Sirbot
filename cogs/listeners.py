@@ -24,14 +24,6 @@ class Listeners(commands.Cog):
         logging.info(f"Left guild: {guild.name}")
         await prefix_delete(guild.id)
 
-    @commands.Cog.listener("before_invoke")
-    async def before_invoke(ctx):
-        logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name}\nArgs: {ctx.args}" )
-
-    @commands.Cog.listener("after_invoke")
-    async def after_invoke(ctx):
-        logging.info(f"Concluded {ctx.command}")
-
 
 def setup(bot):
     bot.add_cog(Listeners(bot))

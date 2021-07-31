@@ -12,7 +12,7 @@ from firebase_admin import credentials
 from utils import prefixes
 
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s:%(levelname)s:%(name)s: %(message)s', level=logging.INFO)
 
 load_dotenv(getcwd()+"/.env")
 
@@ -40,8 +40,17 @@ async def prefix(bot, ctx):
 
 intents = Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True, allowed_mentions=AllowedMentions(replied_user=False))
 
+bot = commands.Bot(
+    command_prefix=prefix, 
+    intents=intents, 
+    case_insensitive=True, 
+    allowed_mentions=AllowedMentions(
+        everyone=False,
+        roles=False,
+        replied_user=False
+    )
+)
 
 bot.default_prefix = getenv("DEFAULT_PREFIX")
 bot.github_repo = getenv("GITHUB_REPO_URL")
@@ -67,8 +76,7 @@ initial_cogs = [
     "cogs.listeners",
     "cogs.neko",
     "cogs.scoresaber",
-    "cogs.status",
-    "cogs.user"
+    "cogs.status"
 ]
 
 for cog in initial_cogs:
@@ -85,6 +93,14 @@ async def startup():
     await prefixes.cache_prefixes()
 
 bot.loop.create_task(startup())
+
+
+@bot.before_invoke
+async def before_invoke(ctx):
+    logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name} ({ctx.message.content})" )
+@bot.after_invoke
+async def after_invoke(ctx):
+    logging.info(f"Concluded {ctx.command}")
 
 
 bot.run(getenv("TOKEN"))
