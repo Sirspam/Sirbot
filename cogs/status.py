@@ -17,14 +17,14 @@ play_status_list = [
     "NEKOPARA Vol. 2",
     "NEKOPARA Vol. 3",
     "NEKOPARA Vol. 4",
+    "on Goole Cardboard"
 ]
 
 watch_status_list = [
     "Aso being cute 😳",
-    "Sirspam shit miss",
     "Aqua being useless",
     "Nekopara",
-    "KonoSuba",
+    "KonoSuba"
 ]
 
 
