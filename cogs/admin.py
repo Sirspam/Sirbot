@@ -1,43 +1,21 @@
 import logging
 
-from discord import Embed, Permissions
 from firebase_admin import firestore
 
 from utils import prefixes
 from discord.ext import commands
-from discord.utils import oauth_url
 
 
 dab = firestore.client()
 
 
-class General(commands.Cog):
+class Admin(commands.Cog):
+    "Administrator only Commands"
     def __init__(self, bot):
         self.bot = bot
 
 
-    @commands.command(aliases=["invite"])
-    async def links(self, ctx):
-        permission_names = (
-            "send_messages",
-            "embed_links",
-            "attach_files",
-            "add_reactions",
-            "use_external_emojis"
-        )
-        perms = Permissions()
-        perms.update(**dict.fromkeys(permission_names, True))
-        embed = Embed(
-            description=
-f"""[**Bot Invite Link**]({oauth_url(self.bot.user.id, perms)})
-[**Home Server**](https://discord.gg/dWX6fpGUK9)
-[**Github Repo**](https://github.com/sirspam/Sirbot)\n
-I hope you're having a good day :)""",
-            color=0x00A9E0)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/822087750798016552.gif?v=1")
-        await ctx.reply(embed=embed)
-
-    @commands.command(case_insensitive=True)
+    @commands.command(help="Changes the bot's default prefix for this server")
     @commands.has_permissions(administrator = True)
     @commands.cooldown(1, 15, commands.BucketType.guild)
     async def set_prefix(self, ctx, *, arg):
@@ -58,8 +36,7 @@ I hope you're having a good day :)""",
             col_ref.sort()
             dab.collection("prefixes").document("collectionlist").update({"array": col_ref})
         doc_ref = dab.collection("prefixes").document(str(ctx.guild.id))
-        arg=arg[1:]
-        arg=arg[:-1]
+        arg=arg[1:][:-1]
         doc_ref.set({
             "prefix": arg
         })
@@ -68,4 +45,4 @@ I hope you're having a good day :)""",
 
 
 def setup(bot):
-    bot.add_cog(General(bot))
+    bot.add_cog(Admin(bot))
