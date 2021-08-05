@@ -1,13 +1,22 @@
 import logging
 from math import ceil
-from asyncio import sleep
+from asyncio import sleep, TimeoutError as asyncio_TimeoutError
 
 from discord import Embed, Colour
 
 from discord.ext import commands
 
 
-class ErrorHandler(commands.Cog):
+class ErrorEmbed(Embed):
+    def __init__(self, *kwargs):
+        super().__init__()
+        self.title = kwargs[0]
+        self.description = kwargs[1]
+        self.colour = Colour.red()
+
+
+class CommandErrorHandler(commands.Cog):
+    "Handles exceptions raised"
     def __init__(self, bot):
         self.bot = bot
 
@@ -18,52 +27,91 @@ class ErrorHandler(commands.Cog):
         if hasattr(ctx.command, "on_error"):
             return
         
-        if isinstance(error, commands.BadArgument):
-            logging.info("BadArgument handler ran")
-            return await ctx.send(f"You've given a bad argument!\nCheck ``{ctx.prefix}help`` for what arguments you need to give")
-
         if isinstance(error, commands.CommandNotFound):
             logging.info("CommandNotFound handler ran")
-            return await ctx.send("Command not found")
+            await ctx.message.add_reaction("❔")
+        
+            def check(reaction, user):
+                return user == ctx.author and str(reaction.emoji) == "❔"
+            try:
+                await self.bot.wait_for('reaction_add', timeout=10, check=check)
+            except asyncio_TimeoutError:
+                await ctx.message.remove_reaction("❔", self.bot.user)
+                return
+            else:
+                return await ctx.reply(embed=ErrorEmbed(
+                    "Command Not Found",
+                    f"Use {ctx.prefix}help to check available commands"
+                ))
+
+        if isinstance(error, commands.BadArgument):
+            logging.info("BadArgument handler ran")
+            return await ctx.reply(embed=ErrorEmbed(
+                "Bad Argument",
+                f"You've given a bad argument for {ctx.command}"
+            )) # Response could be better
+
+        if isinstance(error, commands.MissingRequiredArgument):
+            logging.info(f"MissingRequiredArgument handler ran")
+            return await ctx.reply(embed=ErrorEmbed(
+                "Missing Required Arguments",
+                f"{ctx.command} requires the {error.param.name} argument\nCheck ``{ctx.prefix}help {ctx.command}`` for more help"
+            ))
 
         if isinstance(error, commands.BotMissingPermissions):
             logging.info(f"BotMissingPermissions handler ran - {error.missing_perms}")
-            return await ctx.send(f"Bot missing the following permissions: {error.missing_perms}")
-
-        if isinstance(error, commands.NotOwner):
-            logging.info("NotOwner handler ran")
-            return await ctx.send("This is an owner only command.")
+            return await ctx.reply(embed=ErrorEmbed(
+                "Bot Missing Permissions"
+                ,error.missing_perms
+            ))
 
         if isinstance(error, commands.CommandOnCooldown):
             logging.info("CommandOnCooldown handler ran")
-            message = await ctx.send(f"Command on cooldown, ``{ceil(error.retry_after)} seconds``")
+            message = await ctx.reply(embed=ErrorEmbed(
+                "Command on Cooldown",
+                f"{ceil(error.retry_after)} seconds"
+            ))
             await sleep(int(ceil(error.retry_after)))
-            return await message.add_reaction("✅")
-
-        if isinstance(error, commands.MissingRequiredArgument):
-            logging.info(f"MissingRequiredArgument handler ran. Missing: {error.param.name}")
-            return await ctx.send("You didn't give a required argument.")
+            return await message.edit(embed=Embed(
+                title="Cooldown Finished",
+                colour=Colour.green()
+            ))
 
         if isinstance(error, commands.MissingPermissions):
             logging.info("MissingPermissions handler ran")
-            return await ctx.send("You don't have the permissions for this command.")
+            return await ctx.reply(embed=ErrorEmbed(
+                "Missing Permissions",
+                "You don't have the permissions for this command"
+            ))
 
         if isinstance(error, commands.NSFWChannelRequired):
             logging.info("NSFWChannelRequired hander ran")
-            return await ctx.reply("How lewd of you <:AYAYAFlushed:822094723199008799>\n``This command can only be ran in an nsfw channel``")
+            return await ctx.reply(embed=ErrorEmbed(
+                "How lewd of you 😳",
+                f"{ctx.command} can only be ran in an nsfw channel"
+            ))
+        
+        # For unhandled errors
+        github_issue_url = ""
+        if self.bot.github_repo:
+            github_issue_url = f"open an [issue report]({self.bot.github_repo}/issues) or"
+        await ctx.send(embed=ErrorEmbed(
+            "Uh oh. An unhandled error occured <:NotLikeAqua:822089498866221076>",
+            f"If this keeps occuring {github_issue_url} go pester {self.bot.get_user(self.bot.owner_id).mention}\n\n```py\n{error}```",
+        ))
 
-        logging.error(error)
-        await ctx.send(embed=Embed(
-            title="Uh oh. Something bad happened <:NotLikeAqua:822089498866221076>",
-            description=f"An unhandled error occured.\nIf this keeps occuring open an [issue report](https://github.com/Sirspam/Coordy-McCoordFace/issues) or go pester Sirspam <:AquaSmile:845802697474441236>\n\n```{error}```",
-            colour=Colour.red()
-        ))
-        return await self.bot.get_channel(841306797985234954).send(embed=Embed(
-            title=f"{ctx.command} in {ctx.guild.name}",
-            description=f"{ctx.guild.id}\n**Message Content**```{ctx.message.content}```\n**Error**```{error}```",
-            colour=Colour.red()
-        ))
+        if self.bot.logging_channel_id:
+            return await self.bot.get_channel(self.bot.logging_channel_id).send(embed=Embed(
+                title=f"Unhandled error raised by ``{ctx.command}``",
+                description=
+                f"""**Guild ID**```{ctx.guild.id} ({ctx.guild.name})```
+                **Author ID**```{ctx.author.id} ({ctx.author.name}#{ctx.author.discriminator})```
+                **Message Content**```{ctx.message.content}```
+                **Error**```py\n{error}```""",
+                colour=Colour.red(),
+                url=ctx.message.jump_url
+            ))
 
 
 def setup(bot):
-    bot.add_cog(ErrorHandler(bot))
+    bot.add_cog(CommandErrorHandler(bot))

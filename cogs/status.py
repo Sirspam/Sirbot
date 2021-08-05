@@ -9,23 +9,22 @@ from discord.ext import commands, tasks
 play_status_list = [
     "Beat Saber",
     "Shiny Happy Days",
+    "Weeaboo Spookfest",
+    "The Sauce",
     "USAO Ultimate Hyper Mega Mix",
     "NEKOPARA Vol. 0",
     "NEKOPARA Vol. 1",
     "NEKOPARA Vol. 2",
     "NEKOPARA Vol. 3",
     "NEKOPARA Vol. 4",
-    "Among Us",
-    "Amogus",
-    "a muffin map"
+    "on Goole Cardboard"
 ]
 
 watch_status_list = [
     "Aso being cute 😳",
-    "Sirspam shit miss",
     "Aqua being useless",
     "Nekopara",
-    "KonoSuba",
+    "KonoSuba"
 ]
 
 
@@ -33,7 +32,7 @@ class Status(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @tasks.loop(hours=1)
+    @tasks.loop(minutes=30)
     async def status(self):
         await self.bot.wait_until_ready()
         if getrandbits(1) == 1:

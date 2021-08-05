@@ -1,213 +1,95 @@
-import logging
+from contextlib import suppress
 
-from discord import Embed
+from discord import Embed, Colour
 
-from utils import prefixes
 from discord.ext import commands
+from utils.prefixes import get_prefix
 
 
-async def prefix(self, ctx):
-    result = await prefixes.get_prefix(ctx)
-    if result is None:
-        return self.bot.default_prefix
-    return result
+class HelpEmbed(Embed):
+    def __init__(self, ctx, **kwargs):
+        super().__init__(**kwargs)
+        self.set_footer(text=f"Use {ctx.prefix}help [command] or {ctx.prefix}help [category] for more information")
+        if ctx.bot.github_repo:
+            self.set_author(name=f"{ctx.me.display_name} Help", icon_url=ctx.me.avatar_url, url=ctx.bot.github_repo)
+        else:
+            self.set_author(name=f"{ctx.me.display_name} Help", icon_url=ctx.me.avatar_url)
+        self.colour = Colour.blue()
 
+class HelpCommand(commands.HelpCommand):
+    def __init__(self):
+        super().__init__(
+            command_attrs={
+                "help": "Help Command",
+                "aliases": ["commands"],
+                "hidden": True
+            }
+        )
 
-class HelpClient(commands.Cog):
+    async def send_bot_help(self, mapping):
+        """triggers when `<prefix>help` is called"""
+        self.context.prefix = await get_prefix(self.context)
+        if self.context.prefix is None:
+            self.context.prefix = self.context.bot.default_prefix
+        embed = HelpEmbed(self.context, title="Command Categories")
+        usable = 0 
+
+        for cog, commands in mapping.items():
+            if filtered_commands := await self.filter_commands(commands): 
+                amount_commands = len(filtered_commands)
+                usable += amount_commands
+                if cog:
+                    name = cog.qualified_name
+                    description = cog.description or "\u200b"
+                else:
+                    name = "No Category"
+                    description = "Commands with no category"
+                embed.add_field(name=f"{name} Category", value=description, inline=True)
+        embed.description = f"{len(self.context.bot.commands)} commands | {usable} usable" 
+        await self.get_destination().send(embed=embed)
+
+    async def send_command_help(self, command):
+        self.context.prefix = await get_prefix(self.context)
+        if self.context.prefix is None:
+            self.context.prefix = self.context.bot.default_prefix
+        signature = self.get_command_signature(command)
+        embed = HelpEmbed(self.context, title=signature, description=command.help or "\u200b")
+        if cog := command.cog:
+            embed.add_field(name="Category", value=cog.qualified_name, inline=True)
+        can_run = "No"
+        with suppress(commands.CommandError):
+            if await command.can_run(self.context):
+                can_run = "Yes"
+        embed.add_field(name="Usable", value=can_run, inline=True)
+        if command._buckets and (cooldown := command._buckets._cooldown): # use of internals to get the cooldown of the command
+            embed.add_field(name="Cooldown", value=f"{cooldown.per:.0f} seconds", inline=True)
+        await self.get_destination().send(embed=embed)
+
+    async def send_help_embed(self, title, description, commands): # a helper function to add commands to an embed
+        self.context.prefix = await get_prefix(self.context)
+        if self.context.prefix is None:
+            self.context.prefix = self.context.bot.default_prefix
+        embed = HelpEmbed(self.context, title=title, description=description or "\u200b")
+        if filtered_commands := await self.filter_commands(commands):
+            for command in filtered_commands:
+                embed.add_field(name=self.get_command_signature(command), value=command.help or "\u200b", inline=False)
+        await self.get_destination().send(embed=embed)
+
+    async def send_group_help(self, group):
+        title = self.get_command_signature(group)
+        await self.send_help_embed(title, group.help, group.commands)
+
+    async def send_cog_help(self, cog):
+        title = cog.qualified_name or "No"
+        await self.send_help_embed(f'{title} Category', cog.description, cog.get_commands())
+
+class HelpCog(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
-
-
-    @commands.group(invoke_without_command=True, aliases=["he"])
-    async def help(self, ctx):
-        ctx.prefix = await prefix(self, ctx) # Needed in case the bot was mentioned for this command as ctx.prefix would be the bot's discord id
-        embed = Embed(
-            title="Help",
-            description=f"All of these commands use the ``{ctx.prefix}`` prefix\n<text> is a mandatory argument while [text] is an optional argument\nCommands with (NSFW) will only work within NSFW channels.",
-            color=0x00A9E0
-        )
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
-        embed.add_field(
-            name="Sub Help Commands",
-            value="""``help user`` | command and subcommands for the user command
-            ``help update`` | valid fields for the user update subcommand
-            ``help scoresaber`` | command and subcommands for the scoresaber command
-            ``help waifu`` | command and subcommands for the waifu command""",
-            inline=False
-        )
-        embed.add_field(
-            name="General Commands",
-            value="""``beatsaver <key> [diff]`` | Posts information about a beatsaver map
-            ``links`` | Posts important links for Sirbot
-            ``amogus`` | <:amogus:826403430905937941>
-            ``nhentai [ID]`` | Gets a doujin from nhentai, will be random if no ID is given. (NSFW)""",
-            inline=False
-        )
-        embed.add_field(
-            name="Admin Only Commands",
-            value="""``set_prefix \"<prefix>\"`` | Changes Sirbot's prefix for this guild. __New prefix must be wrapped in ``"``s__""",
-            inline=False
-        )
-        await ctx.reply(embed=embed)
-
-    @help.command(aliases=["u"])
-    async def user(self, ctx):
-        embed = Embed(
-            title="Help User",
-            description=f"These are the valid arguments for ``{ctx.prefix}user",
-            color=0x00A9E0)
-        embed.add_field(
-            name="user [mention]",
-            value="get the info of a user",
-            inline=False
-        )
-        embed.add_field(
-            name="user add <ScoreSaber link>",
-            value="add yourself to the userbase.",
-            inline=False
-        )
-        embed.add_field(
-            name="user update <field>",
-            value=f"Update your info, use ``{ctx.prefix}help update`` for the fields and more info!",
-            inline=False
-        )
-        embed.add_field(
-            name="user remove",
-            value="Removes you from the database",
-            inline=False
-        )
-        await ctx.reply(embed=embed)
-    
-    @help.command(aliases=["up"])
-    async def update(self, ctx):
-        embed = Embed(
-            title="Help User Update",
-            description=f"These are the valid fields for ``{ctx.prefix}user update <field> <kwarg>``\nAny of these can be removed with ``user remove <field>``",
-            color=0x00A9E0
-        )
-        embed.add_field(
-            name="username <kwarg>",
-            value="Updates your username.\nYou can put anything here, so go nuts",
-            inline=False
-        )
-        embed.add_field(
-            name="scoresaber/steam/twitch/youtube/twitter/reddit <kwarg>",
-            value="Updates one of your links.\nUse a valid scoresaber link, otherwise the scoresaber command won't work!\nYou can go nuts with the other links though >w<",
-            inline=False
-        )
-        message = ""
-        for x in self.bot.valid_HMD:
-            message = message + x + ", "
-        embed.add_field(
-            name="HMD <kwarg>",
-            value=f"Updates your Head Mounted Display.\nValid arguments are: ``{message[:-2]}``",
-            inline=False
-        )
-        embed.add_field(
-            name="birthday <kwarg>",
-            value="Updates your birthday.\nOnly the format of ``DD/MM`` or ``DD/MM/YYYY`` will be accepted",
-            inline=False
-        )
-        embed.add_field(
-            name="status <kwarg>",
-            value="Updates your status.\nYou can put anything here, so go nuts",
-            inline=False
-        )
-        embed.add_field(
-            name="pfp <kwarg>",
-            value="Updates your profile picture.\nMake sure this argument is a link going to an image!\nLil' secret: You can post a saved image to discord and use the link which discord generates.",
-            inline=False
-        )
-        embed.add_field(
-            name="colour <kwarg>",
-            value="Updates your profile's embed colour\nMake sure to use a hex code. You can use a site [like this](https://www.color-hex.com/) to find the colour you want!",
-            inline=False
-        )
-        await ctx.reply(embed=embed)
-
-    @help.command(aliases=["ss"])
-    async def scoresaber(self, ctx):
-        embed = Embed(
-            title="Help ScoreSaber",
-            description=f"These are the valid arguments for ``{ctx.prefix}scoresaber``\n~~certainly not a bad ripoff of bs bot~~",
-            color=0x00A9E0
-        )
-        embed.add_field(
-            name="scoresaber [mention]",
-            value="gets a user's ScoreSaber data,",
-            inline=False
-        )
-        embed.add_field(
-            name="scoresaber topsong [song number] [mention]",
-            value="gets a user's top song from ScoreSaber. **Song number has to be given if mention is given**",
-            inline=False
-        )
-        embed.add_field(
-            name="scoresaber recentsong [song number] [mention]",
-            value="gets a user's most recent song from ScoreSaber. **Song number has to be given if mention is given**",
-            inline=False
-        )
-        embed.add_field(
-            name="scoresaber topsongs [page] [mention]",
-            value="gets a user's page of top songs from ScoreSaber. **Page has to be given if mention is given**",
-            inline=False
-        )
-        embed.add_field(
-            name="scoresaber recentsongs [page] [mention]",
-            value="gets a user's page of recent songs from ScoreSaber. **Page has to be given if mention is given**",
-            inline=False
-        )
-        embed.add_field(
-            name="scoresaber compare <first user> [second user]",
-            value="Compare two users together. excluse the second user argument if you only want to compare yourself against someone else.",
-            inline=False
-        )
-        await ctx.reply(embed=embed)
-
-
-    @help.group(invoke_without_command=True)
-    async def waifu(self, ctx):
-        embed = Embed(
-            title="Help Waifu",
-            description=f"These are the valid arguments for ``{ctx.prefix}waifu``",
-            colour=0x00A9E0
-        )
-        embed.add_field(
-            name="waifu [category]",
-            value=f"Posts a waifu.\nUse ``{ctx.prefix}help waifu categories`` for a list of all the valid category arguments!",
-            inline=False
-        )
-        embed.add_field(
-            name="waifu nsfw",
-            value="Posts an nsfw waifu. (NSFW)",
-            inline=True
-        )
-        embed.add_field(
-            name="waifu nsfw neko",
-            value="Posts an nsfw neko. (NSFW)",
-            inline=True
-        )
-        embed.add_field(
-            name="waifu nsfw trap",
-            value="Posts an nsfw trap. (NSFW)",
-            inline=True
-        )
-        embed.set_footer(text="Powered by Waifu.pics",icon_url="https://waifu.pics/favicon.png")
-        await ctx.reply(embed=embed)
-
-    @waifu.command()
-    async def categories(self, ctx):
-        wc_list = str()
-        for category in self.bot.waifu_categories:
-            wc_list = wc_list + f"{category}\n"
-        embed = Embed(
-            title="Waifu Categories",
-            description=f"```{wc_list}```",
-            colour=0x00A9E0
-        )
-        await ctx.author.send(embed=embed)
-        await ctx.message.add_reaction("✅")
+       self.bot = bot
+       help_command = HelpCommand()
+       help_command.cog = self
+       bot.help_command = HelpCommand()
 
 
 def setup(bot):
-    bot.add_cog(HelpClient(bot))
+    bot.add_cog(HelpCog(bot))
