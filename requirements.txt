@@ -1,6 +1,5 @@
 discord.py==1.7.3
-python-dotenv==0.18.0
-jishaku==2.1.0
-firebase-admin==5.0.0
-NHentai-API==0.0.16
+python-dotenv==0.19.0
+jishaku==2.2.0
+firebase-admin==5.0.1
 git+https://github.com/Rapptz/discord-ext-menus@309c70222eec33acacb8c21bbb0fbe9bc57de661#egg=discord-ext-menus
