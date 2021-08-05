@@ -104,7 +104,7 @@ class CommandErrorHandler(commands.Cog):
                 title=f"Unhandled error raised by ``{ctx.command}``",
                 description=
                 f"""**Guild ID**```{ctx.guild.id} ({ctx.guild.name})```
-                **Author ID**```{ctx.author.id} ({ctx.author.name})```
+                **Author ID**```{ctx.author.id} ({ctx.author.name}#{ctx.author.discriminator})```
                 **Message Content**```{ctx.message.content}```
                 **Error**```py\n{error}```""",
                 colour=Colour.red(),
