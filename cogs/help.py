@@ -1,12 +1,10 @@
-# https://gist.github.com/InterStella0/b78488fb28cadf279dfd3164b9f0cf96#start1
-
-
 from contextlib import suppress
 
 from discord import Embed, Colour
 
 from discord.ext import commands
 from utils.prefixes import get_prefix
+
 
 class HelpEmbed(Embed):
     def __init__(self, ctx, **kwargs):
@@ -51,11 +49,10 @@ class HelpCommand(commands.HelpCommand):
         await self.get_destination().send(embed=embed)
 
     async def send_command_help(self, command):
-        """triggers when `<prefix>help <command>` is called"""
-        signature = self.get_command_signature(command)
         self.context.prefix = await get_prefix(self.context)
         if self.context.prefix is None:
             self.context.prefix = self.context.bot.default_prefix
+        signature = self.get_command_signature(command)
         embed = HelpEmbed(self.context, title=signature, description=command.help or "\u200b")
         if cog := command.cog:
             embed.add_field(name="Category", value=cog.qualified_name, inline=True)
