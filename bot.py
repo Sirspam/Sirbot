@@ -54,16 +54,10 @@ bot = commands.Bot(
 
 bot.default_prefix = getenv("DEFAULT_PREFIX")
 bot.github_repo = getenv("GITHUB_REPO_URL")
-bot.logging_channel_id = int(getenv("LOGGING_CHANNEL_ID"))
-bot.valid_HMD = [
-            "CV1",
-            "Rift S",
-            "Quest",
-            "Quest 2",
-            "Index",
-            "Vive",
-            "WMR"
-            ]
+try:
+    bot.logging_channel_id = int(getenv("LOGGING_CHANNEL_ID"))
+except TypeError:
+    bot.logging_channel_id = None
 
 
 initial_cogs = [
@@ -88,7 +82,7 @@ for cog in initial_cogs:
 
 async def startup():
     await bot.wait_until_ready()
-    bot.session = ClientSession(loop=get_event_loop(), headers={"User-Agent": "Sirbot (https://github.com/sirspam/Sirbot)"})
+    bot.session = ClientSession(loop=get_event_loop(), headers={"User-Agent": getenv("USER_AGENT")})
     bot.owner_id = (await bot.application_info()).owner.id
     await prefixes.cache_prefixes()
 
@@ -97,7 +91,8 @@ bot.loop.create_task(startup())
 
 @bot.before_invoke
 async def before_invoke(ctx):
-    logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name} ({ctx.message.content})" )
+    logging.info(f"Invoked {ctx.command} in {ctx.guild.name} by {ctx.author.name} ({ctx.message.content})")
+
 @bot.after_invoke
 async def after_invoke(ctx):
     logging.info(f"Concluded {ctx.command}")
