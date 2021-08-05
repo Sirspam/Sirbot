@@ -1,6 +1,6 @@
 import logging
 from math import ceil
-from asyncio import sleep, TimeoutError
+from asyncio import sleep, TimeoutError as asyncio_TimeoutError
 
 from discord import Embed, Colour
 
@@ -35,7 +35,8 @@ class CommandErrorHandler(commands.Cog):
                 return user == ctx.author and str(reaction.emoji) == "❔"
             try:
                 await self.bot.wait_for('reaction_add', timeout=10, check=check)
-            except TimeoutError:
+            except asyncio_TimeoutError:
+                await ctx.message.remove_reaction("❔", self.bot.user)
                 return
             else:
                 return await ctx.reply(embed=ErrorEmbed(
