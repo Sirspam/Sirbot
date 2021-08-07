@@ -27,7 +27,6 @@ class HelpCommand(commands.HelpCommand):
         )
 
     async def send_bot_help(self, mapping):
-        """triggers when `<prefix>help` is called"""
         self.context.prefix = await get_prefix(self.context)
         if self.context.prefix is None:
             self.context.prefix = self.context.bot.default_prefix

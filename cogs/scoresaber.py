@@ -12,9 +12,11 @@
 import logging
 
 from random import randint
+from json import loads, JSONDecodeError
+from re import sub
 
 from discord import Embed, Member
-from json import loads, JSONDecodeError
+from discord.ext.commands.errors import BadArgument
 from firebase_admin import firestore
 
 from discord.ext import commands
@@ -30,7 +32,6 @@ async def songEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
         await ctx.reply("That user isn't in my database!")
         return logging.info("scoresaber is None")
     scoresaber = ref.get('scoresaber')
-    print(scoresaber)
     ss_id = scoresaber[25:]
     page = (arg_page / 8)
     if page.is_integer() is False:
@@ -215,11 +216,27 @@ async def songsEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
 
 
 class ScoreSaber(commands.Cog):
+    """Get information on a user's ScoreSaber"""
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(help="Link your scoresaber profile")
+    async def link(self, ctx, scoresaber_id):
+        if not scoresaber_id.isdigit():
+            scoresaber_id = ((scoresaber_id.split("?", 1)[0]).split("&", 1)[0])
+            scoresaber_id = sub("[^0-9]","", scoresaber_id)
+            print(scoresaber_id)
+        async with self.bot.session.get("me") as resp:
+            print(await resp.text())
+            if "error" in loads(await resp.text()):
+                logging.info(f"ScoreSaber returned error ({scoresaber_id})")
+                raise BadArgument
+        ref = dab.collection("users").document(str(ctx.author.id))
+        ref.update({'scoresaber': scoresaber_id})
+        await ctx.reply("I've updated your Scoresaber")
+        logging.info(f"{ctx.author.name} has updated their scoresaber to {scoresaber_id}")
 
-    @commands.group(invoke_without_command=True, aliases=["ss"])
+    @commands.command(aliases=["ss"])
     async def scoresaber(self, ctx, argument: Member=None):
         if argument is not None:
             ctx.author = argument
@@ -284,35 +301,35 @@ class ScoreSaber(commands.Cog):
             )
         await ctx.reply(embed=embed)
 
-    @scoresaber.command(aliases=["rs"])
-    async def recentsong(self, ctx, page=1, user=None):
+    @commands.command(aliases=["rs"])
+    async def recentsong(self, ctx, argument1=1, argument2=None):
         async with ctx.channel.typing():
             if user is None:
                 user = ctx.author
             await songEmbed(self, ctx, page, user, arg_type="recentSong")
 
-    @scoresaber.command(aliases=["ts"])
-    async def topsong(self, ctx, page=1, user=None):
+    @commands.command(aliases=["ts"])
+    async def topsong(self, ctx, argument1=1, argument2=None):
         async with ctx.channel.typing():
             if user is None:
                 user = ctx.author
             await songEmbed(self, ctx, page, user, arg_type="topSong")
 
-    @scoresaber.command(aliases=["rss"])
-    async def recentsongs(self, ctx, page=1, user=None):
+    @commands.command(aliases=["rss"])
+    async def recentsongs(self, ctx, argument1=1, argument2=None):
         async with ctx.channel.typing():
             if user is None:
                 user = ctx.author
             await songsEmbed(self, ctx, page, user, arg_type="recentSongs")
 
-    @scoresaber.command(aliases=["tss"])
-    async def topsongs(self, ctx, page=1, user=None):
+    @commands.command(aliases=["tss"])
+    async def topsongs(self, ctx, argument1=1, argument2=None):
         async with ctx.channel.typing():
             if user is None:
                 user = ctx.author
             await songsEmbed(self, ctx, page, user, arg_type="topSongs")
 
-    @scoresaber.command(aliases=["com"])
+    @commands.command(aliases=["com"])
     async def compare(self, ctx, argument1: Member=None, argument2: Member=None):
         if argument1 is None:
             return await ctx.reply("You need to mention someone for me to compare you against!")
