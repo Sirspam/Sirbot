@@ -46,7 +46,7 @@ class BeatSaver(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.group(invoke_without_command=True, aliases=["bs","bsr"], help="Gets information on a certain BeatMap")
     async def beatsaver(self, ctx, beatmap_key, difficulty=None):
-        async with self.bot.session.get(f"https://beatsaver.com/api/maps/beatsaver/{beatmap_key}") as resp:
+        async with self.bot.session.get(f"https://beatsaver.com/api/maps/id/{beatmap_key}") as resp:
             try:
                 response = loads(await resp.text())
             except JSONDecodeError:
