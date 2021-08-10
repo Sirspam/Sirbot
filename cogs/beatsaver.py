@@ -51,7 +51,9 @@ class BeatSaver(commands.Cog):
                 response = loads(await resp.text())
             except JSONDecodeError:
                 raise commands.BadArgument
-        if response == "Not Found":
+        if "error" in response:
+            if response["error"] != "Not Found":
+                logging.error(response["error"])
             raise commands.BadArgument
         m, s = divmod(response["metadata"]["duration"], 60)
         embed = Embed(
