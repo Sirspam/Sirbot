@@ -39,10 +39,7 @@ class CommandErrorHandler(commands.Cog):
                 await ctx.message.remove_reaction("❔", self.bot.user)
                 return
             else:
-                return await ctx.reply(embed=ErrorEmbed(
-                    "Command Not Found",
-                    f"Use {ctx.prefix}help to check available commands"
-                ))
+                return await ctx.send_help()
 
         if isinstance(error, commands.BadArgument):
             logging.info("BadArgument handler ran")
