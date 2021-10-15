@@ -61,10 +61,10 @@ async def songEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
         while arg_page >= 8:
             arg_page = (arg_page - 8)
     Song = songsList[(arg_page - 1)]
-    url2 = (f"https://beatsaver.com/api/maps/by-hash/"+Song["songHash"])
+    url2 = (f"https://api.beatsaver.com/maps/hash/"+Song["songHash"])
     async with self.bot.session.get(url2) as resp:
         json_data = loads(await resp.text())
-    songBSLink = (f"https://beatsaver.com/beatmap/"+json_data["key"])
+    songBSLink = (f"https://beatsaver.com/beatmap/"+json_data["id"])
     if Song["maxScore"] == 0:
         songAcc = f"ScoreSaber API being fucky wucky,\nso you get {randint(0, 100)}"
     else:
@@ -131,7 +131,7 @@ async def songEmbed(self, ctx, arg_page, arg_user: Member, arg_type):
             inline=False
     )
     message.add_field(name="Time Set 🕕🕘", value=(Song["timeSet"])[:10], inline=False)
-    message.set_image(url="https://new.scoresaber.com/api/static/covers/" + Song["songHash"] + ".png")
+    message.set_image(url=f"https://eu.cdn.beatsaver.com/{Song['songHash'].lower()}.jpg")
     await ctx.reply(embed=message)
     logging.info("embed message sent")
 
@@ -226,8 +226,8 @@ class ScoreSaber(commands.Cog):
             scoresaber_id = ((scoresaber_id.split("?", 1)[0]).split("&", 1)[0])
             scoresaber_id = sub("[^0-9]","", scoresaber_id)
             print(scoresaber_id)
-        async with self.bot.session.get("me") as resp:
-            print(await resp.text())
+        async with self.bot.session.get(f"https://new.scoresaber.com/api/player/{scoresaber[25:]}/full") as resp:
+            json_data = loads(await resp.text())
             if "error" in loads(await resp.text()):
                 logging.info(f"ScoreSaber returned error ({scoresaber_id})")
                 raise BadArgument
