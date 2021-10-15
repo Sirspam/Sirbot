@@ -13,7 +13,7 @@ Sirbot's default prefix is **.** although a server admin can change this to a cu
 The rest of the bot is just your usual discord bot, put in the prefix then the command you want. "But what commands does Sirbot have?" I hearing you asking, well that leads us onto our next header, **Sirbot Commands**.
 
 ## Sirbot Commands
-This'll be an excessively long list, so go grab some popcorn
+This'll be an excessively short list, so go grab some popcorn
 ### Help Commands
 You know, commands for when you need help with Sirbot.
 | Command | Description |
