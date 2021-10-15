@@ -84,10 +84,10 @@ class HelpCommand(commands.HelpCommand):
 
 class HelpCog(commands.Cog):
     def __init__(self, bot):
-       self.bot = bot
-       help_command = HelpCommand()
-       help_command.cog = self
-       bot.help_command = HelpCommand()
+        self.bot = bot
+        help_command = HelpCommand()
+        help_command.cog = self
+        bot.help_command = HelpCommand()
 
 
 def setup(bot):
