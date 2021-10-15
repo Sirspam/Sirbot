@@ -24,7 +24,8 @@ watch_status_list = [
     "Aso being cute 😳",
     "Aqua being useless",
     "Nekopara",
-    "KonoSuba"
+    "KonoSuba",
+    "Nyas"
 ]
 
 
