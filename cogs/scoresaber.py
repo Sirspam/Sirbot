@@ -226,7 +226,7 @@ class ScoreSaber(commands.Cog):
             scoresaber_id = ((scoresaber_id.split("?", 1)[0]).split("&", 1)[0])
             scoresaber_id = sub("[^0-9]","", scoresaber_id)
             print(scoresaber_id)
-        async with self.bot.session.get(f"https://new.scoresaber.com/api/player/{scoresaber[25:]}/full") as resp:
+        async with self.bot.session.get(f"https://new.scoresaber.com/api/player/{scoresaber_id[25:]}/full") as resp:
             json_data = loads(await resp.text())
             if "error" in loads(await resp.text()):
                 logging.info(f"ScoreSaber returned error ({scoresaber_id})")
