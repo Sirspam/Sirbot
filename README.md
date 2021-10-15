@@ -23,7 +23,7 @@ You know, commands for when you need help with Sirbot.
 | Command | Description |
 | --- | --- |
 | help | Posts an embed which will basically give you the same amount of information which this readme is giving you. |
-| help waifu | Help for the neko command and it's subcommands. Damn right this bot posts cat girls |
+| help fun | Help for the neko command and it's subcommands. Damn right this bot posts cat girls |
 
 ### Waifu Commands
 Clearly the best part about this bot
