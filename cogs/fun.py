@@ -15,7 +15,7 @@ class Fun(commands.Cog):
         self.bot = bot
         self.colours = ["🟥","🟩","🟪","🟧","🟨","🟫","🔳"]
 
-    @commands.command(help="<:amogus:826403430905937941>") # Need to check this emote will actually appear in the help embed
+    @commands.command(help="<:amogus:826403430905937941>") # Need to check this emote will actually appear in the help embed (it doesn't)
     async def amogus(self, ctx):
         square_colour = choice(self.colours)
         if randint(0,10) == 10:
@@ -38,16 +38,59 @@ class Fun(commands.Cog):
 ⬛{square_colour}{square_colour}⬛⬛{square_colour}{square_colour}""")
 
     @commands.cooldown(1, 2, commands.BucketType.user)
+    @commands.command(help="Posts a kawaii waifu")
+    async def waifu(self, ctx):
+        async with ctx.channel.typing():
+            async with self.bot.session.get("https://api.waifu.pics/sfw/waifu") as resp:
+                url = loads(await resp.text())["url"]
+                logging.info(url)
+            async with self.bot.session.get(url) as resp:
+                root, ext = splitext(url)
+                try:
+                    await ctx.reply(file=File(BytesIO(await resp.read()), f"kawaii_waifu{ext}"))
+                except HTTPException:
+                    await ctx.reply(url)
+    
+    @commands.cooldown(1, 2, commands.BucketType.user)
     @commands.command(aliases=["nya"], help="Posts a kawaii neko")
     async def neko(self, ctx):
         async with ctx.channel.typing():
-            async with self.bot.session.get("https://nekos.life/api/v2/img/neko") as resp:
+            async with self.bot.session.get("https://api.waifu.pics/sfw/neko") as resp:
                 url = loads(await resp.text())["url"]
                 logging.info(url)
             async with self.bot.session.get(url) as resp:
                 root, ext = splitext(url)
                 try:
                     await ctx.reply(file=File(BytesIO(await resp.read()), f"kawaii_neko{ext}"))
+                except HTTPException:
+                    await ctx.reply(url)
+
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    @commands.command(help="Posts a kawaii awoo")
+    async def awoo(self, ctx):
+        async with ctx.channel.typing():
+            async with self.bot.session.get("https://api.waifu.pics/sfw/awoo") as resp:
+                url = loads(await resp.text())["url"]
+                logging.info(url)
+            async with self.bot.session.get(url) as resp:
+                root, ext = splitext(url)
+                try:
+                    await ctx.reply(file=File(BytesIO(await resp.read()), f"kawaii_awoo{ext}"))
+                except HTTPException:
+                    await ctx.reply(url)
+
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    @commands.command(help="Posts an nsfw waifu")
+    @commands.is_nsfw()
+    async def nsfw(self, ctx):
+        async with ctx.channel.typing():
+            async with self.bot.session.get("https://api.waifu.pics/nsfw/waifu") as resp:
+                url = loads(await resp.text())["url"]
+                logging.info(url)
+            async with self.bot.session.get(url) as resp:
+                root, ext = splitext(url)
+                try:
+                    await ctx.reply(file=File(BytesIO(await resp.read()), f"kawaii_waifu{ext}"))
                 except HTTPException:
                     await ctx.reply(url)
 

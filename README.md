@@ -1,9 +1,9 @@
+Sirbot has been archived as I no longer want to continue this project. As a result of a handful of issues regarding API interaction in the other cogs, I've decided to remove them all and keep the fun cog for the hosted version of Sirbot (since this bot is mainly used for cat girl pictures lmao.) This version of Sirbot is in the 'fun' branch.
+
 # Sirbot
 [![CodeFactor](https://www.codefactor.io/repository/github/sirspam/sirbot/badge)](https://www.codefactor.io/repository/github/sirspam/sirbot)
 
 [Discord invite link](https://discord.com/api/oauth2/authorize?client_id=822029618969182218&permissions=313408&scope=bot)
-
-Basically [Scuffed Bot](https://github.com/thijnmens/ScuffedBot) but adapted to work as a public bot with somewhat mediocre code.
 
 Sirbot's main function is interaction with the [ScoreSaber](https://scoresaber.com/) API, although it does feature some other functions. 
 
@@ -61,10 +61,10 @@ The embed for scoresaber compare is incredibly scuffed kekw
 Clearly the best part about this bot
 | Command | Description |
 | --- | --- |
-| waifu <category> | Posts a waifu image |
-| waifu nsfw | Posts an NSFW waifu. (NSFW) |
-| waifu nsfw neko | Posts an NSFW neko. (NSFW) |
-| waifu nsfw trap | Posts an NSFW trap. (NSFW) |
+| waifu | Posts a kawaii waifu |
+| neko | Posts a kawaii neko |
+| awoo | Posts a kawaii awoo |
+| nsfw | Posts an NSFW waifu. (NSFW channel only) |
 
 ### General Commands
 | Command | Description |
@@ -73,7 +73,6 @@ Clearly the best part about this bot
 | beatsaver search <query> | Searches for maps on BeatSaver |
 | links | Posts an embed with important links relating to Sirbot |
 | amogus | ![amogus](https://cdn.discordapp.com/emojis/826403430905937941.png?v=1) |
-| nhentai <ID> | Gets a doujin from nhentai, will be random if no ID is given. (NSFW) |
 
 ### Admin Only Commands
 | Command | Description |
